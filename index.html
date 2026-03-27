@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TAOURIRT HUB</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -57,6 +58,13 @@
         }
         .status-on { color: #22c55e; }
         .status-off { color: #ef4444; }
+        .map-container {
+            background: #1e293b;
+            border-radius: 20px;
+            padding: 12px;
+            margin-bottom: 20px;
+        }
+        #map { height: 250px; border-radius: 16px; }
     </style>
 </head>
 <body>
@@ -66,6 +74,10 @@
     </div>
 
     <div class="container" style="max-width: 550px; margin: auto;">
+        <div class="map-container">
+            <div id="map"></div>
+        </div>
+
         <div id="duty-container"><div class="loading">⏳ جاري التحميل...</div></div>
 
         <div class="section-title">📋 الصيدليات</div>
@@ -79,23 +91,58 @@
         تاوريرت هب - دليل المدينة الرقمي
     </div>
 
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         const SUPABASE_URL = 'https://pyxeusrxoizjlihyqhac.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_u1vYpwFYhvou2oyvsxoNIQ_1WDklzXt';
+        
+        let map;
+
+        function initMap() {
+            map = L.map('map').setView([34.4167, -2.8833], 13);
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                attribution: '© OpenStreetMap',
+                subdomains: 'abcd'
+            }).addTo(map);
+        }
+
+        function addMarker(pharmacy, coords) {
+            const marker = L.marker(coords).addTo(map);
+            marker.bindPopup(`
+                <b>${pharmacy.name}</b><br>
+                ${pharmacy.address || ''}<br>
+                <a href="tel:${pharmacy.phone}">اتصل</a>
+            `);
+        }
 
         async function loadData() {
             try {
-                // جلب الصيدليات
                 const pharmRes = await fetch(`${SUPABASE_URL}/rest/v1/pharmacies?select=*`, {
                     headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
                 });
                 const pharmacies = await pharmRes.json();
 
-                // جلب الأسواق
                 const marketRes = await fetch(`${SUPABASE_URL}/rest/v1/markets?select=*`, {
                     headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
                 });
                 const markets = await marketRes.json();
+
+                // تهيئة الخريطة
+                initMap();
+
+                // إضافة نقاط الصيدليات على الخريطة
+                const coordsMap = {
+                    'صيدلية المزينين': [34.4180, -2.8820],
+                    'صيدلية الأندلس': [34.4250, -2.8750],
+                    'صيدلية النور': [34.4100, -2.8900],
+                    'صيدلية الفتح': [34.4050, -2.8850],
+                    'صيدلية السلام': [34.4200, -2.8780]
+                };
+                
+                pharmacies.forEach(p => {
+                    const coords = coordsMap[p.name] || [34.4167, -2.8833];
+                    addMarker(p, coords);
+                });
 
                 // صيدلية الحراسة
                 const duty = pharmacies.find(p => p.is_on_duty === true);
