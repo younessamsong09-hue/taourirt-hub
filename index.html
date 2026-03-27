@@ -65,6 +65,27 @@
             margin-bottom: 20px;
         }
         #map { height: 250px; border-radius: 16px; }
+        .neighborhoods {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .neighbor-btn {
+            background: #1e293b;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 30px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .neighbor-btn.active {
+            background: #3b82f6;
+        }
+        .neighbor-btn:hover {
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
@@ -74,6 +95,8 @@
     </div>
 
     <div class="container" style="max-width: 550px; margin: auto;">
+        <div class="neighborhoods" id="neighborhoods"></div>
+
         <div class="map-container">
             <div id="map"></div>
         </div>
@@ -96,7 +119,34 @@
         const SUPABASE_URL = 'https://pyxeusrxoizjlihyqhac.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_u1vYpwFYhvou2oyvsxoNIQ_1WDklzXt';
         
-        let map;
+        let map, markers = [];
+        let allPharmacies = [];
+        let allMarkets = [];
+        let currentNeighborhood = 'all';
+
+        const neighborhoods = [
+            { id: 'all', name: 'الكل', icon: '🌍' },
+            { id: 'center', name: 'وسط المدينة', icon: '🏙️' },
+            { id: 'masira', name: 'حي المسيرة', icon: '🏘️' },
+            { id: 'salam', name: 'حي السلام', icon: '🕊️' },
+            { id: 'taawon', name: 'حي التعاون', icon: '🤝' }
+        ];
+
+        const neighborhoodMap = {
+            'all': 'الكل',
+            'center': 'وسط المدينة',
+            'masira': 'المسيرة',
+            'salam': 'السلام',
+            'taawon': 'التعاون'
+        };
+
+        const coordsMap = {
+            'صيدلية المزينين': [34.4180, -2.8820],
+            'صيدلية الأندلس': [34.4250, -2.8750],
+            'صيدلية النور': [34.4100, -2.8900],
+            'صيدلية الفتح': [34.4050, -2.8850],
+            'صيدلية السلام': [34.4200, -2.8780]
+        };
 
         function initMap() {
             map = L.map('map').setView([34.4167, -2.8833], 13);
@@ -106,6 +156,11 @@
             }).addTo(map);
         }
 
+        function clearMarkers() {
+            markers.forEach(m => map.removeLayer(m));
+            markers = [];
+        }
+
         function addMarker(pharmacy, coords) {
             const marker = L.marker(coords).addTo(map);
             marker.bindPopup(`
@@ -113,6 +168,82 @@
                 ${pharmacy.address || ''}<br>
                 <a href="tel:${pharmacy.phone}">اتصل</a>
             `);
+            markers.push(marker);
+        }
+
+        function updateMap(pharmacies) {
+            clearMarkers();
+            pharmacies.forEach(p => {
+                const coords = coordsMap[p.name] || [34.4167 + (Math.random() - 0.5) * 0.02, -2.8833 + (Math.random() - 0.5) * 0.02];
+                addMarker(p, coords);
+            });
+        }
+
+        function filterByNeighborhood(items) {
+            if (currentNeighborhood === 'all') return items;
+            const targetName = neighborhoodMap[currentNeighborhood];
+            return items.filter(item => item.address && item.address.includes(targetName));
+        }
+
+        function renderNeighborhoods() {
+            const container = document.getElementById('neighborhoods');
+            container.innerHTML = neighborhoods.map(n => `
+                <button class="neighbor-btn ${n.id === currentNeighborhood ? 'active' : ''}" data-neighbor="${n.id}">
+                    ${n.icon} ${n.name}
+                </button>
+            `).join('');
+
+            document.querySelectorAll('.neighbor-btn').forEach(btn => {
+                btn.onclick = () => {
+                    currentNeighborhood = btn.dataset.neighbor;
+                    renderNeighborhoods();
+                    renderAll();
+                };
+            });
+        }
+
+        function renderAll() {
+            const filtered = filterByNeighborhood(allPharmacies);
+            updateMap(filtered);
+
+            const duty = filtered.find(p => p.is_on_duty === true);
+            if (duty) {
+                document.getElementById('duty-container').innerHTML = `
+                    <div class="duty-card">
+                        <h3>🚨 صيدلية الحراسة الآن</h3>
+                        <h2>${duty.name}</h2>
+                        <p>${duty.address || ''}</p>
+                        <a href="tel:${duty.phone}" class="btn">📞 اتصل الآن</a>
+                    </div>
+                `;
+            } else {
+                document.getElementById('duty-container').innerHTML = '<div class="card">⚠️ لا توجد صيدلية حراسة اليوم</div>';
+            }
+
+            if (filtered.length === 0) {
+                document.getElementById('pharmacies-container').innerHTML = '<div class="card">📭 لا توجد صيدليات في هذا الحي</div>';
+            } else {
+                document.getElementById('pharmacies-container').innerHTML = filtered.map(p => `
+                    <div class="card">
+                        <h3>🏪 ${p.name}</h3>
+                        <p>📍 ${p.address || 'العنوان غير متوفر'}</p>
+                        <p>📞 <a href="tel:${p.phone}" class="phone-link">${p.phone || 'رقم غير متوفر'}</a></p>
+                        <span class="${p.is_on_duty ? 'status-on' : 'status-off'}">${p.is_on_duty ? '🟢 متوفر' : '⚪ غير متوفر'}</span>
+                    </div>
+                `).join('');
+            }
+
+            if (allMarkets.length === 0) {
+                document.getElementById('markets-container').innerHTML = '<div class="card">📭 لا توجد أسواق مسجلة</div>';
+            } else {
+                document.getElementById('markets-container').innerHTML = allMarkets.map(m => `
+                    <div class="card">
+                        <h3>🛍️ ${m.name}</h3>
+                        <p>📍 ${m.address || 'العنوان غير متوفر'}</p>
+                        <p>📞 <a href="tel:${m.phone}" class="phone-link">${m.phone || 'رقم غير متوفر'}</a></p>
+                    </div>
+                `).join('');
+            }
         }
 
         async function loadData() {
@@ -120,71 +251,16 @@
                 const pharmRes = await fetch(`${SUPABASE_URL}/rest/v1/pharmacies?select=*`, {
                     headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
                 });
-                const pharmacies = await pharmRes.json();
+                allPharmacies = await pharmRes.json();
 
                 const marketRes = await fetch(`${SUPABASE_URL}/rest/v1/markets?select=*`, {
                     headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
                 });
-                const markets = await marketRes.json();
+                allMarkets = await marketRes.json();
 
-                // تهيئة الخريطة
                 initMap();
-
-                // إضافة نقاط الصيدليات على الخريطة
-                const coordsMap = {
-                    'صيدلية المزينين': [34.4180, -2.8820],
-                    'صيدلية الأندلس': [34.4250, -2.8750],
-                    'صيدلية النور': [34.4100, -2.8900],
-                    'صيدلية الفتح': [34.4050, -2.8850],
-                    'صيدلية السلام': [34.4200, -2.8780]
-                };
-                
-                pharmacies.forEach(p => {
-                    const coords = coordsMap[p.name] || [34.4167, -2.8833];
-                    addMarker(p, coords);
-                });
-
-                // صيدلية الحراسة
-                const duty = pharmacies.find(p => p.is_on_duty === true);
-                if (duty) {
-                    document.getElementById('duty-container').innerHTML = `
-                        <div class="duty-card">
-                            <h3>🚨 صيدلية الحراسة الآن</h3>
-                            <h2>${duty.name}</h2>
-                            <p>${duty.address || ''}</p>
-                            <a href="tel:${duty.phone}" class="btn">📞 اتصل الآن</a>
-                        </div>
-                    `;
-                } else {
-                    document.getElementById('duty-container').innerHTML = '<div class="card">⚠️ لا توجد صيدلية حراسة اليوم</div>';
-                }
-
-                // عرض الصيدليات
-                if (pharmacies.length === 0) {
-                    document.getElementById('pharmacies-container').innerHTML = '<div class="card">📭 لا توجد صيدليات مسجلة</div>';
-                } else {
-                    document.getElementById('pharmacies-container').innerHTML = pharmacies.map(p => `
-                        <div class="card">
-                            <h3>🏪 ${p.name}</h3>
-                            <p>📍 ${p.address || 'العنوان غير متوفر'}</p>
-                            <p>📞 <a href="tel:${p.phone}" class="phone-link">${p.phone || 'رقم غير متوفر'}</a></p>
-                            <span class="${p.is_on_duty ? 'status-on' : 'status-off'}">${p.is_on_duty ? '🟢 متوفر' : '⚪ غير متوفر'}</span>
-                        </div>
-                    `).join('');
-                }
-
-                // عرض الأسواق
-                if (markets.length === 0) {
-                    document.getElementById('markets-container').innerHTML = '<div class="card">📭 لا توجد أسواق مسجلة</div>';
-                } else {
-                    document.getElementById('markets-container').innerHTML = markets.map(m => `
-                        <div class="card">
-                            <h3>🛍️ ${m.name}</h3>
-                            <p>📍 ${m.address || 'العنوان غير متوفر'}</p>
-                            <p>📞 <a href="tel:${m.phone}" class="phone-link">${m.phone || 'رقم غير متوفر'}</a></p>
-                        </div>
-                    `).join('');
-                }
+                renderNeighborhoods();
+                renderAll();
 
             } catch (error) {
                 console.error('خطأ:', error);
