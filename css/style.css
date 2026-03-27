@@ -282,3 +282,50 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
     gap: 8px;
     margin-bottom: 16px;
 }
+
+/* تصغير أكثر */
+.stats-bar {
+    gap: 4px;
+}
+.stat-card {
+    padding: 4px 3px;
+    border-radius: 10px;
+}
+.stat-card .number {
+    font-size: 14px;
+}
+.stat-card .label {
+    font-size: 8px;
+}
+.stat-card .label i {
+    font-size: 8px;
+}
+
+/* بطاقة الوظائف أصغر */
+.jobs-card {
+    padding: 4px 8px;
+    gap: 5px;
+}
+.jobs-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 8px;
+}
+.jobs-icon i {
+    font-size: 12px;
+}
+.jobs-title {
+    font-size: 9px;
+}
+.jobs-count {
+    font-size: 14px;
+}
+.jobs-arrow i {
+    font-size: 10px;
+}
+
+/* الصف العلوي */
+.top-row {
+    gap: 6px;
+    margin-bottom: 12px;
+}
