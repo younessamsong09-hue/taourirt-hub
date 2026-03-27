@@ -238,3 +238,47 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
 }
 .apply-job { background: #3b82f6; }
 .share-job { background: #25D366; }
+
+/* تصغير الإحصائيات والوظائف */
+.stats-bar {
+    gap: 6px;
+}
+.stat-card {
+    padding: 6px 4px;
+    border-radius: 12px;
+}
+.stat-card .number {
+    font-size: 18px;
+}
+.stat-card .label {
+    font-size: 9px;
+}
+
+/* تصغير بطاقة الوظائف */
+.jobs-card {
+    padding: 6px 10px;
+    gap: 6px;
+}
+.jobs-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 10px;
+}
+.jobs-icon i {
+    font-size: 14px;
+}
+.jobs-title {
+    font-size: 10px;
+}
+.jobs-count {
+    font-size: 16px;
+}
+.jobs-arrow i {
+    font-size: 12px;
+}
+
+/* الصف العلوي */
+.top-row {
+    gap: 8px;
+    margin-bottom: 16px;
+}
