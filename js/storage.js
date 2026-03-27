@@ -21,3 +21,34 @@ function shareOnWhatsApp(name, phone, address) {
     const message = `🏥 *${name}*\n📍 ${address || 'العنوان غير متوفر'}\n📞 ${phone}\n\n📱 تاوريرت هب`;
     window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
 }
+
+// ========== عداد الزوار ==========
+function updateVisitorCount() {
+    let today = new Date().toISOString().split('T')[0];
+    let visits = localStorage.getItem('visits_' + today);
+    
+    if (visits) {
+        visits = parseInt(visits) + 1;
+    } else {
+        visits = 1;
+        // حذف البيانات القديمة (أكثر من 7 أيام)
+        for (let i = 0; i < localStorage.length; i++) {
+            let key = localStorage.key(i);
+            if (key && key.startsWith('visits_') && key !== 'visits_' + today) {
+                let oldDate = new Date(key.replace('visits_', ''));
+                let weekAgo = new Date();
+                weekAgo.setDate(weekAgo.getDate() - 7);
+                if (oldDate < weekAgo) {
+                    localStorage.removeItem(key);
+                }
+            }
+        }
+    }
+    localStorage.setItem('visits_' + today, visits);
+    return visits;
+}
+
+function getTodayVisitors() {
+    let today = new Date().toISOString().split('T')[0];
+    return parseInt(localStorage.getItem('visits_' + today)) || 0;
+}

@@ -24,3 +24,30 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
 .rating i { cursor: pointer; font-size: 16px; margin: 0 2px; }
 .share-btn { background: #25D366; border: none; padding: 5px 12px; border-radius: 20px; color: white; cursor: pointer; font-size: 12px; }
 .card-footer { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; align-items: center; }
+
+/* بطاقات الإحصائيات */
+.stats-bar {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+.stat-card {
+    background: #1e293b;
+    border-radius: 15px;
+    padding: 12px 20px;
+    flex: 1;
+    text-align: center;
+    min-width: 100px;
+}
+.stat-card .number {
+    font-size: 24px;
+    font-weight: bold;
+    color: #22d3ee;
+}
+.stat-card .label {
+    font-size: 12px;
+    color: #94a3b8;
+    margin-top: 5px;
+}

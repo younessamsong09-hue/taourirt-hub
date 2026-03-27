@@ -32,6 +32,9 @@ function getFilteredPharmacies() {
 }
 
 function renderAll() {
+    document.getElementById("visitorCount").innerText = getTodayVisitors();
+    document.getElementById("pharmacyCount").innerText = allPharmacies.length;
+    document.getElementById("marketCount").innerText = allMarkets.length;
     const filtered = getFilteredPharmacies();
     updateMap(filtered);
     const pharmCount = document.getElementById('pharmCount');
@@ -89,6 +92,7 @@ function clearSearch() {
 }
 
 async function loadData() {
+        updateVisitorCount();
     try {
         const pharmRes = await fetch(`${SUPABASE_URL}/rest/v1/pharmacies?select=*`, {
             headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
@@ -136,3 +140,4 @@ async function loadData() {
 }
 
 document.addEventListener('DOMContentLoaded', loadData);
+        updateVisitorCount();

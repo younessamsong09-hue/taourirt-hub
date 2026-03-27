@@ -2,160 +2,13 @@
 <html dir="rtl" lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>TAOURIRT HUB</title>
+    <meta name="description" content="دليل مدينة تاوريرت الرقمي - خدمات صحية وتجارية">
+    <meta name="theme-color" content="#3b82f6">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #0f172a;
-            color: white;
-            padding: 20px;
-        }
-        .header {
-            background: linear-gradient(135deg, #3b82f6, #06b6d4);
-            padding: 20px;
-            text-align: center;
-            border-radius: 20px;
-            margin-bottom: 20px;
-        }
-        .search-box {
-            background: #1e293b;
-            border-radius: 50px;
-            padding: 12px 20px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .search-box i {
-            color: #94a3b8;
-            font-size: 18px;
-        }
-        .search-box input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: white;
-            font-size: 16px;
-            outline: none;
-        }
-        .search-box input::placeholder {
-            color: #64748b;
-        }
-        .search-box button {
-            background: #3b82f6;
-            border: none;
-            padding: 6px 16px;
-            border-radius: 30px;
-            color: white;
-            cursor: pointer;
-        }
-        .card {
-            background: #1e293b;
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 10px;
-        }
-        .duty-card {
-            background: #ef4444;
-            border-radius: 20px;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .btn {
-            display: inline-block;
-            background: white;
-            color: #ef4444;
-            padding: 10px 20px;
-            border-radius: 30px;
-            text-decoration: none;
-            margin-top: 10px;
-        }
-        .phone-link {
-            color: #22d3ee;
-            text-decoration: none;
-        }
-        .section-title {
-            color: #22d3ee;
-            margin: 20px 0 10px;
-            font-size: 20px;
-        }
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #94a3b8;
-        }
-        .status-on { color: #22c55e; }
-        .status-off { color: #ef4444; }
-        .map-container {
-            background: #1e293b;
-            border-radius: 20px;
-            padding: 12px;
-            margin-bottom: 20px;
-        }
-        #map { height: 250px; border-radius: 16px; }
-        .neighborhoods {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
-        .neighbor-btn {
-            background: #1e293b;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 30px;
-            color: white;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .neighbor-btn.active {
-            background: #3b82f6;
-        }
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-        .rating i {
-            cursor: pointer;
-            font-size: 16px;
-            margin: 0 2px;
-        }
-        .share-btn {
-            background: #25D366;
-            border: none;
-            padding: 5px 12px;
-            border-radius: 20px;
-            color: white;
-            cursor: pointer;
-            font-size: 12px;
-        }
-        .card-footer {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        .search-clear {
-            background: transparent;
-            color: #94a3b8;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        .result-count {
-            font-size: 12px;
-            color: #94a3b8;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div class="header">
@@ -163,19 +16,46 @@
         <p>دليل مدينة تاوريرت - خدمات صحية وتجارية</p>
     </div>
 
+    <div class="stats-bar">
+        <div class="stat-card">
+            <div class="number" id="visitorCount">0</div>
+            <div class="label"><i class="fas fa-eye"></i> زائر اليوم</div>
+        </div>
+        <div class="stat-card">
+            <div class="number" id="pharmacyCount">0</div>
+            <div class="label"><i class="fas fa-hospital-user"></i> صيدلية</div>
+        </div>
+        <div class="stat-card">
+            <div class="number" id="marketCount">0</div>
+            <div class="label"><i class="fas fa-store"></i> سوق ومحل</div>
+        </div>
+    </div>
+
+
     <div class="container" style="max-width: 550px; margin: auto;">
-        <!-- صندوق البحث -->
         <div class="search-box">
             <i class="fas fa-search"></i>
             <input type="text" id="searchInput" placeholder="🔍 بحث بالاسم أو الحي أو الهاتف...">
             <button id="clearSearch" class="search-clear" style="display: none;">✖</button>
         </div>
 
-        <div class="neighborhoods" id="neighborhoods"></div>
+        <div id="neighborhoods-container"></div>
 
         <div class="map-container">
             <div id="map"></div>
+            <div class="map-controls">
+                <button id="locateBtn" class="map-btn" title="موقعي الحالي">
+                    <i class="fas fa-location-dot"></i>
+                </button>
+                <button id="zoomInBtn" class="map-btn" title="تكبير">
+                    <i class="fas fa-plus"></i>
+                </button>
+                <button id="zoomOutBtn" class="map-btn" title="تصغير">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
         </div>
+        <div id="locationStatus" class="location-status"></div>
 
         <div id="duty-container"><div class="loading">⏳ جاري التحميل...</div></div>
 
@@ -191,279 +71,10 @@
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script>
-        const SUPABASE_URL = 'https://pyxeusrxoizjlihyqhac.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_u1vYpwFYhvou2oyvsxoNIQ_1WDklzXt';
-        
-        let map, markers = [];
-        let allPharmacies = [];
-        let allMarkets = [];
-        let currentNeighborhood = 'all';
-        let currentSearch = '';
-
-        const neighborhoods = [
-            { id: 'all', name: 'الكل', icon: '🌍' },
-            { id: 'center', name: 'وسط المدينة', icon: '🏙️' },
-            { id: 'masira', name: 'حي المسيرة', icon: '🏘️' },
-            { id: 'salam', name: 'حي السلام', icon: '🕊️' },
-            { id: 'taawon', name: 'حي التعاون', icon: '🤝' }
-        ];
-
-        const neighborhoodMap = {
-            'all': 'الكل',
-            'center': 'وسط المدينة',
-            'masira': 'المسيرة',
-            'salam': 'السلام',
-            'taawon': 'التعاون'
-        };
-
-        const coordsMap = {
-            'صيدلية المزينين': [34.4180, -2.8820],
-            'صيدلية الأندلس': [34.4250, -2.8750],
-            'صيدلية النور': [34.4100, -2.8900],
-            'صيدلية الفتح': [34.4050, -2.8850],
-            'صيدلية السلام': [34.4200, -2.8780]
-        };
-
-        // التقييم والمشاركة
-        function saveRating(id, rating) {
-            const ratings = JSON.parse(localStorage.getItem('ratings') || '{}');
-            ratings[id] = rating;
-            localStorage.setItem('ratings', JSON.stringify(ratings));
-        }
-
-        function getRating(id) {
-            const ratings = JSON.parse(localStorage.getItem('ratings') || '{}');
-            return ratings[id] || 0;
-        }
-
-        function showToast(msg) {
-            const toast = document.createElement('div');
-            toast.textContent = msg;
-            toast.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#22c55e;color:white;padding:12px 24px;border-radius:50px;z-index:9999;';
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 2000);
-        }
-
-        function shareOnWhatsApp(name, phone, address) {
-            const message = `🏥 *${name}*\n📍 ${address || 'العنوان غير متوفر'}\n📞 ${phone}\n\n📱 تاوريرت هب`;
-            window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
-        }
-
-        function formatPhone(phone) {
-            if (!phone) return '';
-            return phone.replace(/(\d{2})(\d{3})(\d{3})(\d{2})/, '$1 $2 $3 $4');
-        }
-
-        // الخريطة
-        function initMap() {
-            map = L.map('map').setView([34.4167, -2.8833], 13);
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-                attribution: '© OpenStreetMap',
-                subdomains: 'abcd'
-            }).addTo(map);
-        }
-
-        function clearMarkers() {
-            markers.forEach(m => map.removeLayer(m));
-            markers = [];
-        }
-
-        function addMarker(pharmacy, coords) {
-            const marker = L.marker(coords).addTo(map);
-            marker.bindPopup(`<b>${pharmacy.name}</b><br>${pharmacy.address || ''}<br><a href="tel:${pharmacy.phone}">اتصل</a>`);
-            markers.push(marker);
-        }
-
-        function updateMap(pharmacies) {
-            clearMarkers();
-            pharmacies.forEach(p => {
-                const coords = coordsMap[p.name] || [34.4167 + (Math.random() - 0.5) * 0.02, -2.8833 + (Math.random() - 0.5) * 0.02];
-                addMarker(p, coords);
-            });
-        }
-
-        // الفلترة والبحث
-        function filterBySearch(items) {
-            if (!currentSearch) return items;
-            const search = currentSearch.toLowerCase();
-            return items.filter(item => 
-                item.name.toLowerCase().includes(search) ||
-                (item.address && item.address.toLowerCase().includes(search)) ||
-                (item.phone && item.phone.includes(search))
-            );
-        }
-
-        function filterByNeighborhood(items) {
-            if (currentNeighborhood === 'all') return items;
-            const targetName = neighborhoodMap[currentNeighborhood];
-            return items.filter(item => item.address && item.address.includes(targetName));
-        }
-
-        function getFilteredPharmacies() {
-            let filtered = filterByNeighborhood(allPharmacies);
-            filtered = filterBySearch(filtered);
-            return filtered;
-        }
-
-        // عرض الأحياء
-        function renderNeighborhoods() {
-            const container = document.getElementById('neighborhoods');
-            container.innerHTML = neighborhoods.map(n => `
-                <button class="neighbor-btn ${n.id === currentNeighborhood ? 'active' : ''}" data-neighbor="${n.id}">
-                    ${n.icon} ${n.name}
-                </button>
-            `).join('');
-
-            document.querySelectorAll('.neighbor-btn').forEach(btn => {
-                btn.onclick = () => {
-                    currentNeighborhood = btn.dataset.neighbor;
-                    renderNeighborhoods();
-                    renderAll();
-                };
-            });
-        }
-
-        // عرض البيانات
-        function renderAll() {
-            const filtered = getFilteredPharmacies();
-            updateMap(filtered);
-            
-            // عدد النتائج
-            document.getElementById('pharmCount').innerHTML = filtered.length > 0 ? `(${filtered.length})` : '';
-
-            // صيدلية الحراسة
-            const duty = filtered.find(p => p.is_on_duty === true);
-            if (duty) {
-                document.getElementById('duty-container').innerHTML = `
-                    <div class="duty-card">
-                        <h3>🚨 صيدلية الحراسة الآن</h3>
-                        <h2>${duty.name}</h2>
-                        <p>${duty.address || ''}</p>
-                        <a href="tel:${duty.phone}" class="btn">📞 اتصل الآن</a>
-                    </div>
-                `;
-            } else {
-                document.getElementById('duty-container').innerHTML = '<div class="card">⚠️ لا توجد صيدلية حراسة اليوم</div>';
-            }
-
-            // الصيدليات
-            if (filtered.length === 0) {
-                document.getElementById('pharmacies-container').innerHTML = '<div class="card" style="text-align:center">📭 لا توجد نتائج مطابقة للبحث</div>';
-            } else {
-                document.getElementById('pharmacies-container').innerHTML = filtered.map(p => {
-                    const rating = getRating(p.id);
-                    return `
-                        <div class="card" data-id="${p.id}">
-                            <div class="card-header">
-                                <h3>🏪 ${p.name}</h3>
-                                <div class="rating">
-                                    ${[1,2,3,4,5].map(star => `
-                                        <i class="fas fa-star star" data-star="${star}" style="color: ${star <= rating ? '#facc15' : '#475569'}"></i>
-                                    `).join('')}
-                                </div>
-                            </div>
-                            <p>📍 ${p.address || 'العنوان غير متوفر'}</p>
-                            <p>📞 <a href="tel:${p.phone}" class="phone-link">${formatPhone(p.phone) || 'رقم غير متوفر'}</a></p>
-                            <div class="card-footer">
-                                <span class="${p.is_on_duty ? 'status-on' : 'status-off'}">${p.is_on_duty ? '🟢 متوفر' : '⚪ غير متوفر'}</span>
-                                <button class="share-btn" data-name="${p.name}" data-phone="${p.phone}" data-address="${p.address}">
-                                    <i class="fab fa-whatsapp"></i> مشاركة
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            }
-
-            // الأسواق (لا تتأثر بالبحث والفلترة)
-            if (allMarkets.length === 0) {
-                document.getElementById('markets-container').innerHTML = '<div class="card">📭 لا توجد أسواق مسجلة</div>';
-            } else {
-                document.getElementById('markets-container').innerHTML = allMarkets.map(m => `
-                    <div class="card">
-                        <h3>🛍️ ${m.name}</h3>
-                        <p>📍 ${m.address || 'العنوان غير متوفر'}</p>
-                        <p>📞 <a href="tel:${m.phone}" class="phone-link">${formatPhone(m.phone) || 'رقم غير متوفر'}</a></p>
-                        <button class="share-btn" data-name="${m.name}" data-phone="${m.phone}" data-address="${m.address}">
-                            <i class="fab fa-whatsapp"></i> مشاركة
-                        </button>
-                    </div>
-                `).join('');
-            }
-
-            bindEvents();
-        }
-
-        function bindEvents() {
-            // التقييم
-            document.querySelectorAll('.star').forEach(star => {
-                star.onclick = (e) => {
-                    e.stopPropagation();
-                    const card = star.closest('.card');
-                    const id = parseInt(card.dataset.id);
-                    const rating = parseInt(star.dataset.star);
-                    saveRating(id, rating);
-                    const stars = card.querySelectorAll('.star');
-                    stars.forEach((s, i) => s.style.color = i < rating ? '#facc15' : '#475569');
-                    showToast(`قيمت بـ ${rating} نجوم`);
-                };
-            });
-
-            // المشاركة
-            document.querySelectorAll('.share-btn').forEach(btn => {
-                btn.onclick = (e) => {
-                    e.stopPropagation();
-                    shareOnWhatsApp(btn.dataset.name, btn.dataset.phone, btn.dataset.address);
-                };
-            });
-        }
-
-        // البحث
-        function handleSearch() {
-            const input = document.getElementById('searchInput');
-            currentSearch = input.value;
-            const clearBtn = document.getElementById('clearSearch');
-            clearBtn.style.display = currentSearch ? 'inline-block' : 'none';
-            renderAll();
-        }
-
-        function clearSearch() {
-            document.getElementById('searchInput').value = '';
-            currentSearch = '';
-            document.getElementById('clearSearch').style.display = 'none';
-            renderAll();
-        }
-
-        // تحميل البيانات
-        async function loadData() {
-            try {
-                const pharmRes = await fetch(`${SUPABASE_URL}/rest/v1/pharmacies?select=*`, {
-                    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-                });
-                allPharmacies = await pharmRes.json();
-
-                const marketRes = await fetch(`${SUPABASE_URL}/rest/v1/markets?select=*`, {
-                    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-                });
-                allMarkets = await marketRes.json();
-
-                initMap();
-                renderNeighborhoods();
-                renderAll();
-
-                // ربط أحداث البحث
-                const searchInput = document.getElementById('searchInput');
-                searchInput.addEventListener('input', handleSearch);
-                document.getElementById('clearSearch').addEventListener('click', clearSearch);
-
-            } catch (error) {
-                console.error('خطأ:', error);
-                document.getElementById('duty-container').innerHTML = '<div class="card">⚠️ خطأ في الاتصال بقاعدة البيانات</div>';
-            }
-        }
-
-        loadData();
-    </script>
+    <script src="js/config.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/map.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
