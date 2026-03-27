@@ -2,10 +2,8 @@
 <html dir="rtl" lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TAOURIRT HUB</title>
-    <meta name="description" content="دليل مدينة تاوريرت الرقمي - خدمات صحية وتجارية">
-    <meta name="theme-color" content="#3b82f6">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
@@ -16,53 +14,40 @@
         <p>دليل مدينة تاوريرت - خدمات صحية وتجارية</p>
     </div>
 
-    <div class="stats-bar">
-
-        <!-- وظائف -->
-        <div class="jobs-card" onclick="toggleJobs()">
-            <div class="jobs-icon"><i class="fas fa-briefcase"></i></div>
-            <div>
-                <div style="font-size:12px;color:#94a3b8;">وظائف</div>
-                <div style="font-size:20px;font-weight:bold;color:#facc15;" id="jobsCount">0</div>
-            </div>
-            <div><i id="jobsArrow" class="fas fa-chevron-down"></i></div>
-        </div>
-        <div class="stat-card">
-
-        <!-- وظائف -->
-        <div class="jobs-card" onclick="toggleJobs()">
-            <div class="jobs-icon"><i class="fas fa-briefcase"></i></div>
-            <div>
-                <div style="font-size:12px;color:#94a3b8;">وظائف</div>
-                <div style="font-size:20px;font-weight:bold;color:#facc15;" id="jobsCount">0</div>
-            </div>
-            <div><i id="jobsArrow" class="fas fa-chevron-down"></i></div>
-        </div>
-            <div class="number" id="visitorCount">0</div>
-
-        <!-- وظائف -->
-        <div class="jobs-card" onclick="toggleJobs()">
-            <div class="jobs-icon"><i class="fas fa-briefcase"></i></div>
-            <div>
-                <div style="font-size:12px;color:#94a3b8;">وظائف</div>
-                <div style="font-size:20px;font-weight:bold;color:#facc15;" id="jobsCount">0</div>
-            </div>
-            <div><i id="jobsArrow" class="fas fa-chevron-down"></i></div>
-        </div>
-            <div class="label"><i class="fas fa-eye"></i> زائر اليوم</div>
-        </div>
-        <div class="stat-card">
-            <div class="number" id="pharmacyCount">0</div>
-            <div class="label"><i class="fas fa-hospital-user"></i> صيدلية</div>
-        </div>
-        <div class="stat-card">
-            <div class="number" id="marketCount">0</div>
-            <div class="label"><i class="fas fa-store"></i> سوق ومحل</div>
-        </div>
-    </div>
-
-
     <div class="container" style="max-width: 550px; margin: auto;">
+        <!-- الصف العلوي: إحصائيات + وظائف -->
+        <div class="top-row">
+            <div class="stats-bar">
+                <div class="stat-card">
+                    <div class="number" id="visitorCount">0</div>
+                    <div class="label"><i class="fas fa-eye"></i> زائر</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" id="pharmacyCount">0</div>
+                    <div class="label"><i class="fas fa-hospital-user"></i> صيدلية</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" id="marketCount">0</div>
+                    <div class="label"><i class="fas fa-store"></i> سوق</div>
+                </div>
+            </div>
+            
+            <!-- بطاقة الوظائف -->
+            <div class="jobs-card" onclick="toggleJobs()">
+                <div class="jobs-icon"><i class="fas fa-briefcase"></i></div>
+                <div class="jobs-info">
+                    <div class="jobs-title">وظائف</div>
+                    <div class="jobs-count" id="jobsCount">0</div>
+                </div>
+                <div class="jobs-arrow"><i id="jobsArrow" class="fas fa-chevron-down"></i></div>
+            </div>
+        </div>
+
+        <!-- القائمة المنسدلة للوظائف -->
+        <div id="jobsDropdown" style="display: none;">
+            <div id="jobsList"></div>
+        </div>
+
         <div class="search-box">
             <i class="fas fa-search"></i>
             <input type="text" id="searchInput" placeholder="🔍 بحث بالاسم أو الحي أو الهاتف...">
@@ -70,22 +55,6 @@
         </div>
 
         <div id="neighborhoods-container"></div>
-
-        <div class="map-container">
-            <div id="map"></div>
-            <div class="map-controls">
-                <button id="locateBtn" class="map-btn" title="موقعي الحالي">
-                    <i class="fas fa-location-dot"></i>
-                </button>
-                <button id="zoomInBtn" class="map-btn" title="تكبير">
-                    <i class="fas fa-plus"></i>
-                </button>
-                <button id="zoomOutBtn" class="map-btn" title="تصغير">
-                    <i class="fas fa-minus"></i>
-                </button>
-            </div>
-        </div>
-        <div id="locationStatus" class="location-status"></div>
 
         <div id="duty-container"><div class="loading">⏳ جاري التحميل...</div></div>
 
@@ -96,8 +65,8 @@
         <div id="markets-container"><div class="loading">⏳ جاري التحميل...</div></div>
     </div>
 
-    <div style="text-align:center; margin-top:30px; padding:20px; color:#64748b;">
-        ❤️ تاوريرت هب - دليل المدينة الرقمي ❤️
+    <div class="footer">
+        تاوريرت هب - دليل المدينة الرقمي
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -105,7 +74,7 @@
     <script src="js/storage.js"></script>
     <script src="js/map.js"></script>
     <script src="js/ui.js"></script>
-    <script src="js/jobs.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/jobs.js"></script>
 </body>
 </html>

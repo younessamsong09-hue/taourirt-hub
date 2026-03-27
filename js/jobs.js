@@ -1,23 +1,38 @@
-// ========== وظائف تاوريرت ==========
-let jobs = [
-    { id: 1, title: 'صيدلي', company: 'صيدلية المزينين', location: 'وسط المدينة', salary: '4000', phone: '0536123456' },
-    { id: 2, title: 'ممرض', company: 'المستشفى الإقليمي', location: 'حي المسيرة', salary: '3000', phone: '0536123457' },
-    { id: 3, title: 'بائع', company: 'مركز المنار', location: 'وسط المدينة', salary: '2500', phone: '0536123458' }
+// وظائف تاوريرت
+const jobs = [
+    { title: 'صيدلي', company: 'صيدلية المزينين', location: 'وسط المدينة', salary: '4000', phone: '0536123456' },
+    { title: 'ممرض', company: 'المستشفى', location: 'حي المسيرة', salary: '3000', phone: '0536123457' },
+    { title: 'بائع', company: 'مركز المنار', location: 'وسط المدينة', salary: '2500', phone: '0536123458' }
 ];
 
-function showJobs() {
-    const container = document.getElementById('jobsContainer');
-    if (!container) return;
+function toggleJobs() {
+    const dropdown = document.getElementById('jobsDropdown');
+    const arrow = document.getElementById('jobsArrow');
+    if (dropdown.style.display === 'none') {
+        dropdown.style.display = 'block';
+        arrow.className = 'fas fa-chevron-up';
+        showJobsList();
+    } else {
+        dropdown.style.display = 'none';
+        arrow.className = 'fas fa-chevron-down';
+    }
+}
+
+function showJobsList() {
+    const container = document.getElementById('jobsList');
+    document.getElementById('jobsCount').innerText = jobs.length;
     container.innerHTML = jobs.map(job => `
         <div class="job-item">
-            <div><strong>${job.title}</strong> - ${job.company}</div>
             <div>
-                <button onclick="applyJob('${job.phone}', '${job.title}')" style="background:#3b82f6; border:none; padding:4px 10px; border-radius:15px; color:white;">تقدم</button>
-                <button onclick="shareJob('${job.title}', '${job.company}')" style="background:#25D366; border:none; padding:4px 10px; border-radius:15px; color:white;">مشاركة</button>
+                <div class="job-title">${job.title}</div>
+                <div class="job-details">${job.company} • ${job.location} • ${job.salary} د</div>
+            </div>
+            <div class="job-actions">
+                <button class="apply-job" onclick="applyJob('${job.phone}', '${job.title}')">تقدم</button>
+                <button class="share-job" onclick="shareJob('${job.title}', '${job.company}')">مشاركة</button>
             </div>
         </div>
     `).join('');
-    document.getElementById('jobsCount').innerText = jobs.length;
 }
 
 function applyJob(phone, title) {
@@ -28,15 +43,5 @@ function shareJob(title, company) {
     window.open(`https://wa.me/?text=${encodeURIComponent('فرصة عمل: ' + title + ' في ' + company)}`, '_blank');
 }
 
-function toggleJobs() {
-    const dropdown = document.getElementById('jobsDropdown');
-    const arrow = document.getElementById('jobsArrow');
-    if (dropdown.style.display === 'none') {
-        dropdown.style.display = 'block';
-        arrow.className = 'fas fa-chevron-up';
-        showJobs();
-    } else {
-        dropdown.style.display = 'none';
-        arrow.className = 'fas fa-chevron-down';
-    }
-}
+// تحديث عدد الوظائف
+document.getElementById('jobsCount').innerText = jobs.length;

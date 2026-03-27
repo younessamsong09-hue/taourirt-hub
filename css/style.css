@@ -122,3 +122,119 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
     justify-content: space-between;
     align-items: center;
 }
+
+/* الصف العلوي */
+.top-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+.stats-bar {
+    display: flex;
+    gap: 8px;
+    flex: 2;
+}
+.stat-card {
+    background: #1e293b;
+    border-radius: 16px;
+    padding: 10px 8px;
+    text-align: center;
+    flex: 1;
+}
+.stat-card .number {
+    font-size: 22px;
+    font-weight: bold;
+    color: #22d3ee;
+}
+.stat-card .label {
+    font-size: 10px;
+    color: #94a3b8;
+}
+
+/* بطاقة الوظائف */
+.jobs-card {
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    border-radius: 16px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    border: 1px solid #334155;
+    flex: 1;
+}
+.jobs-card:hover {
+    border-color: #22d3ee;
+    background: #1e293b;
+}
+.jobs-icon {
+    background: #22c55e;
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.jobs-icon i {
+    font-size: 18px;
+    color: white;
+}
+.jobs-info {
+    flex: 1;
+}
+.jobs-title {
+    font-size: 12px;
+    color: #94a3b8;
+}
+.jobs-count {
+    font-size: 20px;
+    font-weight: bold;
+    color: #facc15;
+}
+.jobs-arrow i {
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+/* القائمة المنسدلة */
+#jobsDropdown {
+    background: #1e293b;
+    border-radius: 16px;
+    margin-bottom: 20px;
+    padding: 12px;
+    border: 1px solid #334155;
+}
+.job-item {
+    background: #0f172a;
+    border-radius: 12px;
+    padding: 10px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.job-title {
+    font-weight: bold;
+    color: #facc15;
+}
+.job-details {
+    font-size: 11px;
+    color: #94a3b8;
+}
+.job-actions {
+    display: flex;
+    gap: 6px;
+}
+.apply-job, .share-job {
+    border: none;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    cursor: pointer;
+    color: white;
+}
+.apply-job { background: #3b82f6; }
+.share-job { background: #25D366; }
