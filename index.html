@@ -16,7 +16,7 @@
 
     <div class="container" style="max-width: 550px; margin: auto;">
         <!-- الصف العلوي: إحصائيات + وظائف -->
-        <div class="top-row">
+        <div class="top-row" style="display:flex; gap:8px; margin-bottom:12px;">
             <div class="stats-bar">
                 <div class="stat-card">
                     <div class="number" id="visitorCount">0</div>
@@ -34,6 +34,15 @@
             
             <!-- بطاقة الوظائف -->
             <div class="jobs-card" onclick="toggleJobs()">
+
+            <!-- بطاقة الشكاوى -->
+            <div class="complaints-card" onclick="showComplaintForm()">
+                <div class="complaints-icon"><i class="fas fa-comment-dots"></i></div>
+                <div class="complaints-info">
+                    <div class="complaints-title">شكاوى</div>
+                    <div class="complaints-count" id="complaintsCount">0</div>
+                </div>
+            </div>
                 <div class="jobs-icon"><i class="fas fa-briefcase"></i></div>
                 <div class="jobs-info">
                     <div class="jobs-title">وظائف</div>
@@ -80,5 +89,24 @@
     <script src="js/ui.js"></script>
     <script src="js/main.js"></script>
     <script src="js/jobs.js"></script>
+    <!-- نموذج تقديم شكوى أو اقتراح -->
+    <div id="complaintModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:10000; align-items:center; justify-content:center;">
+        <div style="background:#1e293b; border-radius:24px; padding:20px; width:90%; max-width:500px; max-height:90%; overflow-y:auto;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+                <h3 style="color:#22d3ee;"><i class="fas fa-comment-dots"></i> شكوى أو اقتراح</h3>
+                <span onclick="closeComplaintForm()" style="font-size:28px; cursor:pointer;">&times;</span>
+            </div>
+            <input type="text" id="complaintName" placeholder="الاسم الكامل *" style="width:100%; padding:10px; margin-bottom:10px; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;">
+            <input type="tel" id="complaintPhone" placeholder="رقم الهاتف *" style="width:100%; padding:10px; margin-bottom:10px; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;">
+            <select id="complaintType" style="width:100%; padding:10px; margin-bottom:10px; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;">
+                <option value="complaint">شكوى</option>
+                <option value="suggestion">اقتراح</option>
+            </select>
+            <input type="text" id="complaintLocation" placeholder="الموقع (الحي، الشارع)" style="width:100%; padding:10px; margin-bottom:10px; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;">
+            <input type="text" id="complaintTitle" placeholder="عنوان الشكوى *" style="width:100%; padding:10px; margin-bottom:10px; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;">
+            <textarea id="complaintDescription" rows="4" placeholder="شرح الشكوى أو الاقتراح بالتفصيل *" style="width:100%; padding:10px; margin-bottom:15px; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;"></textarea>
+            <button onclick="submitComplaint()" style="width:100%; background:#22c55e; border:none; padding:12px; border-radius:30px; color:white; font-size:16px;">إرسال</button>
+        </div>
+    </div>
 </body>
 </html>
