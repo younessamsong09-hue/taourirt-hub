@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TAOURIRT HUB</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -86,6 +87,38 @@
         .neighbor-btn:hover {
             transform: scale(1.05);
         }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .rating {
+            direction: ltr;
+        }
+        .rating i {
+            cursor: pointer;
+            font-size: 16px;
+            margin: 0 2px;
+        }
+        .share-btn {
+            background: #25D366;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 20px;
+            color: white;
+            cursor: pointer;
+            font-size: 12px;
+            margin-top: 8px;
+            display: inline-block;
+        }
+        .card-footer {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
@@ -148,6 +181,37 @@
             'صيدلية السلام': [34.4200, -2.8780]
         };
 
+        // ========== التقييم ==========
+        function saveRating(id, rating) {
+            const ratings = JSON.parse(localStorage.getItem('ratings') || '{}');
+            ratings[id] = rating;
+            localStorage.setItem('ratings', JSON.stringify(ratings));
+        }
+
+        function getRating(id) {
+            const ratings = JSON.parse(localStorage.getItem('ratings') || '{}');
+            return ratings[id] || 0;
+        }
+
+        function showToast(msg) {
+            const toast = document.createElement('div');
+            toast.textContent = msg;
+            toast.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#22c55e;color:white;padding:12px 24px;border-radius:50px;z-index:9999;';
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2000);
+        }
+
+        function shareOnWhatsApp(name, phone, address) {
+            const message = `🏥 *${name}*\n📍 ${address || 'العنوان غير متوفر'}\n📞 ${phone}\n\n📱 تاوريرت هب - دليل مدينة تاوريرت`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        function formatPhone(phone) {
+            if (!phone) return '';
+            return phone.replace(/(\d{2})(\d{3})(\d{3})(\d{2})/, '$1 $2 $3 $4');
+        }
+
+        // ========== الخريطة ==========
         function initMap() {
             map = L.map('map').setView([34.4167, -2.8833], 13);
             L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -179,12 +243,14 @@
             });
         }
 
+        // ========== الفلترة ==========
         function filterByNeighborhood(items) {
             if (currentNeighborhood === 'all') return items;
             const targetName = neighborhoodMap[currentNeighborhood];
             return items.filter(item => item.address && item.address.includes(targetName));
         }
 
+        // ========== عرض الأحياء ==========
         function renderNeighborhoods() {
             const container = document.getElementById('neighborhoods');
             container.innerHTML = neighborhoods.map(n => `
@@ -202,10 +268,12 @@
             });
         }
 
+        // ========== عرض البيانات ==========
         function renderAll() {
             const filtered = filterByNeighborhood(allPharmacies);
             updateMap(filtered);
 
+            // صيدلية الحراسة
             const duty = filtered.find(p => p.is_on_duty === true);
             if (duty) {
                 document.getElementById('duty-container').innerHTML = `
@@ -220,19 +288,36 @@
                 document.getElementById('duty-container').innerHTML = '<div class="card">⚠️ لا توجد صيدلية حراسة اليوم</div>';
             }
 
+            // الصيدليات مع تقييم ومشاركة
             if (filtered.length === 0) {
                 document.getElementById('pharmacies-container').innerHTML = '<div class="card">📭 لا توجد صيدليات في هذا الحي</div>';
             } else {
-                document.getElementById('pharmacies-container').innerHTML = filtered.map(p => `
-                    <div class="card">
-                        <h3>🏪 ${p.name}</h3>
-                        <p>📍 ${p.address || 'العنوان غير متوفر'}</p>
-                        <p>📞 <a href="tel:${p.phone}" class="phone-link">${p.phone || 'رقم غير متوفر'}</a></p>
-                        <span class="${p.is_on_duty ? 'status-on' : 'status-off'}">${p.is_on_duty ? '🟢 متوفر' : '⚪ غير متوفر'}</span>
-                    </div>
-                `).join('');
+                document.getElementById('pharmacies-container').innerHTML = filtered.map(p => {
+                    const rating = getRating(p.id);
+                    return `
+                        <div class="card" data-id="${p.id}">
+                            <div class="card-header">
+                                <h3>🏪 ${p.name}</h3>
+                                <div class="rating">
+                                    ${[1,2,3,4,5].map(star => `
+                                        <i class="fas fa-star star" data-star="${star}" style="color: ${star <= rating ? '#facc15' : '#475569'}"></i>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            <p>📍 ${p.address || 'العنوان غير متوفر'}</p>
+                            <p>📞 <a href="tel:${p.phone}" class="phone-link">${formatPhone(p.phone) || 'رقم غير متوفر'}</a></p>
+                            <div class="card-footer">
+                                <span class="${p.is_on_duty ? 'status-on' : 'status-off'}">${p.is_on_duty ? '🟢 متوفر' : '⚪ غير متوفر'}</span>
+                                <button class="share-btn" data-name="${p.name}" data-phone="${p.phone}" data-address="${p.address}">
+                                    <i class="fab fa-whatsapp"></i> مشاركة
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
             }
 
+            // الأسواق
             if (allMarkets.length === 0) {
                 document.getElementById('markets-container').innerHTML = '<div class="card">📭 لا توجد أسواق مسجلة</div>';
             } else {
@@ -240,12 +325,46 @@
                     <div class="card">
                         <h3>🛍️ ${m.name}</h3>
                         <p>📍 ${m.address || 'العنوان غير متوفر'}</p>
-                        <p>📞 <a href="tel:${m.phone}" class="phone-link">${m.phone || 'رقم غير متوفر'}</a></p>
+                        <p>📞 <a href="tel:${m.phone}" class="phone-link">${formatPhone(m.phone) || 'رقم غير متوفر'}</a></p>
+                        <button class="share-btn" data-name="${m.name}" data-phone="${m.phone}" data-address="${m.address}">
+                            <i class="fab fa-whatsapp"></i> مشاركة
+                        </button>
                     </div>
                 `).join('');
             }
+
+            // ربط الأحداث
+            bindEvents();
         }
 
+        function bindEvents() {
+            // ربط التقييم
+            document.querySelectorAll('.star').forEach(star => {
+                star.onclick = (e) => {
+                    e.stopPropagation();
+                    const card = star.closest('.card');
+                    const id = parseInt(card.dataset.id);
+                    const rating = parseInt(star.dataset.star);
+                    saveRating(id, rating);
+                    
+                    const stars = card.querySelectorAll('.star');
+                    stars.forEach((s, i) => {
+                        s.style.color = i < rating ? '#facc15' : '#475569';
+                    });
+                    showToast(`قيمت الصيدلية بـ ${rating} نجوم`);
+                };
+            });
+
+            // ربط المشاركة
+            document.querySelectorAll('.share-btn').forEach(btn => {
+                btn.onclick = (e) => {
+                    e.stopPropagation();
+                    shareOnWhatsApp(btn.dataset.name, btn.dataset.phone, btn.dataset.address);
+                };
+            });
+        }
+
+        // ========== تحميل البيانات ==========
         async function loadData() {
             try {
                 const pharmRes = await fetch(`${SUPABASE_URL}/rest/v1/pharmacies?select=*`, {
