@@ -21,6 +21,38 @@
             border-radius: 20px;
             margin-bottom: 20px;
         }
+        .search-box {
+            background: #1e293b;
+            border-radius: 50px;
+            padding: 12px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .search-box i {
+            color: #94a3b8;
+            font-size: 18px;
+        }
+        .search-box input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 16px;
+            outline: none;
+        }
+        .search-box input::placeholder {
+            color: #64748b;
+        }
+        .search-box button {
+            background: #3b82f6;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 30px;
+            color: white;
+            cursor: pointer;
+        }
         .card {
             background: #1e293b;
             border-radius: 15px;
@@ -84,17 +116,11 @@
         .neighbor-btn.active {
             background: #3b82f6;
         }
-        .neighbor-btn:hover {
-            transform: scale(1.05);
-        }
         .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 8px;
-        }
-        .rating {
-            direction: ltr;
         }
         .rating i {
             cursor: pointer;
@@ -109,8 +135,6 @@
             color: white;
             cursor: pointer;
             font-size: 12px;
-            margin-top: 8px;
-            display: inline-block;
         }
         .card-footer {
             display: flex;
@@ -118,6 +142,18 @@
             margin-top: 10px;
             flex-wrap: wrap;
             align-items: center;
+        }
+        .search-clear {
+            background: transparent;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .result-count {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-bottom: 10px;
+            text-align: center;
         }
     </style>
 </head>
@@ -128,6 +164,13 @@
     </div>
 
     <div class="container" style="max-width: 550px; margin: auto;">
+        <!-- صندوق البحث -->
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="🔍 بحث بالاسم أو الحي أو الهاتف...">
+            <button id="clearSearch" class="search-clear" style="display: none;">✖</button>
+        </div>
+
         <div class="neighborhoods" id="neighborhoods"></div>
 
         <div class="map-container">
@@ -136,7 +179,7 @@
 
         <div id="duty-container"><div class="loading">⏳ جاري التحميل...</div></div>
 
-        <div class="section-title">📋 الصيدليات</div>
+        <div class="section-title">📋 الصيدليات <span id="pharmCount" style="font-size: 14px;"></span></div>
         <div id="pharmacies-container"><div class="loading">⏳ جاري التحميل...</div></div>
 
         <div class="section-title">🛒 الأسواق والمحلات</div>
@@ -156,6 +199,7 @@
         let allPharmacies = [];
         let allMarkets = [];
         let currentNeighborhood = 'all';
+        let currentSearch = '';
 
         const neighborhoods = [
             { id: 'all', name: 'الكل', icon: '🌍' },
@@ -181,7 +225,7 @@
             'صيدلية السلام': [34.4200, -2.8780]
         };
 
-        // ========== التقييم ==========
+        // التقييم والمشاركة
         function saveRating(id, rating) {
             const ratings = JSON.parse(localStorage.getItem('ratings') || '{}');
             ratings[id] = rating;
@@ -202,7 +246,7 @@
         }
 
         function shareOnWhatsApp(name, phone, address) {
-            const message = `🏥 *${name}*\n📍 ${address || 'العنوان غير متوفر'}\n📞 ${phone}\n\n📱 تاوريرت هب - دليل مدينة تاوريرت`;
+            const message = `🏥 *${name}*\n📍 ${address || 'العنوان غير متوفر'}\n📞 ${phone}\n\n📱 تاوريرت هب`;
             window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
         }
 
@@ -211,7 +255,7 @@
             return phone.replace(/(\d{2})(\d{3})(\d{3})(\d{2})/, '$1 $2 $3 $4');
         }
 
-        // ========== الخريطة ==========
+        // الخريطة
         function initMap() {
             map = L.map('map').setView([34.4167, -2.8833], 13);
             L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -227,11 +271,7 @@
 
         function addMarker(pharmacy, coords) {
             const marker = L.marker(coords).addTo(map);
-            marker.bindPopup(`
-                <b>${pharmacy.name}</b><br>
-                ${pharmacy.address || ''}<br>
-                <a href="tel:${pharmacy.phone}">اتصل</a>
-            `);
+            marker.bindPopup(`<b>${pharmacy.name}</b><br>${pharmacy.address || ''}<br><a href="tel:${pharmacy.phone}">اتصل</a>`);
             markers.push(marker);
         }
 
@@ -243,14 +283,30 @@
             });
         }
 
-        // ========== الفلترة ==========
+        // الفلترة والبحث
+        function filterBySearch(items) {
+            if (!currentSearch) return items;
+            const search = currentSearch.toLowerCase();
+            return items.filter(item => 
+                item.name.toLowerCase().includes(search) ||
+                (item.address && item.address.toLowerCase().includes(search)) ||
+                (item.phone && item.phone.includes(search))
+            );
+        }
+
         function filterByNeighborhood(items) {
             if (currentNeighborhood === 'all') return items;
             const targetName = neighborhoodMap[currentNeighborhood];
             return items.filter(item => item.address && item.address.includes(targetName));
         }
 
-        // ========== عرض الأحياء ==========
+        function getFilteredPharmacies() {
+            let filtered = filterByNeighborhood(allPharmacies);
+            filtered = filterBySearch(filtered);
+            return filtered;
+        }
+
+        // عرض الأحياء
         function renderNeighborhoods() {
             const container = document.getElementById('neighborhoods');
             container.innerHTML = neighborhoods.map(n => `
@@ -268,10 +324,13 @@
             });
         }
 
-        // ========== عرض البيانات ==========
+        // عرض البيانات
         function renderAll() {
-            const filtered = filterByNeighborhood(allPharmacies);
+            const filtered = getFilteredPharmacies();
             updateMap(filtered);
+            
+            // عدد النتائج
+            document.getElementById('pharmCount').innerHTML = filtered.length > 0 ? `(${filtered.length})` : '';
 
             // صيدلية الحراسة
             const duty = filtered.find(p => p.is_on_duty === true);
@@ -288,9 +347,9 @@
                 document.getElementById('duty-container').innerHTML = '<div class="card">⚠️ لا توجد صيدلية حراسة اليوم</div>';
             }
 
-            // الصيدليات مع تقييم ومشاركة
+            // الصيدليات
             if (filtered.length === 0) {
-                document.getElementById('pharmacies-container').innerHTML = '<div class="card">📭 لا توجد صيدليات في هذا الحي</div>';
+                document.getElementById('pharmacies-container').innerHTML = '<div class="card" style="text-align:center">📭 لا توجد نتائج مطابقة للبحث</div>';
             } else {
                 document.getElementById('pharmacies-container').innerHTML = filtered.map(p => {
                     const rating = getRating(p.id);
@@ -317,7 +376,7 @@
                 }).join('');
             }
 
-            // الأسواق
+            // الأسواق (لا تتأثر بالبحث والفلترة)
             if (allMarkets.length === 0) {
                 document.getElementById('markets-container').innerHTML = '<div class="card">📭 لا توجد أسواق مسجلة</div>';
             } else {
@@ -333,12 +392,11 @@
                 `).join('');
             }
 
-            // ربط الأحداث
             bindEvents();
         }
 
         function bindEvents() {
-            // ربط التقييم
+            // التقييم
             document.querySelectorAll('.star').forEach(star => {
                 star.onclick = (e) => {
                     e.stopPropagation();
@@ -346,16 +404,13 @@
                     const id = parseInt(card.dataset.id);
                     const rating = parseInt(star.dataset.star);
                     saveRating(id, rating);
-                    
                     const stars = card.querySelectorAll('.star');
-                    stars.forEach((s, i) => {
-                        s.style.color = i < rating ? '#facc15' : '#475569';
-                    });
-                    showToast(`قيمت الصيدلية بـ ${rating} نجوم`);
+                    stars.forEach((s, i) => s.style.color = i < rating ? '#facc15' : '#475569');
+                    showToast(`قيمت بـ ${rating} نجوم`);
                 };
             });
 
-            // ربط المشاركة
+            // المشاركة
             document.querySelectorAll('.share-btn').forEach(btn => {
                 btn.onclick = (e) => {
                     e.stopPropagation();
@@ -364,7 +419,23 @@
             });
         }
 
-        // ========== تحميل البيانات ==========
+        // البحث
+        function handleSearch() {
+            const input = document.getElementById('searchInput');
+            currentSearch = input.value;
+            const clearBtn = document.getElementById('clearSearch');
+            clearBtn.style.display = currentSearch ? 'inline-block' : 'none';
+            renderAll();
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            currentSearch = '';
+            document.getElementById('clearSearch').style.display = 'none';
+            renderAll();
+        }
+
+        // تحميل البيانات
         async function loadData() {
             try {
                 const pharmRes = await fetch(`${SUPABASE_URL}/rest/v1/pharmacies?select=*`, {
@@ -380,6 +451,11 @@
                 initMap();
                 renderNeighborhoods();
                 renderAll();
+
+                // ربط أحداث البحث
+                const searchInput = document.getElementById('searchInput');
+                searchInput.addEventListener('input', handleSearch);
+                document.getElementById('clearSearch').addEventListener('click', clearSearch);
 
             } catch (error) {
                 console.error('خطأ:', error);
