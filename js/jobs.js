@@ -5,8 +5,11 @@ let jobs = JSON.parse(localStorage.getItem('taourirt_jobs')) || [
 ];
 
 function toggleJobs() {
+    console.log('toggleJobs called');
     const content = document.getElementById('jobsContent');
     const arrow = document.getElementById('jobsArrow');
+    console.log('content:', content, 'arrow:', arrow);
+    
     if (!content || !arrow) return;
     
     if (content.style.display === 'none') {
@@ -20,8 +23,16 @@ function toggleJobs() {
 }
 
 function showJobsList() {
+    console.log('showJobsList called');
     const container = document.getElementById('jobsList');
-    if (!container) return;
+    console.log('container:', container);
+    
+    if (!container) {
+        console.log('jobsList not found!');
+        return;
+    }
+    
+    console.log('jobs count:', jobs.length);
     
     if (jobs.length === 0) {
         container.innerHTML = '<div class="card" style="text-align:center">📭 لا توجد وظائف</div>';
@@ -42,6 +53,7 @@ function showJobsList() {
         </div>
     `).join('');
     updateJobsCount();
+    console.log('jobs displayed');
 }
 
 function updateJobsCount() {
@@ -59,3 +71,4 @@ function shareJob(title, company) {
 }
 
 updateJobsCount();
+console.log('jobs.js loaded');
