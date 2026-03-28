@@ -34,29 +34,24 @@ function sendMessage() {
     addMessage(question, 'user');
     input.value = '';
     
-    // البحث في Supabase
     searchAnswer(question);
 }
 
 async function searchAnswer(question) {
     try {
-        // البحث في قاعدة البيانات
         const response = await fetch(`${SUPABASE_URL}/rest/v1/assistant_answers?select=*`, {
             headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
         });
         const answers = await response.json();
         
-        // البحث عن إجابة مناسبة
         let foundAnswer = null;
         let bestMatch = 0;
         
         for (let a of answers) {
             let match = 0;
-            // البحث في السؤال
             if (question.includes(a.question) || a.question.includes(question)) {
                 match += 10;
             }
-            // البحث في الكلمات المفتاحية
             if (a.keywords) {
                 for (let kw of a.keywords) {
                     if (question.includes(kw)) {
@@ -88,7 +83,6 @@ function handleKeyPress(e) {
     }
 }
 
-// إضافة زر المساعد إلى الصفحة
 function addAssistantButton() {
     const btn = document.createElement('div');
     btn.id = 'assistantBtn';
@@ -117,7 +111,6 @@ function addAssistantButton() {
     document.getElementById('assistantInput').addEventListener('keypress', handleKeyPress);
 }
 
-// إضافة CSS
 function addAssistantCSS() {
     const style = document.createElement('style');
     style.textContent = `
