@@ -1,4 +1,3 @@
-// ========== التبرع بالدم ==========
 let donors = JSON.parse(localStorage.getItem('donors')) || [];
 let emergencies = JSON.parse(localStorage.getItem('emergencies')) || [];
 
@@ -6,12 +5,10 @@ function showBloodReg() {
     document.getElementById('bloodReg').style.display = 'block';
     document.getElementById('bloodEmer').style.display = 'none';
 }
-
 function showBloodEmer() {
     document.getElementById('bloodEmer').style.display = 'block';
     document.getElementById('bloodReg').style.display = 'none';
 }
-
 function addDonor() {
     let name = document.getElementById('donorName').value;
     let phone = document.getElementById('donorPhone').value;
@@ -24,9 +21,7 @@ function addDonor() {
     document.getElementById('donorPhone').value = '';
     document.getElementById('donorBlood').value = 'فصيلة الدم';
     document.getElementById('bloodReg').style.display = 'none';
-    alert('تم التسجيل كمتبرع');
 }
-
 function addEmergency() {
     let patient = document.getElementById('emergPatient').value;
     let blood = document.getElementById('emergBlood').value;
@@ -39,24 +34,19 @@ function addEmergency() {
     document.getElementById('emergBlood').value = 'فصيلة الدم';
     document.getElementById('emergPhone').value = '';
     document.getElementById('bloodEmer').style.display = 'none';
-    alert('تم نشر الحالة');
 }
-
 function showDonorsList() {
     let c = document.getElementById('donorsList');
     if (!c) return;
-    if (donors.length === 0) { c.innerHTML = '<div class="card">📭 لا متبرعين</div>'; return; }
+    if (donors.length === 0) { c.innerHTML = '<div class="card" style="text-align:center">📭 لا متبرعين</div>'; return; }
     c.innerHTML = donors.map(d => `<div class="donor-card"><span>🩸 ${d.name} (${d.blood})</span><a href="tel:${d.phone}" class="call-btn">اتصل</a></div>`).join('');
 }
-
 function showEmergenciesList() {
     let c = document.getElementById('emergList');
     if (!c) return;
     let active = emergencies.filter(e => e.status === 'active');
-    if (active.length === 0) { c.innerHTML = '<div class="card">✅ لا حالات نشطة</div>'; return; }
+    if (active.length === 0) { c.innerHTML = '<div class="card" style="text-align:center">✅ لا حالات</div>'; return; }
     c.innerHTML = active.map(e => `<div class="emergency-card"><span>🚨 ${e.patient} (${e.blood})</span><a href="tel:${e.phone}" class="call-btn">اتصل</a></div>`).join('');
 }
-
-// تحميل القوائم
 showDonorsList();
 showEmergenciesList();

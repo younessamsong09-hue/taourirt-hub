@@ -22,61 +22,80 @@
             <div class="stat-card"><div class="number" id="marketCount">0</div><div class="label">🛒 سوق</div></div>
         </div>
 
-        <!-- التبرع بالدم -->
-        <div class="blood-card">
-            <div class="section-title">🩸 التبرع بالدم</div>
-            <div class="blood-buttons">
-                <button class="btn-blood" onclick="showBloodReg()">🩸 سجل متبرع</button>
-                <button class="btn-blood-emergency" onclick="showBloodEmer()">🚨 حالة استعجالية</button>
+        <!-- التبرع بالدم (قابل للطي) -->
+        <div class="toggle-card">
+            <div class="toggle-header" onclick="toggleBlood()">
+                <div class="toggle-icon"><i class="fas fa-tint"></i></div>
+                <div class="toggle-title">التبرع بالدم</div>
+                <div class="toggle-count" id="bloodCount">0</div>
+                <div class="toggle-arrow"><i id="bloodArrow" class="fas fa-chevron-down"></i></div>
             </div>
-            <div id="bloodReg" style="display:none; margin-top:8px;">
-                <input type="text" id="donorName" placeholder="الاسم" class="blood-input">
-                <input type="tel" id="donorPhone" placeholder="الهاتف" class="blood-input">
-                <select id="donorBlood" class="blood-input"><option>فصيلة الدم</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select>
-                <button onclick="addDonor()" class="submit-blood">تسجيل</button>
+            <div id="bloodContent" class="toggle-content" style="display:none;">
+                <div class="toggle-buttons">
+                    <button class="toggle-btn" onclick="showBloodReg()">🩸 سجل متبرع</button>
+                    <button class="toggle-btn-emergency" onclick="showBloodEmer()">🚨 حالة استعجالية</button>
+                </div>
+                <div id="bloodReg" style="display:none; margin-top:6px;">
+                    <input type="text" id="donorName" placeholder="الاسم" class="toggle-input">
+                    <input type="tel" id="donorPhone" placeholder="الهاتف" class="toggle-input">
+                    <select id="donorBlood" class="toggle-input"><option>فصيلة الدم</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select>
+                    <button onclick="addDonor()" class="toggle-submit">تسجيل</button>
+                </div>
+                <div id="bloodEmer" style="display:none; margin-top:6px;">
+                    <input type="text" id="emergPatient" placeholder="اسم المريض" class="toggle-input">
+                    <select id="emergBlood" class="toggle-input"><option>فصيلة الدم</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select>
+                    <input type="tel" id="emergPhone" placeholder="رقم التواصل" class="toggle-input">
+                    <button onclick="addEmergency()" class="toggle-submit-emergency">نشر 🚨</button>
+                </div>
+                <div id="donorsList" class="toggle-list"></div>
+                <div id="emergList" class="toggle-list"></div>
             </div>
-            <div id="bloodEmer" style="display:none; margin-top:8px;">
-                <input type="text" id="emergPatient" placeholder="اسم المريض" class="blood-input">
-                <select id="emergBlood" class="blood-input"><option>فصيلة الدم</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select>
-                <input type="tel" id="emergPhone" placeholder="رقم التواصل" class="blood-input">
-                <button onclick="addEmergency()" class="submit-blood-emergency">نشر 🚨</button>
-            </div>
-            <div id="donorsList"></div>
-            <div id="emergList"></div>
         </div>
 
-        <!-- المفقودات والموجودات -->
-        <div class="lost-card">
-            <div class="section-title">🔑 المفقودات والموجودات</div>
-            <div class="lost-buttons">
-                <button class="btn-lost" onclick="showLostForm()">📦 أضف مفقود</button>
-                <button class="btn-found" onclick="showFoundForm()">🎁 أضف موجود</button>
+        <!-- المفقودات والموجودات (قابل للطي) -->
+        <div class="toggle-card">
+            <div class="toggle-header" onclick="toggleLostFound()">
+                <div class="toggle-icon"><i class="fas fa-search"></i></div>
+                <div class="toggle-title">المفقودات والموجودات</div>
+                <div class="toggle-count" id="lostCount">0</div>
+                <div class="toggle-arrow"><i id="lostArrow" class="fas fa-chevron-down"></i></div>
             </div>
-            <div id="lostForm" style="display:none; margin-top:8px;">
-                <input type="text" id="lostTitle" placeholder="العنوان" class="lost-input">
-                <textarea id="lostDesc" placeholder="الوصف" rows="2" class="lost-input"></textarea>
-                <input type="text" id="lostPlace" placeholder="المكان" class="lost-input">
-                <input type="tel" id="lostPhone" placeholder="الهاتف" class="lost-input">
-                <button onclick="addLost()" class="submit-lost">نشر</button>
+            <div id="lostFoundContent" class="toggle-content" style="display:none;">
+                <div class="toggle-buttons">
+                    <button class="toggle-btn-lost" onclick="showLostForm()">📦 أضف مفقود</button>
+                    <button class="toggle-btn-found" onclick="showFoundForm()">🎁 أضف موجود</button>
+                </div>
+                <div id="lostForm" style="display:none; margin-top:6px;">
+                    <input type="text" id="lostTitle" placeholder="العنوان" class="toggle-input">
+                    <textarea id="lostDesc" placeholder="الوصف" rows="2" class="toggle-input"></textarea>
+                    <input type="text" id="lostPlace" placeholder="المكان" class="toggle-input">
+                    <input type="tel" id="lostPhone" placeholder="الهاتف" class="toggle-input">
+                    <button onclick="addLost()" class="toggle-submit-lost">نشر</button>
+                </div>
+                <div id="foundForm" style="display:none; margin-top:6px;">
+                    <input type="text" id="foundTitle" placeholder="العنوان" class="toggle-input">
+                    <textarea id="foundDesc" placeholder="الوصف" rows="2" class="toggle-input"></textarea>
+                    <input type="text" id="foundPlace" placeholder="المكان" class="toggle-input">
+                    <input type="tel" id="foundPhone" placeholder="الهاتف" class="toggle-input">
+                    <button onclick="addFound()" class="toggle-submit-found">نشر</button>
+                </div>
+                <div id="lostList" class="toggle-list"></div>
+                <div id="foundList" class="toggle-list"></div>
             </div>
-            <div id="foundForm" style="display:none; margin-top:8px;">
-                <input type="text" id="foundTitle" placeholder="العنوان" class="lost-input">
-                <textarea id="foundDesc" placeholder="الوصف" rows="2" class="lost-input"></textarea>
-                <input type="text" id="foundPlace" placeholder="المكان" class="lost-input">
-                <input type="tel" id="foundPhone" placeholder="الهاتف" class="lost-input">
-                <button onclick="addFound()" class="submit-found">نشر</button>
-            </div>
-            <div id="lostList"></div>
-            <div id="foundList"></div>
         </div>
 
-        <!-- وظائف -->
-        <div class="jobs-card" onclick="toggleJobs()">
-            <div class="jobs-icon"><i class="fas fa-briefcase"></i></div>
-            <div class="jobs-info"><div class="jobs-title">وظائف</div><div class="jobs-count" id="jobsCount">0</div></div>
-            <div class="jobs-arrow"><i id="jobsArrow" class="fas fa-chevron-down"></i></div>
+        <!-- وظائف (قابل للطي) -->
+        <div class="toggle-card">
+            <div class="toggle-header" onclick="toggleJobs()">
+                <div class="toggle-icon"><i class="fas fa-briefcase"></i></div>
+                <div class="toggle-title">وظائف تاوريرت</div>
+                <div class="toggle-count" id="jobsCount">0</div>
+                <div class="toggle-arrow"><i id="jobsArrow" class="fas fa-chevron-down"></i></div>
+            </div>
+            <div id="jobsContent" class="toggle-content" style="display:none;">
+                <div id="jobsList"></div>
+            </div>
         </div>
-        <div id="jobsDropdown" style="display:none;"><div id="jobsList"></div></div>
 
         <!-- بحث -->
         <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="🔍 بحث..."><button id="clearSearch" class="search-clear" style="display:none;">✖</button></div>
@@ -101,5 +120,56 @@
     <script src="js/complaints.js"></script>
     <script src="js/blood.js"></script>
     <script src="js/lostfound.js"></script>
+
+    <script>
+        function toggleBlood() {
+            let c = document.getElementById('bloodContent');
+            let a = document.getElementById('bloodArrow');
+            if (c.style.display === 'none') {
+                c.style.display = 'block';
+                a.className = 'fas fa-chevron-up';
+            } else {
+                c.style.display = 'none';
+                a.className = 'fas fa-chevron-down';
+            }
+        }
+        function toggleLostFound() {
+            let c = document.getElementById('lostFoundContent');
+            let a = document.getElementById('lostArrow');
+            if (c.style.display === 'none') {
+                c.style.display = 'block';
+                a.className = 'fas fa-chevron-up';
+            } else {
+                c.style.display = 'none';
+                a.className = 'fas fa-chevron-down';
+            }
+        }
+        function toggleJobs() {
+            let c = document.getElementById('jobsContent');
+            let a = document.getElementById('jobsArrow');
+            if (c.style.display === 'none') {
+                c.style.display = 'block';
+                a.className = 'fas fa-chevron-up';
+                if (typeof showJobsList === 'function') showJobsList();
+            } else {
+                c.style.display = 'none';
+                a.className = 'fas fa-chevron-down';
+            }
+        }
+        // تحديث الأعداد
+        function updateBloodCount() {
+            let donors = JSON.parse(localStorage.getItem('donors')) || [];
+            let emergencies = JSON.parse(localStorage.getItem('emergencies')) || [];
+            document.getElementById('bloodCount').innerText = donors.length + emergencies.length;
+        }
+        function updateLostCount() {
+            let lost = JSON.parse(localStorage.getItem('lost_items')) || [];
+            let found = JSON.parse(localStorage.getItem('found_items')) || [];
+            document.getElementById('lostCount').innerText = lost.length + found.length;
+        }
+        setInterval(() => { updateBloodCount(); updateLostCount(); }, 1000);
+        updateBloodCount();
+        updateLostCount();
+    </script>
 </body>
 </html>

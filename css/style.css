@@ -1201,3 +1201,112 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
 .jobs-count {
     font-size: 12px;
 }
+
+/* بطاقات قابلة للطي مثل الوظائف */
+.toggle-card {
+    background: #1e293b;
+    border-radius: 16px;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+.toggle-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    cursor: pointer;
+    background: #1e293b;
+}
+.toggle-header:hover {
+    background: #334155;
+}
+.toggle-icon {
+    width: 28px;
+    height: 28px;
+    background: #3b82f6;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.toggle-icon i {
+    font-size: 14px;
+    color: white;
+}
+.toggle-title {
+    flex: 1;
+    font-size: 13px;
+    font-weight: bold;
+    color: #22d3ee;
+}
+.toggle-count {
+    font-size: 12px;
+    color: #facc15;
+    background: #0f172a;
+    padding: 2px 8px;
+    border-radius: 20px;
+}
+.toggle-arrow i {
+    color: #94a3b8;
+    font-size: 12px;
+}
+.toggle-content {
+    border-top: 1px solid #334155;
+    padding: 10px;
+    background: #0f172a;
+}
+.toggle-buttons {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+.toggle-btn, .toggle-btn-emergency, .toggle-btn-lost, .toggle-btn-found {
+    flex: 1;
+    border: none;
+    padding: 5px;
+    border-radius: 25px;
+    color: white;
+    cursor: pointer;
+    font-size: 11px;
+}
+.toggle-btn { background: #ef4444; }
+.toggle-btn-emergency { background: #dc2626; }
+.toggle-btn-lost { background: #ef4444; }
+.toggle-btn-found { background: #22c55e; }
+.toggle-input {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 5px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    color: white;
+    font-size: 11px;
+}
+.toggle-submit, .toggle-submit-emergency, .toggle-submit-lost, .toggle-submit-found {
+    width: 100%;
+    border: none;
+    padding: 5px;
+    border-radius: 25px;
+    color: white;
+    cursor: pointer;
+    font-size: 11px;
+}
+.toggle-submit { background: #ef4444; }
+.toggle-submit-emergency { background: #dc2626; }
+.toggle-submit-lost { background: #ef4444; }
+.toggle-submit-found { background: #22c55e; }
+.toggle-list {
+    margin-top: 8px;
+}
+.toggle-list .donor-card, .toggle-list .emergency-card,
+.toggle-list .lost-card, .toggle-list .found-card {
+    background: #1e293b;
+    padding: 5px 8px;
+    margin-bottom: 4px;
+    border-radius: 10px;
+    font-size: 11px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
