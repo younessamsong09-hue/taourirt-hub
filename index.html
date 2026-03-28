@@ -15,166 +15,81 @@
     </div>
 
     <div class="container" style="max-width: 550px; margin: auto;">
-        <!-- الصف العلوي: إحصائيات -->
+        <!-- الإحصائيات -->
         <div class="stats-row">
+            <div class="stat-card"><div class="number" id="visitorCount">0</div><div class="label">👁️ زائر</div></div>
+            <div class="stat-card"><div class="number" id="pharmacyCount">0</div><div class="label">🏥 صيدلية</div></div>
+            <div class="stat-card"><div class="number" id="marketCount">0</div><div class="label">🛒 سوق</div></div>
+        </div>
+
+        <!-- التبرع بالدم -->
+        <div class="blood-card">
+            <div class="section-title">🩸 التبرع بالدم</div>
+            <div class="blood-buttons">
+                <button onclick="showBloodReg()" class="btn-blood">🩸 سجل متبرع</button>
+                <button onclick="showBloodEmer()" class="btn-blood-emergency">🚨 حالة استعجالية</button>
+            </div>
+            <div id="bloodRegForm" style="display:none; margin-top:8px;">
+                <input type="text" id="donorName" placeholder="الاسم" class="blood-input">
+                <input type="tel" id="donorPhone" placeholder="الهاتف" class="blood-input">
+                <select id="donorBlood" class="blood-input"><option>فصيلة الدم</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select>
+                <button onclick="addDonor()" class="submit-blood">تسجيل</button>
+            </div>
+            <div id="bloodEmerForm" style="display:none; margin-top:8px;">
+                <input type="text" id="emergPatient" placeholder="اسم المريض" class="blood-input">
+                <select id="emergBlood" class="blood-input"><option>فصيلة الدم</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select>
+                <input type="tel" id="emergPhone" placeholder="رقم التواصل" class="blood-input">
+                <button onclick="addEmergency()" class="submit-blood-emergency">نشر 🚨</button>
+            </div>
+            <div id="donorsList"></div>
+            <div id="emergList"></div>
+        </div>
 
         <!-- المفقودات والموجودات -->
         <div class="lostfound-card">
             <div class="section-title">🔑 المفقودات والموجودات</div>
             <div class="lostfound-buttons">
-                <button onclick="showLostForm()" class="btn-lost">📦 أضف مفقود</button>
-                <button onclick="showFoundForm()" class="btn-found">🎁 أضف موجود</button>
+                <button onclick="showLost()" class="btn-lost">📦 أضف مفقود</button>
+                <button onclick="showFound()" class="btn-found">🎁 أضف موجود</button>
             </div>
-            <div id="lostForm" style="display:none; margin-top:15px;">
+            <div id="lostForm" style="display:none; margin-top:8px;">
                 <input type="text" id="lostTitle" placeholder="العنوان" class="lost-input">
                 <textarea id="lostDesc" placeholder="الوصف" rows="2" class="lost-input"></textarea>
                 <input type="text" id="lostPlace" placeholder="المكان" class="lost-input">
-                <input type="tel" id="lostPhone" placeholder="رقم الهاتف" class="lost-input">
-                <button onclick="addLost()" class="submit-lost">نشر</button>
+                <input type="tel" id="lostPhone" placeholder="الهاتف" class="lost-input">
+                <button onclick="addLostItem()" class="submit-lost">نشر</button>
             </div>
-            <div id="foundForm" style="display:none; margin-top:15px;">
+            <div id="foundForm" style="display:none; margin-top:8px;">
                 <input type="text" id="foundTitle" placeholder="العنوان" class="lost-input">
                 <textarea id="foundDesc" placeholder="الوصف" rows="2" class="lost-input"></textarea>
                 <input type="text" id="foundPlace" placeholder="المكان" class="lost-input">
-                <input type="tel" id="foundPhone" placeholder="رقم الهاتف" class="lost-input">
-                <button onclick="addFound()" class="submit-found">نشر</button>
+                <input type="tel" id="foundPhone" placeholder="الهاتف" class="lost-input">
+                <button onclick="addFoundItem()" class="submit-found">نشر</button>
             </div>
             <div id="lostList"></div>
             <div id="foundList"></div>
         </div>
-            <div class="stat-card">
 
-        <!-- المفقودات والموجودات -->
-        <div class="lostfound-card">
-            <div class="section-title">🔑 المفقودات والموجودات</div>
-            <div class="lostfound-buttons">
-                <button onclick="showLostForm()" class="btn-lost">📦 أضف مفقود</button>
-                <button onclick="showFoundForm()" class="btn-found">🎁 أضف موجود</button>
-            </div>
-            <div id="lostForm" style="display:none; margin-top:15px;">
-                <input type="text" id="lostTitle" placeholder="العنوان" class="lost-input">
-                <textarea id="lostDesc" placeholder="الوصف" rows="2" class="lost-input"></textarea>
-                <input type="text" id="lostPlace" placeholder="المكان" class="lost-input">
-                <input type="tel" id="lostPhone" placeholder="رقم الهاتف" class="lost-input">
-                <button onclick="addLost()" class="submit-lost">نشر</button>
-            </div>
-            <div id="foundForm" style="display:none; margin-top:15px;">
-                <input type="text" id="foundTitle" placeholder="العنوان" class="lost-input">
-                <textarea id="foundDesc" placeholder="الوصف" rows="2" class="lost-input"></textarea>
-                <input type="text" id="foundPlace" placeholder="المكان" class="lost-input">
-                <input type="tel" id="foundPhone" placeholder="رقم الهاتف" class="lost-input">
-                <button onclick="addFound()" class="submit-found">نشر</button>
-            </div>
-            <div id="lostList"></div>
-            <div id="foundList"></div>
+        <!-- وظائف -->
+        <div class="jobs-card" onclick="toggleJobs()">
+            <div class="jobs-icon"><i class="fas fa-briefcase"></i></div>
+            <div class="jobs-info"><div class="jobs-title">وظائف</div><div class="jobs-count" id="jobsCount">0</div></div>
+            <div class="jobs-arrow"><i id="jobsArrow" class="fas fa-chevron-down"></i></div>
         </div>
-                <div class="number" id="visitorCount">0</div>
+        <div id="jobsDropdown" style="display:none;"><div id="jobsList"></div></div>
 
-        <!-- المفقودات والموجودات -->
-        <div class="lostfound-card">
-            <div class="section-title">🔑 المفقودات والموجودات</div>
-            <div class="lostfound-buttons">
-                <button onclick="showLostForm()" class="btn-lost">📦 أضف مفقود</button>
-                <button onclick="showFoundForm()" class="btn-found">🎁 أضف موجود</button>
-            </div>
-            <div id="lostForm" style="display:none; margin-top:15px;">
-                <input type="text" id="lostTitle" placeholder="العنوان" class="lost-input">
-                <textarea id="lostDesc" placeholder="الوصف" rows="2" class="lost-input"></textarea>
-                <input type="text" id="lostPlace" placeholder="المكان" class="lost-input">
-                <input type="tel" id="lostPhone" placeholder="رقم الهاتف" class="lost-input">
-                <button onclick="addLost()" class="submit-lost">نشر</button>
-            </div>
-            <div id="foundForm" style="display:none; margin-top:15px;">
-                <input type="text" id="foundTitle" placeholder="العنوان" class="lost-input">
-                <textarea id="foundDesc" placeholder="الوصف" rows="2" class="lost-input"></textarea>
-                <input type="text" id="foundPlace" placeholder="المكان" class="lost-input">
-                <input type="tel" id="foundPhone" placeholder="رقم الهاتف" class="lost-input">
-                <button onclick="addFound()" class="submit-found">نشر</button>
-            </div>
-            <div id="lostList"></div>
-            <div id="foundList"></div>
-        </div>
-                <div class="label"><i class="fas fa-eye"></i> زائر</div>
-            </div>
-            <div class="stat-card">
-                <div class="number" id="pharmacyCount">0</div>
-                <div class="label"><i class="fas fa-hospital-user"></i> صيدلية</div>
-            </div>
-            <div class="stat-card">
-                <div class="number" id="marketCount">0</div>
-                <div class="label"><i class="fas fa-store"></i> سوق</div>
-            </div>
-        </div>
-
-        <!-- بطاقات الخدمات -->
-        <div class="services-row">
-            <div class="service-card" onclick="toggleJobs()">
-                <div class="service-icon jobs-icon"><i class="fas fa-briefcase"></i></div>
-                <div class="service-info">
-                    <div class="service-title">وظائف</div>
-                    <div class="service-count" id="jobsCount">0</div>
-                </div>
-                <div class="service-arrow"><i id="jobsArrow" class="fas fa-chevron-down"></i></div>
-            </div>
-            
-            <div class="service-card" onclick="showComplaintForm()">
-                <div class="service-icon complaints-icon"><i class="fas fa-comment-dots"></i></div>
-                <div class="service-info">
-                    <div class="service-title">شكاوى</div>
-                    <div class="service-count" id="complaintsCount">0</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- القائمة المنسدلة للوظائف -->
-        <div id="jobsDropdown" style="display: none;">
-            <div id="jobsList"></div>
-        </div>
-
-        <div class="search-box">
-            <i class="fas fa-search"></i>
-            <input type="text" id="searchInput" placeholder="🔍 بحث بالاسم أو الحي أو الهاتف...">
-            <button id="clearSearch" class="search-clear" style="display: none;">✖</button>
-        </div>
-
+        <!-- بحث -->
+        <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="🔍 بحث..."><button id="clearSearch" class="search-clear" style="display:none;">✖</button></div>
         <div id="neighborhoods-container"></div>
-
-        <div id="map-container" style="background:#1e293b; border-radius:20px; padding:12px; margin-bottom:20px;">
-            <div id="map" style="height:200px; border-radius:16px;"></div>
-        </div>
-
-        <div id="duty-container"><div class="loading">⏳ جاري التحميل...</div></div>
-
-        <div class="section-title">📋 الصيدليات <span id="pharmCount" style="font-size: 14px;"></span></div>
-        <div id="pharmacies-container"><div class="loading">⏳ جاري التحميل...</div></div>
-
-        <div class="section-title">🛒 الأسواق والمحلات</div>
-        <div id="markets-container"><div class="loading">⏳ جاري التحميل...</div></div>
+        <div id="map-container"><div id="map"></div></div>
+        <div id="duty-container"><div class="loading">⏳</div></div>
+        <div class="section-title">📋 الصيدليات <span id="pharmCount"></span></div>
+        <div id="pharmacies-container"><div class="loading">⏳</div></div>
+        <div class="section-title">🛒 الأسواق</div>
+        <div id="markets-container"><div class="loading">⏳</div></div>
     </div>
 
-    <div class="footer">
-        ❤️ تاوريرت هب - دليل المدينة الرقمي ❤️
-    </div>
-
-    <!-- نموذج تقديم شكوى -->
-    <div id="complaintModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:10000; align-items:center; justify-content:center;">
-        <div style="background:#1e293b; border-radius:24px; padding:20px; width:90%; max-width:500px;">
-            <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
-                <h3 style="color:#22d3ee;"><i class="fas fa-comment-dots"></i> شكوى أو اقتراح</h3>
-                <span onclick="closeComplaintForm()" style="font-size:28px; cursor:pointer;">&times;</span>
-            </div>
-            <input type="text" id="complaintName" placeholder="الاسم الكامل *" style="width:100%; padding:10px; margin-bottom:10px; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;">
-            <input type="tel" id="complaintPhone" placeholder="رقم الهاتف *" style="width:100%; padding:10px; margin-bottom:10px; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;">
-            <select id="complaintType" style="width:100%; padding:10px; margin-bottom:10px; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;">
-                <option value="complaint">شكوى</option>
-                <option value="suggestion">اقتراح</option>
-            </select>
-            <input type="text" id="complaintLocation" placeholder="الموقع" style="width:100%; padding:10px; margin-bottom:10px; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;">
-            <input type="text" id="complaintTitle" placeholder="العنوان *" style="width:100%; padding:10px; margin-bottom:10px; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;">
-            <textarea id="complaintDescription" rows="4" placeholder="التفاصيل *" style="width:100%; padding:10px; margin-bottom:15px; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;"></textarea>
-            <button onclick="submitComplaint()" style="width:100%; background:#22c55e; border:none; padding:12px; border-radius:30px; color:white;">إرسال</button>
-        </div>
-    </div>
+    <div class="footer">❤️ تاوريرت هب</div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="js/config.js"></script>
@@ -182,746 +97,89 @@
     <script src="js/map.js"></script>
     <script src="js/ui.js"></script>
     <script src="js/main.js"></script>
-    <script src="js/blood.js"></script>
-    <script src="js/assistant.js"></script>
     <script src="js/jobs.js"></script>
     <script src="js/complaints.js"></script>
-    <script src="js/assistant.js"></script>
-</body>
-</html>
+
     <script>
-        // إضافة الصوت للمساعد
-        (function() {
-            // انتظار تحميل المساعد
-            setTimeout(() => {
-                // إضافة زر الميكروفون
-                const inputContainer = document.querySelector('#assistantPanel .assistant-input');
-                if (inputContainer && !document.querySelector('#micBtn')) {
-                    const micBtn = document.createElement('button');
-                    micBtn.id = 'micBtn';
-                    micBtn.innerHTML = '<i class="fas fa-microphone"></i>';
-                    micBtn.style.cssText = 'background:#3b82f6; border:none; width:40px; height:40px; border-radius:50%; color:white; cursor:pointer; margin-left:5px;';
-                    micBtn.onclick = () => {
-                        if (!('webkitSpeechRecognition' in window)) {
-                            alert('متصفحك لا يدعم التعرف على الصوت');
-                            return;
-                        }
-                        const recognition = new webkitSpeechRecognition();
-                        recognition.lang = 'ar-MA';
-                        micBtn.style.background = '#ef4444';
-                        recognition.start();
-                        recognition.onresult = (event) => {
-                            const text = event.results[0][0].transcript;
-                            const input = document.getElementById('assistantInput');
-                            if (input) {
-                                input.value = text;
-                                const sendBtn = document.getElementById('sendBtn');
-                                if (sendBtn) sendBtn.click();
-                            }
-                            micBtn.style.background = '#3b82f6';
-                        };
-                        recognition.onerror = () => {
-                            micBtn.style.background = '#3b82f6';
-                        };
-                    };
-                    inputContainer.appendChild(micBtn);
-                }
-                
-                // جعل المساعد يتحدث
-                function speakMessage(text) {
-                    if ('speechSynthesis' in window && text && !text.includes('مرحبا')) {
-                        window.speechSynthesis.cancel();
-                        const utterance = new SpeechSynthesisUtterance(text);
-                        utterance.lang = 'ar-MA';
-                        utterance.rate = 0.85;
-                        window.speechSynthesis.speak(utterance);
-                    }
-                }
-                
-                // حفظ الدالة الأصلية
-                const originalAddMessage = window.addMessage;
-                if (originalAddMessage) {
-                    window.addMessage = function(text, isUser) {
-                        originalAddMessage(text, isUser);
-                        if (!isUser) {
-                            setTimeout(() => speakMessage(text), 100);
-                        }
-                    };
-                }
-            }, 1000);
-        })();
-    </script>
-        <!-- قسم التبرع بالدم -->
-            
-            <div class="blood-tabs">
-                <button class="blood-tab active" onclick="showBloodTab('register')">تسجيل متبرع</button>
-                <button class="blood-tab" onclick="showBloodTab('emergency')">حالة استعجالية</button>
-                <button class="blood-tab" onclick="showBloodTab('donors')">قائمة المتبرعين</button>
-                <button class="blood-tab" onclick="showBloodTab('emergencies')">حالات نشطة</button>
-                <button class="blood-tab" onclick="showBloodTab('stats')">إحصائيات</button>
-            </div>
-            
-            <div id="bloodRegister" class="blood-tab-content active">
-                <div class="blood-form">
-                    <h3><i class="fas fa-user-plus"></i> تسجيل متبرع جديد</h3>
-                    <input type="text" id="donorName" placeholder="الاسم الكامل *" class="blood-input">
-                    <input type="tel" id="donorPhone" placeholder="رقم الهاتف *" class="blood-input">
-                    <select id="donorBloodType" class="blood-input">
-                        <option value="">اختر فصيلة الدم *</option>
-                        <option value="A+">A+</option><option value="A-">A-</option>
-                        <option value="B+">B+</option><option value="B-">B-</option>
-                        <option value="AB+">AB+</option><option value="AB-">AB-</option>
-                        <option value="O+">O+</option><option value="O-">O-</option>
-                    </select>
-                    <input type="text" id="donorLocation" placeholder="الموقع (الحي، الشارع)" class="blood-input">
-                    <button onclick="registerDonor()" class="blood-btn">تسجيل 🩸</button>
-                </div>
-            </div>
-            
-            <div id="bloodEmergency" class="blood-tab-content">
-                <div class="blood-form">
-                    <h3><i class="fas fa-ambulance"></i> حالة استعجالية - طلب متبرع</h3>
-                    <input type="text" id="emergencyPatient" placeholder="اسم المريض *" class="blood-input">
-                    <select id="emergencyBloodType" class="blood-input">
-                        <option value="">فصيلة الدم المطلوبة *</option>
-                        <option value="A+">A+</option><option value="A-">A-</option>
-                        <option value="B+">B+</option><option value="B-">B-</option>
-                        <option value="AB+">AB+</option><option value="AB-">AB-</option>
-                        <option value="O+">O+</option><option value="O-">O-</option>
-                    </select>
-                    <input type="text" id="emergencyHospital" placeholder="المستشفى" class="blood-input">
-                    <input type="tel" id="emergencyContact" placeholder="رقم جهة الاتصال *" class="blood-input">
-                    <button onclick="requestEmergency()" class="blood-btn urgent">نشر استغاثة 🚨</button>
-                </div>
-            </div>
-            
-            <div id="bloodDonors" class="blood-tab-content">
-                <div id="donorsList">جاري التحميل...</div>
-            </div>
-            
-            <div id="bloodEmergencies" class="blood-tab-content">
-                <div id="emergenciesList">جاري التحميل...</div>
-            </div>
-            
-            <div id="bloodStats" class="blood-tab-content">
-                <div id="bloodStats">جاري التحميل...</div>
-            </div>
-        </div>
-    <script>
-        // تبديل تبويبات التبرع بالدم
-        function showBloodTab(tab) {
-            document.querySelectorAll('.blood-tab').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.blood-tab-content').forEach(content => content.classList.remove('active'));
-            
-            if (tab === 'register') {
-                document.querySelector('#bloodRegister').classList.add('active');
-                document.querySelector('.blood-tab:first-child').classList.add('active');
-            } else if (tab === 'emergency') {
-                document.querySelector('#bloodEmergency').classList.add('active');
-                document.querySelector('.blood-tab:nth-child(2)').classList.add('active');
-            } else if (tab === 'donors') {
-                document.querySelector('#bloodDonors').classList.add('active');
-                document.querySelector('.blood-tab:nth-child(3)').classList.add('active');
-                showDonorsList();
-            } else if (tab === 'emergencies') {
-                document.querySelector('#bloodEmergencies').classList.add('active');
-                document.querySelector('.blood-tab:nth-child(4)').classList.add('active');
-                showEmergenciesList();
-            } else if (tab === 'stats') {
-                document.querySelector('#bloodStats').classList.add('active');
-                document.querySelector('.blood-tab:nth-child(5)').classList.add('active');
-                showBloodStats();
-            }
+        // التبرع بالدم
+        let donors = JSON.parse(localStorage.getItem('donors')) || [];
+        let emergencies = JSON.parse(localStorage.getItem('emergencies')) || [];
+
+        function showBloodReg() { document.getElementById('bloodRegForm').style.display = 'block'; document.getElementById('bloodEmerForm').style.display = 'none'; }
+        function showBloodEmer() { document.getElementById('bloodEmerForm').style.display = 'block'; document.getElementById('bloodRegForm').style.display = 'none'; }
+
+        function addDonor() {
+            let name = document.getElementById('donorName').value;
+            let phone = document.getElementById('donorPhone').value;
+            let blood = document.getElementById('donorBlood').value;
+            if (!name || !phone || !blood) { alert('املأ الحقول'); return; }
+            donors.push({id:Date.now(), name, phone, blood});
+            localStorage.setItem('donors', JSON.stringify(donors));
+            showDonors();
+            document.getElementById('donorName').value = '';
+            document.getElementById('donorPhone').value = '';
+            document.getElementById('donorBlood').value = 'فصيلة الدم';
+            document.getElementById('bloodRegForm').style.display = 'none';
         }
-        
-        // عرض القوائم عند تحميل الصفحة
-        setTimeout(() => {
-            if (document.getElementById('donorsList')) showDonorsList();
-            if (document.getElementById('emergenciesList')) showEmergenciesList();
-            if (document.getElementById('bloodStats')) showBloodStats();
-        }, 500);
-    </script>
-        <!-- قسم المفقودات والموجودات -->
-        <div class="lostfound-section">
-            <div class="section-title">🔑 المفقودات والموجودات</div>
-            
-            <div class="lostfound-buttons">
-                <button onclick="showLostForm()" class="lost-btn">📦 أبلغ عن مفقود</button>
-                <button onclick="showFoundForm()" class="found-btn">🎁 أبلغ عن موجود</button>
-            </div>
-            
-            <div id="lostForm" style="display:none;">
-                <input type="text" id="lostTitle" placeholder="مثال: مفاتيح السيارة" style="width:100%; padding:10px; margin:5px 0; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;">
-                <textarea id="lostDesc" placeholder="الوصف" rows="2" style="width:100%; padding:10px; margin:5px 0; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;"></textarea>
-                <input type="text" id="lostPhone" placeholder="رقم الهاتف" style="width:100%; padding:10px; margin:5px 0; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;">
-                <button onclick="addLost()" style="background:#ef4444; border:none; padding:10px; border-radius:30px; color:white;">نشر</button>
-            </div>
-            
-            <div id="foundForm" style="display:none;">
-                <input type="text" id="foundTitle" placeholder="مثال: بطاقة تعريف" style="width:100%; padding:10px; margin:5px 0; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;">
-                <textarea id="foundDesc" placeholder="الوصف" rows="2" style="width:100%; padding:10px; margin:5px 0; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;"></textarea>
-                <input type="text" id="foundPhone" placeholder="رقم الهاتف" style="width:100%; padding:10px; margin:5px 0; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;">
-                <button onclick="addFound()" style="background:#22c55e; border:none; padding:10px; border-radius:30px; color:white;">نشر</button>
-            </div>
-            
-            <div id="lostList"></div>
-            <div id="foundList"></div>
-        </div>
-    <script>
-        let lostItems = JSON.parse(localStorage.getItem('lost')) || [];
-        let foundItems = JSON.parse(localStorage.getItem('found')) || [];
-        
-        function showLostForm() {
-            document.getElementById('lostForm').style.display = 'block';
-            document.getElementById('foundForm').style.display = 'none';
+
+        function addEmergency() {
+            let patient = document.getElementById('emergPatient').value;
+            let blood = document.getElementById('emergBlood').value;
+            let phone = document.getElementById('emergPhone').value;
+            if (!patient || !blood || !phone) { alert('املأ الحقول'); return; }
+            emergencies.push({id:Date.now(), patient, blood, phone, status:'active'});
+            localStorage.setItem('emergencies', JSON.stringify(emergencies));
+            showEmergencies();
+            document.getElementById('emergPatient').value = '';
+            document.getElementById('emergBlood').value = 'فصيلة الدم';
+            document.getElementById('emergPhone').value = '';
+            document.getElementById('bloodEmerForm').style.display = 'none';
         }
-        function showFoundForm() {
-            document.getElementById('foundForm').style.display = 'block';
-            document.getElementById('lostForm').style.display = 'none';
+
+        function showDonors() {
+            let c = document.getElementById('donorsList');
+            if (donors.length === 0) { c.innerHTML = '<div class="card">📭 لا متبرعين</div>'; return; }
+            c.innerHTML = donors.map(d => `<div class="donor-card"><span>🩸 ${d.name} (${d.blood})</span><a href="tel:${d.phone}" class="call-btn">اتصل</a></div>`).join('');
         }
-        
-        function addLost() {
-            let title = document.getElementById('lostTitle').value;
-            let desc = document.getElementById('lostDesc').value;
-            let phone = document.getElementById('lostPhone').value;
-            if(!title || !desc || !phone) { alert('املأ الحقول'); return; }
-            lostItems.unshift({id:Date.now(), title, desc, phone});
-            localStorage.setItem('lost', JSON.stringify(lostItems));
-            showLostList();
-            document.getElementById('lostTitle').value = '';
-            document.getElementById('lostDesc').value = '';
-            document.getElementById('lostPhone').value = '';
-            document.getElementById('lostForm').style.display = 'none';
+
+        function showEmergencies() {
+            let c = document.getElementById('emergList');
+            let active = emergencies.filter(e => e.status === 'active');
+            if (active.length === 0) { c.innerHTML = '<div class="card">✅ لا حالات</div>'; return; }
+            c.innerHTML = active.map(e => `<div class="emergency-card"><span>🚨 ${e.patient} (${e.blood})</span><a href="tel:${e.phone}" class="call-btn">اتصل</a></div>`).join('');
         }
-        
-        function addFound() {
-            let title = document.getElementById('foundTitle').value;
-            let desc = document.getElementById('foundDesc').value;
-            let phone = document.getElementById('foundPhone').value;
-            if(!title || !desc || !phone) { alert('املأ الحقول'); return; }
-            foundItems.unshift({id:Date.now(), title, desc, phone});
-            localStorage.setItem('found', JSON.stringify(foundItems));
-            showFoundList();
-            document.getElementById('foundTitle').value = '';
-            document.getElementById('foundDesc').value = '';
-            document.getElementById('foundPhone').value = '';
-            document.getElementById('foundForm').style.display = 'none';
-        }
-        
-        function showLostList() {
-            let container = document.getElementById('lostList');
-            if(lostItems.length === 0) { container.innerHTML = '<div class="card">لا توجد إعلانات</div>'; return; }
-            container.innerHTML = lostItems.map(i => `
-                <div class="card">
-                    <h3>📦 ${i.title}</h3>
-                    <p>${i.desc}</p>
-                    <a href="tel:${i.phone}" class="phone-link">📞 اتصل</a>
-                    <button onclick="removeLost(${i.id})" style="background:#ef4444; border:none; padding:3px 8px; border-radius:15px; color:white;">✓</button>
-                </div>
-            `).join('');
-        }
-        
-        function showFoundList() {
-            let container = document.getElementById('foundList');
-            if(foundItems.length === 0) { container.innerHTML = '<div class="card">لا توجد إعلانات</div>'; return; }
-            container.innerHTML = foundItems.map(i => `
-                <div class="card">
-                    <h3>🎁 ${i.title}</h3>
-                    <p>${i.desc}</p>
-                    <a href="tel:${i.phone}" class="phone-link">📞 اتصل</a>
-                    <button onclick="removeFound(${i.id})" style="background:#22c55e; border:none; padding:3px 8px; border-radius:15px; color:white;">✓</button>
-                </div>
-            `).join('');
-        }
-        
-        function removeLost(id) { lostItems = lostItems.filter(i => i.id !== id); localStorage.setItem('lost', JSON.stringify(lostItems)); showLostList(); }
-        function removeFound(id) { foundItems = foundItems.filter(i => i.id !== id); localStorage.setItem('found', JSON.stringify(foundItems)); showFoundList(); }
-        
-        showLostList();
-        showFoundList();
-    </script>
-        <!-- قسم المفقودات والموجودات -->
-            
-            <div class="lostfound-btns">
-                <button onclick="toggleLostForm()" class="btn-lost">📦 أضف مفقود</button>
-                <button onclick="toggleFoundForm()" class="btn-found">🎁 أضف موجود</button>
-            </div>
-            
-            <div id="lostForm" style="display:none; margin-top:15px;">
-                <input type="text" id="lostTitle" placeholder="العنوان (مثال: مفاتيح)" class="lost-input">
-                <textarea id="lostDesc" placeholder="الوصف" rows="2" class="lost-input"></textarea>
-                <input type="text" id="lostPlace" placeholder="المكان" class="lost-input">
-                <input type="tel" id="lostPhone" placeholder="رقم الهاتف" class="lost-input">
-                <button onclick="addLostItem()" class="submit-lost">نشر</button>
-            </div>
-            
-            <div id="foundForm" style="display:none; margin-top:15px;">
-                <input type="text" id="foundTitle" placeholder="العنوان (مثال: بطاقة تعريف)" class="lost-input">
-                <textarea id="foundDesc" placeholder="الوصف" rows="2" class="lost-input"></textarea>
-                <input type="text" id="foundPlace" placeholder="المكان" class="lost-input">
-                <input type="tel" id="foundPhone" placeholder="رقم الهاتف" class="lost-input">
-                <button onclick="addFoundItem()" class="submit-found">نشر</button>
-            </div>
-            
-            <div id="lostItems"></div>
-            <div id="foundItems"></div>
-        </div>
-    <script>
-        // بيانات المفقودات والموجودات
-        let lostList = JSON.parse(localStorage.getItem('lost_items')) || [];
-        let foundList = JSON.parse(localStorage.getItem('found_items')) || [];
-        
-        function toggleLostForm() {
-            document.getElementById('lostForm').style.display = 'block';
-            document.getElementById('foundForm').style.display = 'none';
-        }
-        
-        function toggleFoundForm() {
-            document.getElementById('foundForm').style.display = 'block';
-            document.getElementById('lostForm').style.display = 'none';
-        }
-        
+
+        // المفقودات
+        let lost = JSON.parse(localStorage.getItem('lost')) || [];
+        let found = JSON.parse(localStorage.getItem('found')) || [];
+
+        function showLost() { document.getElementById('lostForm').style.display = 'block'; document.getElementById('foundForm').style.display = 'none'; }
+        function showFound() { document.getElementById('foundForm').style.display = 'block'; document.getElementById('lostForm').style.display = 'none'; }
+
         function addLostItem() {
             let title = document.getElementById('lostTitle').value;
             let desc = document.getElementById('lostDesc').value;
             let place = document.getElementById('lostPlace').value;
             let phone = document.getElementById('lostPhone').value;
-            
-            if (!title || !desc || !phone) {
-                alert('الرجاء ملء الحقول المطلوبة');
-                return;
-            }
-            
-            lostList.unshift({
-                id: Date.now(),
-                title: title,
-                desc: desc,
-                place: place,
-                phone: phone,
-                date: new Date().toLocaleDateString('ar-MA')
-            });
-            
-            localStorage.setItem('lost_items', JSON.stringify(lostList));
-            showLostItems();
-            
+            if (!title || !desc || !phone) return;
+            lost.unshift({id:Date.now(), title, desc, place, phone, date:new Date().toLocaleDateString()});
+            localStorage.setItem('lost', JSON.stringify(lost));
+            showLostList();
             document.getElementById('lostTitle').value = '';
             document.getElementById('lostDesc').value = '';
             document.getElementById('lostPlace').value = '';
             document.getElementById('lostPhone').value = '';
             document.getElementById('lostForm').style.display = 'none';
-            alert('تم إضافة العنصر المفقود');
         }
-        
+
         function addFoundItem() {
             let title = document.getElementById('foundTitle').value;
             let desc = document.getElementById('foundDesc').value;
             let place = document.getElementById('foundPlace').value;
             let phone = document.getElementById('foundPhone').value;
-            
-            if (!title || !desc || !phone) {
-                alert('الرجاء ملء الحقول المطلوبة');
-                return;
-            }
-            
-            foundList.unshift({
-                id: Date.now(),
-                title: title,
-                desc: desc,
-                place: place,
-                phone: phone,
-                date: new Date().toLocaleDateString('ar-MA')
-            });
-            
-            localStorage.setItem('found_items', JSON.stringify(foundList));
-            showFoundItems();
-            
-            document.getElementById('foundTitle').value = '';
-            document.getElementById('foundDesc').value = '';
-            document.getElementById('foundPlace').value = '';
-            document.getElementById('foundPhone').value = '';
-            document.getElementById('foundForm').style.display = 'none';
-            alert('تم إضافة العنصر الموجود');
-        }
-        
-        function showLostItems() {
-            let container = document.getElementById('lostItems');
-            if (lostList.length === 0) {
-                container.innerHTML = '<div class="card" style="text-align:center">📭 لا توجد إعلانات مفقودة</div>';
-                return;
-            }
-            
-            container.innerHTML = lostList.map(item => `
-                <div class="lost-card">
-                    <div class="lost-card-header">
-                        <h3>📦 ${item.title}</h3>
-                        <span class="badge-lost">مفقود</span>
-                    </div>
-                    <p>${item.desc}</p>
-                    <p><i class="fas fa-location-dot"></i> ${item.place || 'تاوريرت'}</p>
-                    <p><i class="fas fa-calendar"></i> ${item.date}</p>
-                    <div class="lost-card-footer">
-                        <a href="tel:${item.phone}" class="call-btn">📞 اتصل</a>
-                        <button onclick="removeLost(${item.id})" class="done-btn">تم الحل ✓</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-        
-        function showFoundItems() {
-            let container = document.getElementById('foundItems');
-            if (foundList.length === 0) {
-                container.innerHTML = '<div class="card" style="text-align:center">📭 لا توجد إعلانات موجودة</div>';
-                return;
-            }
-            
-            container.innerHTML = foundList.map(item => `
-                <div class="found-card">
-                    <div class="found-card-header">
-                        <h3>🎁 ${item.title}</h3>
-                        <span class="badge-found">موجود</span>
-                    </div>
-                    <p>${item.desc}</p>
-                    <p><i class="fas fa-location-dot"></i> ${item.place || 'تاوريرت'}</p>
-                    <p><i class="fas fa-calendar"></i> ${item.date}</p>
-                    <div class="found-card-footer">
-                        <a href="tel:${item.phone}" class="call-btn">📞 اتصل</a>
-                        <button onclick="removeFound(${item.id})" class="done-btn">تم التسليم ✓</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-        
-        function removeLost(id) {
-            lostList = lostList.filter(item => item.id !== id);
-            localStorage.setItem('lost_items', JSON.stringify(lostList));
-            showLostItems();
-            alert('تم إزالة الإعلان');
-        }
-        
-        function removeFound(id) {
-            foundList = foundList.filter(item => item.id !== id);
-            localStorage.setItem('found_items', JSON.stringify(foundList));
-            showFoundItems();
-            alert('تم إزالة الإعلان');
-        }
-        
-        // عرض القوائم عند التحميل
-        showLostItems();
-        showFoundItems();
-    </script>
-        <!-- رادار العروض والهميزات -->
-                <button onclick="showAddDeal()" class="add-deal-btn">+ أضف عرض</button>
-            </div>
-            
-            <div id="dealsList" class="deals-list">
-                <div class="loading">⏳ جاري التحميل...</div>
-            </div>
-        </div>
-    <!-- نافذة إضافة عرض -->
-    <div id="dealModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:10000; align-items:center; justify-content:center;">
-        <div style="background:#1e293b; border-radius:24px; padding:25px; width:90%; max-width:450px;">
-            <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
-                <h3 style="color:#f59e0b;"><i class="fas fa-tag"></i> إضافة عرض جديد</h3>
-                <span onclick="closeModal()" style="font-size:28px; cursor:pointer;">&times;</span>
-            </div>
-            <input type="text" id="dealTitle" placeholder="اسم المتجر *" style="width:100%; padding:10px; margin-bottom:10px; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;">
-            <input type="text" id="dealOffer" placeholder="العرض (مثال: 50% تخفيض) *" style="width:100%; padding:10px; margin-bottom:10px; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;">
-            <textarea id="dealDesc" rows="2" placeholder="تفاصيل العرض" style="width:100%; padding:10px; margin-bottom:10px; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;"></textarea>
-            <input type="text" id="dealLocation" placeholder="الموقع (الحي، الشارع)" style="width:100%; padding:10px; margin-bottom:10px; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;">
-            <input type="tel" id="dealPhone" placeholder="رقم الهاتف *" style="width:100%; padding:10px; margin-bottom:10px; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;">
-            <input type="date" id="dealExpiry" style="width:100%; padding:10px; margin-bottom:15px; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;">
-            <button onclick="addDeal()" style="width:100%; background:#f59e0b; border:none; padding:12px; border-radius:30px; color:white; font-size:16px; cursor:pointer;">نشر العرض</button>
-        </div>
-    </div>
-    <script>
-        let deals = JSON.parse(localStorage.getItem('taourirt_deals')) || [];
-        
-        // العروض التجريبية
-        if (deals.length === 0) {
-            deals = [
-                { id: 1, title: 'مركز المنار', offer: 'تخفيضات تصل إلى 40%', desc: 'على جميع الملابس', location: 'وسط المدينة', phone: '0536123463', expiry: '2026-04-15', date: '2026-03-28' },
-                { id: 2, title: 'صيدلية الجابري', offer: 'خصم 20%', desc: 'على أدوية الحساسية', location: 'شارع مولاي عبد الله', phone: '0536699222', expiry: '2026-04-10', date: '2026-03-27' }
-            ];
-            localStorage.setItem('taourirt_deals', JSON.stringify(deals));
-        }
-        
-        function showDeals() {
-            const container = document.getElementById('dealsList');
-            if (deals.length === 0) {
-                container.innerHTML = '<div class="card" style="text-align:center">📭 لا توجد عروض حالياً</div>';
-                return;
-            }
-            
-            // ترتيب حسب التاريخ (الأحدث أولاً)
-            const sorted = [...deals].sort((a,b) => new Date(b.date) - new Date(a.date));
-            
-            container.innerHTML = sorted.map(deal => `
-                <div class="deal-card">
-                    <div class="deal-badge">🔥 عرض خاص</div>
-                    <div class="deal-store">🏪 ${deal.title}</div>
-                    <div class="deal-offer">🎁 ${deal.offer}</div>
-                    <div class="deal-desc">${deal.desc}</div>
-                    <div class="deal-details">
-                        <span><i class="fas fa-location-dot"></i> ${deal.location || 'تاوريرت'}</span>
-                        <span><i class="fas fa-calendar"></i> حتى ${deal.expiry ? new Date(deal.expiry).toLocaleDateString('ar-MA') : 'قريباً'}</span>
-                    </div>
-                    <div class="deal-footer">
-                        <a href="tel:${deal.phone}" class="deal-call"><i class="fas fa-phone"></i> اتصل</a>
-                        <button onclick="shareDeal('${deal.title}', '${deal.offer}')" class="deal-share"><i class="fab fa-whatsapp"></i> مشاركة</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-        
-        function showAddDeal() {
-            document.getElementById('dealModal').style.display = 'flex';
-        }
-        
-        function closeModal() {
-            document.getElementById('dealModal').style.display = 'none';
-            document.getElementById('dealTitle').value = '';
-            document.getElementById('dealOffer').value = '';
-            document.getElementById('dealDesc').value = '';
-            document.getElementById('dealLocation').value = '';
-            document.getElementById('dealPhone').value = '';
-            document.getElementById('dealExpiry').value = '';
-        }
-        
-        function addDeal() {
-            const title = document.getElementById('dealTitle').value;
-            const offer = document.getElementById('dealOffer').value;
-            const desc = document.getElementById('dealDesc').value;
-            const location = document.getElementById('dealLocation').value;
-            const phone = document.getElementById('dealPhone').value;
-            const expiry = document.getElementById('dealExpiry').value;
-            
-            if (!title || !offer || !phone) {
-                alert('الرجاء ملء الحقول المطلوبة');
-                return;
-            }
-            
-            const newDeal = {
-                id: Date.now(),
-                title: title,
-                offer: offer,
-                desc: desc,
-                location: location,
-                phone: phone,
-                expiry: expiry,
-                date: new Date().toISOString().split('T')[0]
-            };
-            
-            deals.unshift(newDeal);
-            localStorage.setItem('taourirt_deals', JSON.stringify(deals));
-            showDeals();
-            closeModal();
-            alert('تم إضافة العرض بنجاح!');
-        }
-        
-        function shareDeal(title, offer) {
-            const msg = `🛍️ عرض مميز في تاوريرت!\n\n🏪 ${title}\n🎁 ${offer}\n\n📱 تاوريرت هب - دليل المدينة`;
-            window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
-        }
-        
-        // عرض العروض عند التحميل
-        showDeals();
-    </script>
-        <!-- المفقودات والموجودات -->
-            
-            <div class="lostfound-buttons">
-                <button onclick="showLostForm()" class="btn-lost">📦 أضف مفقود</button>
-                <button onclick="showFoundForm()" class="btn-found">🎁 أضف موجود</button>
-            </div>
-            
-            <div id="lostForm" style="display:none; margin-top:15px;">
-                <input type="text" id="lostTitle" placeholder="العنوان (مثال: مفاتيح)" class="lost-input">
-                <textarea id="lostDesc" placeholder="الوصف" rows="2" class="lost-input"></textarea>
-                <input type="text" id="lostPlace" placeholder="المكان" class="lost-input">
-                <input type="tel" id="lostPhone" placeholder="رقم الهاتف" class="lost-input">
-                <button onclick="addLost()" class="submit-lost">نشر</button>
-            </div>
-            
-            <div id="foundForm" style="display:none; margin-top:15px;">
-                <input type="text" id="foundTitle" placeholder="العنوان (مثال: بطاقة تعريف)" class="lost-input">
-                <textarea id="foundDesc" placeholder="الوصف" rows="2" class="lost-input"></textarea>
-                <input type="text" id="foundPlace" placeholder="المكان" class="lost-input">
-                <input type="tel" id="foundPhone" placeholder="رقم الهاتف" class="lost-input">
-                <button onclick="addFound()" class="submit-found">نشر</button>
-            </div>
-            
-            <div id="lostList"></div>
-            <div id="foundList"></div>
-        </div>
-    <script>
-        let lostItems = JSON.parse(localStorage.getItem('lost_items')) || [];
-        let foundItems = JSON.parse(localStorage.getItem('found_items')) || [];
-        
-        function showLostForm() {
-            document.getElementById('lostForm').style.display = 'block';
-            document.getElementById('foundForm').style.display = 'none';
-        }
-        
-        function showFoundForm() {
-            document.getElementById('foundForm').style.display = 'block';
-            document.getElementById('lostForm').style.display = 'none';
-        }
-        
-        function addLost() {
-            let title = document.getElementById('lostTitle').value;
-            let desc = document.getElementById('lostDesc').value;
-            let place = document.getElementById('lostPlace').value;
-            let phone = document.getElementById('lostPhone').value;
-            
-            if (!title || !desc || !phone) {
-                alert('الرجاء ملء الحقول المطلوبة');
-                return;
-            }
-            
-            lostItems.unshift({
-                id: Date.now(),
-                title: title,
-                desc: desc,
-                place: place,
-                phone: phone,
-                date: new Date().toLocaleDateString('ar-MA')
-            });
-            
-            localStorage.setItem('lost_items', JSON.stringify(lostItems));
-            showLostList();
-            
-            document.getElementById('lostTitle').value = '';
-            document.getElementById('lostDesc').value = '';
-            document.getElementById('lostPlace').value = '';
-            document.getElementById('lostPhone').value = '';
-            document.getElementById('lostForm').style.display = 'none';
-            alert('تم الإضافة');
-        }
-        
-        function addFound() {
-            let title = document.getElementById('foundTitle').value;
-            let desc = document.getElementById('foundDesc').value;
-            let place = document.getElementById('foundPlace').value;
-            let phone = document.getElementById('foundPhone').value;
-            
-            if (!title || !desc || !phone) {
-                alert('الرجاء ملء الحقول المطلوبة');
-                return;
-            }
-            
-            foundItems.unshift({
-                id: Date.now(),
-                title: title,
-                desc: desc,
-                place: place,
-                phone: phone,
-                date: new Date().toLocaleDateString('ar-MA')
-            });
-            
-            localStorage.setItem('found_items', JSON.stringify(foundItems));
-            showFoundList();
-            
-            document.getElementById('foundTitle').value = '';
-            document.getElementById('foundDesc').value = '';
-            document.getElementById('foundPlace').value = '';
-            document.getElementById('foundPhone').value = '';
-            document.getElementById('foundForm').style.display = 'none';
-            alert('تم الإضافة');
-        }
-        
-        function showLostList() {
-            let container = document.getElementById('lostList');
-            if (lostItems.length === 0) {
-                container.innerHTML = '<div class="card" style="text-align:center">📭 لا توجد إعلانات مفقودة</div>';
-                return;
-            }
-            container.innerHTML = lostItems.map(item => `
-                <div class="lost-card">
-                    <div><strong>📦 ${item.title}</strong> <span style="background:#ef4444; padding:2px 8px; border-radius:15px; font-size:11px;">مفقود</span></div>
-                    <p>${item.desc}</p>
-                    <p><i class="fas fa-location-dot"></i> ${item.place || 'تاوريرت'}</p>
-                    <p><i class="fas fa-calendar"></i> ${item.date}</p>
-                    <div style="display:flex; gap:10px; margin-top:10px;">
-                        <a href="tel:${item.phone}" style="background:#3b82f6; padding:5px 12px; border-radius:20px; color:white; text-decoration:none;">📞 اتصل</a>
-                        <button onclick="removeLost(${item.id})" style="background:#334155; border:none; padding:5px 12px; border-radius:20px; color:white;">✓ تم الحل</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-        
-        function showFoundList() {
-            let container = document.getElementById('foundList');
-            if (foundItems.length === 0) {
-                container.innerHTML = '<div class="card" style="text-align:center">📭 لا توجد إعلانات موجودة</div>';
-                return;
-            }
-            container.innerHTML = foundItems.map(item => `
-                <div class="found-card">
-                    <div><strong>🎁 ${item.title}</strong> <span style="background:#22c55e; padding:2px 8px; border-radius:15px; font-size:11px;">موجود</span></div>
-                    <p>${item.desc}</p>
-                    <p><i class="fas fa-location-dot"></i> ${item.place || 'تاوريرت'}</p>
-                    <p><i class="fas fa-calendar"></i> ${item.date}</p>
-                    <div style="display:flex; gap:10px; margin-top:10px;">
-                        <a href="tel:${item.phone}" style="background:#3b82f6; padding:5px 12px; border-radius:20px; color:white; text-decoration:none;">📞 اتصل</a>
-                        <button onclick="removeFound(${item.id})" style="background:#334155; border:none; padding:5px 12px; border-radius:20px; color:white;">✓ تم التسليم</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-        
-        function removeLost(id) {
-            lostItems = lostItems.filter(i => i.id !== id);
-            localStorage.setItem('lost_items', JSON.stringify(lostItems));
-            showLostList();
-        }
-        
-        function removeFound(id) {
-            foundItems = foundItems.filter(i => i.id !== id);
-            localStorage.setItem('found_items', JSON.stringify(foundItems));
-            showFoundList();
-        }
-        
-        showLostList();
-        showFoundList();
-    </script>
- 
- 
-    <script>
-        let lostItems = JSON.parse(localStorage.getItem('lost_items')) || [];
-        let foundItems = JSON.parse(localStorage.getItem('found_items')) || [];
-        
-        function showLostForm() {
-            document.getElementById('lostForm').style.display = 'block';
-            document.getElementById('foundForm').style.display = 'none';
-        }
-        function showFoundForm() {
-            document.getElementById('foundForm').style.display = 'block';
-            document.getElementById('lostForm').style.display = 'none';
-        }
-        
-        function addLost() {
-            let title = document.getElementById('lostTitle').value;
-            let desc = document.getElementById('lostDesc').value;
-            let place = document.getElementById('lostPlace').value;
-            let phone = document.getElementById('lostPhone').value;
-            if (!title || !desc || !phone) { alert('املأ الحقول'); return; }
-            lostItems.unshift({id:Date.now(), title, desc, place, phone, date:new Date().toLocaleDateString('ar-MA')});
-            localStorage.setItem('lost_items', JSON.stringify(lostItems));
-            showLostList();
-            document.getElementById('lostTitle').value = '';
-            document.getElementById('lostDesc').value = '';
-            document.getElementById('lostPlace').value = '';
-            document.getElementById('lostPhone').value = '';
-            document.getElementById('lostForm').style.display = 'none';
-        }
-        
-        function addFound() {
-            let title = document.getElementById('foundTitle').value;
-            let desc = document.getElementById('foundDesc').value;
-            let place = document.getElementById('foundPlace').value;
-            let phone = document.getElementById('foundPhone').value;
-            if (!title || !desc || !phone) { alert('املأ الحقول'); return; }
-            foundItems.unshift({id:Date.now(), title, desc, place, phone, date:new Date().toLocaleDateString('ar-MA')});
-            localStorage.setItem('found_items', JSON.stringify(foundItems));
+            if (!title || !desc || !phone) return;
+            found.unshift({id:Date.now(), title, desc, place, phone, date:new Date().toLocaleDateString()});
+            localStorage.setItem('found', JSON.stringify(found));
             showFoundList();
             document.getElementById('foundTitle').value = '';
             document.getElementById('foundDesc').value = '';
@@ -929,32 +187,26 @@
             document.getElementById('foundPhone').value = '';
             document.getElementById('foundForm').style.display = 'none';
         }
-        
+
         function showLostList() {
             let c = document.getElementById('lostList');
-            if (lostItems.length === 0) { c.innerHTML = '<div class="card">📭 لا توجد إعلانات مفقودة</div>'; return; }
-            c.innerHTML = lostItems.map(i => `
-                <div class="lost-card"><div><strong>📦 ${i.title}</strong> <span style="background:#ef4444;padding:2px 8px;border-radius:15px;">مفقود</span></div>
-                <p>${i.desc}</p><p>📍 ${i.place || 'تاوريرت'}</p><p>📅 ${i.date}</p>
-                <div><a href="tel:${i.phone}" style="background:#3b82f6;padding:5px 12px;border-radius:20px;color:white;">📞 اتصل</a>
-                <button onclick="removeLost(${i.id})" style="background:#334155;border:none;padding:5px 12px;border-radius:20px;color:white;">✓ تم الحل</button></div></div>
-            `).join('');
+            if (lost.length === 0) { c.innerHTML = '<div class="card">📭 لا مفقودات</div>'; return; }
+            c.innerHTML = lost.map(i => `<div class="lost-card"><div><strong>📦 ${i.title}</strong><span class="badge-lost">مفقود</span></div><p>${i.desc}</p><p>📍 ${i.place}</p><div><a href="tel:${i.phone}" class="call-btn">اتصل</a><button onclick="removeLost(${i.id})" class="done-btn">تم</button></div></div>`).join('');
         }
-        
+
         function showFoundList() {
             let c = document.getElementById('foundList');
-            if (foundItems.length === 0) { c.innerHTML = '<div class="card">📭 لا توجد إعلانات موجودة</div>'; return; }
-            c.innerHTML = foundItems.map(i => `
-                <div class="found-card"><div><strong>🎁 ${i.title}</strong> <span style="background:#22c55e;padding:2px 8px;border-radius:15px;">موجود</span></div>
-                <p>${i.desc}</p><p>📍 ${i.place || 'تاوريرت'}</p><p>📅 ${i.date}</p>
-                <div><a href="tel:${i.phone}" style="background:#3b82f6;padding:5px 12px;border-radius:20px;color:white;">📞 اتصل</a>
-                <button onclick="removeFound(${i.id})" style="background:#334155;border:none;padding:5px 12px;border-radius:20px;color:white;">✓ تم التسليم</button></div></div>
-            `).join('');
+            if (found.length === 0) { c.innerHTML = '<div class="card">📭 لا موجودات</div>'; return; }
+            c.innerHTML = found.map(i => `<div class="found-card"><div><strong>🎁 ${i.title}</strong><span class="badge-found">موجود</span></div><p>${i.desc}</p><p>📍 ${i.place}</p><div><a href="tel:${i.phone}" class="call-btn">اتصل</a><button onclick="removeFound(${i.id})" class="done-btn">تم</button></div></div>`).join('');
         }
-        
-        function removeLost(id) { lostItems = lostItems.filter(i => i.id !== id); localStorage.setItem('lost_items', JSON.stringify(lostItems)); showLostList(); }
-        function removeFound(id) { foundItems = foundItems.filter(i => i.id !== id); localStorage.setItem('found_items', JSON.stringify(foundItems)); showFoundList(); }
-        
+
+        function removeLost(id) { lost = lost.filter(i => i.id !== id); localStorage.setItem('lost', JSON.stringify(lost)); showLostList(); }
+        function removeFound(id) { found = found.filter(i => i.id !== id); localStorage.setItem('found', JSON.stringify(found)); showFoundList(); }
+
+        showDonors();
+        showEmergencies();
         showLostList();
         showFoundList();
     </script>
+</body>
+</html>
