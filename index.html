@@ -268,3 +268,102 @@
             if (document.getElementById('bloodStats')) showBloodStats();
         }, 500);
     </script>
+        <!-- قسم المفقودات والموجودات -->
+        <div class="lostfound-section">
+            <div class="section-title">🔑 المفقودات والموجودات</div>
+            
+            <div class="lostfound-buttons">
+                <button onclick="showLostForm()" class="lost-btn">📦 أبلغ عن مفقود</button>
+                <button onclick="showFoundForm()" class="found-btn">🎁 أبلغ عن موجود</button>
+            </div>
+            
+            <div id="lostForm" style="display:none;">
+                <input type="text" id="lostTitle" placeholder="مثال: مفاتيح السيارة" style="width:100%; padding:10px; margin:5px 0; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;">
+                <textarea id="lostDesc" placeholder="الوصف" rows="2" style="width:100%; padding:10px; margin:5px 0; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;"></textarea>
+                <input type="text" id="lostPhone" placeholder="رقم الهاتف" style="width:100%; padding:10px; margin:5px 0; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;">
+                <button onclick="addLost()" style="background:#ef4444; border:none; padding:10px; border-radius:30px; color:white;">نشر</button>
+            </div>
+            
+            <div id="foundForm" style="display:none;">
+                <input type="text" id="foundTitle" placeholder="مثال: بطاقة تعريف" style="width:100%; padding:10px; margin:5px 0; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;">
+                <textarea id="foundDesc" placeholder="الوصف" rows="2" style="width:100%; padding:10px; margin:5px 0; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;"></textarea>
+                <input type="text" id="foundPhone" placeholder="رقم الهاتف" style="width:100%; padding:10px; margin:5px 0; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;">
+                <button onclick="addFound()" style="background:#22c55e; border:none; padding:10px; border-radius:30px; color:white;">نشر</button>
+            </div>
+            
+            <div id="lostList"></div>
+            <div id="foundList"></div>
+        </div>
+    <script>
+        let lostItems = JSON.parse(localStorage.getItem('lost')) || [];
+        let foundItems = JSON.parse(localStorage.getItem('found')) || [];
+        
+        function showLostForm() {
+            document.getElementById('lostForm').style.display = 'block';
+            document.getElementById('foundForm').style.display = 'none';
+        }
+        function showFoundForm() {
+            document.getElementById('foundForm').style.display = 'block';
+            document.getElementById('lostForm').style.display = 'none';
+        }
+        
+        function addLost() {
+            let title = document.getElementById('lostTitle').value;
+            let desc = document.getElementById('lostDesc').value;
+            let phone = document.getElementById('lostPhone').value;
+            if(!title || !desc || !phone) { alert('املأ الحقول'); return; }
+            lostItems.unshift({id:Date.now(), title, desc, phone});
+            localStorage.setItem('lost', JSON.stringify(lostItems));
+            showLostList();
+            document.getElementById('lostTitle').value = '';
+            document.getElementById('lostDesc').value = '';
+            document.getElementById('lostPhone').value = '';
+            document.getElementById('lostForm').style.display = 'none';
+        }
+        
+        function addFound() {
+            let title = document.getElementById('foundTitle').value;
+            let desc = document.getElementById('foundDesc').value;
+            let phone = document.getElementById('foundPhone').value;
+            if(!title || !desc || !phone) { alert('املأ الحقول'); return; }
+            foundItems.unshift({id:Date.now(), title, desc, phone});
+            localStorage.setItem('found', JSON.stringify(foundItems));
+            showFoundList();
+            document.getElementById('foundTitle').value = '';
+            document.getElementById('foundDesc').value = '';
+            document.getElementById('foundPhone').value = '';
+            document.getElementById('foundForm').style.display = 'none';
+        }
+        
+        function showLostList() {
+            let container = document.getElementById('lostList');
+            if(lostItems.length === 0) { container.innerHTML = '<div class="card">لا توجد إعلانات</div>'; return; }
+            container.innerHTML = lostItems.map(i => `
+                <div class="card">
+                    <h3>📦 ${i.title}</h3>
+                    <p>${i.desc}</p>
+                    <a href="tel:${i.phone}" class="phone-link">📞 اتصل</a>
+                    <button onclick="removeLost(${i.id})" style="background:#ef4444; border:none; padding:3px 8px; border-radius:15px; color:white;">✓</button>
+                </div>
+            `).join('');
+        }
+        
+        function showFoundList() {
+            let container = document.getElementById('foundList');
+            if(foundItems.length === 0) { container.innerHTML = '<div class="card">لا توجد إعلانات</div>'; return; }
+            container.innerHTML = foundItems.map(i => `
+                <div class="card">
+                    <h3>🎁 ${i.title}</h3>
+                    <p>${i.desc}</p>
+                    <a href="tel:${i.phone}" class="phone-link">📞 اتصل</a>
+                    <button onclick="removeFound(${i.id})" style="background:#22c55e; border:none; padding:3px 8px; border-radius:15px; color:white;">✓</button>
+                </div>
+            `).join('');
+        }
+        
+        function removeLost(id) { lostItems = lostItems.filter(i => i.id !== id); localStorage.setItem('lost', JSON.stringify(lostItems)); showLostList(); }
+        function removeFound(id) { foundItems = foundItems.filter(i => i.id !== id); localStorage.setItem('found', JSON.stringify(foundItems)); showFoundList(); }
+        
+        showLostList();
+        showFoundList();
+    </script>
