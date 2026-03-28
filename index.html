@@ -113,3 +113,65 @@
     <script src="js/assistant.js"></script>
 </body>
 </html>
+    <script>
+        // إضافة الصوت للمساعد
+        (function() {
+            // انتظار تحميل المساعد
+            setTimeout(() => {
+                // إضافة زر الميكروفون
+                const inputContainer = document.querySelector('#assistantPanel .assistant-input');
+                if (inputContainer && !document.querySelector('#micBtn')) {
+                    const micBtn = document.createElement('button');
+                    micBtn.id = 'micBtn';
+                    micBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+                    micBtn.style.cssText = 'background:#3b82f6; border:none; width:40px; height:40px; border-radius:50%; color:white; cursor:pointer; margin-left:5px;';
+                    micBtn.onclick = () => {
+                        if (!('webkitSpeechRecognition' in window)) {
+                            alert('متصفحك لا يدعم التعرف على الصوت');
+                            return;
+                        }
+                        const recognition = new webkitSpeechRecognition();
+                        recognition.lang = 'ar-MA';
+                        micBtn.style.background = '#ef4444';
+                        recognition.start();
+                        recognition.onresult = (event) => {
+                            const text = event.results[0][0].transcript;
+                            const input = document.getElementById('assistantInput');
+                            if (input) {
+                                input.value = text;
+                                const sendBtn = document.getElementById('sendBtn');
+                                if (sendBtn) sendBtn.click();
+                            }
+                            micBtn.style.background = '#3b82f6';
+                        };
+                        recognition.onerror = () => {
+                            micBtn.style.background = '#3b82f6';
+                        };
+                    };
+                    inputContainer.appendChild(micBtn);
+                }
+                
+                // جعل المساعد يتحدث
+                function speakMessage(text) {
+                    if ('speechSynthesis' in window && text && !text.includes('مرحبا')) {
+                        window.speechSynthesis.cancel();
+                        const utterance = new SpeechSynthesisUtterance(text);
+                        utterance.lang = 'ar-MA';
+                        utterance.rate = 0.85;
+                        window.speechSynthesis.speak(utterance);
+                    }
+                }
+                
+                // حفظ الدالة الأصلية
+                const originalAddMessage = window.addMessage;
+                if (originalAddMessage) {
+                    window.addMessage = function(text, isUser) {
+                        originalAddMessage(text, isUser);
+                        if (!isUser) {
+                            setTimeout(() => speakMessage(text), 100);
+                        }
+                    };
+                }
+            }, 1000);
+        })();
+    </script>
