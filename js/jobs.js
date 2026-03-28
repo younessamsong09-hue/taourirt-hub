@@ -1,4 +1,3 @@
-// وظائف تاوريرت
 const jobs = [
     { title: 'صيدلي', company: 'صيدلية المزينين', location: 'وسط المدينة', salary: '4000', phone: '0536123456' },
     { title: 'ممرض', company: 'المستشفى', location: 'حي المسيرة', salary: '3000', phone: '0536123457' },
@@ -13,7 +12,6 @@ function toggleJobs() {
     if (dropdown.style.display === 'none') {
         dropdown.style.display = 'block';
         arrow.className = 'fas fa-chevron-up';
-        
         const jobsList = document.getElementById('jobsList');
         if (jobsList) {
             jobsList.innerHTML = jobs.map(j => `
@@ -27,9 +25,6 @@ function toggleJobs() {
                 </div>
             `).join('');
         }
-        
-        const jobsCount = document.getElementById('jobsCount');
-        if (jobsCount) jobsCount.innerText = jobs.length;
     } else {
         dropdown.style.display = 'none';
         arrow.className = 'fas fa-chevron-down';
@@ -44,7 +39,6 @@ function shareJob(title, company) {
     window.open(`https://wa.me/?text=${encodeURIComponent('فرصة عمل: ' + title + ' في ' + company)}`, '_blank');
 }
 
-// تهيئة عدد الوظائف
 document.addEventListener('DOMContentLoaded', () => {
     const jobsCount = document.getElementById('jobsCount');
     if (jobsCount) jobsCount.innerText = jobs.length;

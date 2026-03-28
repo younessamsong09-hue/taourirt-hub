@@ -525,3 +525,91 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
 .resolve-btn:hover {
     background: #2563eb;
 }
+
+/* صف الإحصائيات */
+.stats-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+.stat-card {
+    background: #1e293b;
+    border-radius: 16px;
+    padding: 8px 5px;
+    text-align: center;
+    flex: 1;
+}
+.stat-card .number {
+    font-size: 18px;
+    font-weight: bold;
+    color: #22d3ee;
+}
+.stat-card .label {
+    font-size: 10px;
+    color: #94a3b8;
+}
+
+/* صف الخدمات */
+.services-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+.service-card {
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    border-radius: 16px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    border: 1px solid #334155;
+    flex: 1;
+}
+.service-card:hover {
+    border-color: #22d3ee;
+    background: #1e293b;
+}
+.service-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.jobs-icon {
+    background: #22c55e;
+}
+.complaints-icon {
+    background: #ef4444;
+}
+.service-icon i {
+    font-size: 20px;
+    color: white;
+}
+.service-info {
+    flex: 1;
+}
+.service-title {
+    font-size: 12px;
+    color: #94a3b8;
+}
+.service-count {
+    font-size: 20px;
+    font-weight: bold;
+    color: #facc15;
+}
+.service-arrow i {
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+/* القائمة المنسدلة */
+#jobsDropdown {
+    background: #1e293b;
+    border-radius: 16px;
+    margin-bottom: 20px;
+    padding: 12px;
+    border: 1px solid #334155;
+}
