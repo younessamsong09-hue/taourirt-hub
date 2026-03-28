@@ -5,21 +5,21 @@ let jobs = JSON.parse(localStorage.getItem('taourirt_jobs')) || [
 ];
 
 function toggleJobs() {
-    const dropdown = document.getElementById('jobsDropdown');
+    const content = document.getElementById('jobsContent');
     const arrow = document.getElementById('jobsArrow');
-    if (!dropdown || !arrow) return;
+    if (!content || !arrow) return;
     
-    if (dropdown.style.display === 'none') {
-        dropdown.style.display = 'block';
+    if (content.style.display === 'none') {
+        content.style.display = 'block';
         arrow.className = 'fas fa-chevron-up';
-        showJobs();
+        showJobsList();
     } else {
-        dropdown.style.display = 'none';
+        content.style.display = 'none';
         arrow.className = 'fas fa-chevron-down';
     }
 }
 
-function showJobs() {
+function showJobsList() {
     const container = document.getElementById('jobsList');
     if (!container) return;
     
