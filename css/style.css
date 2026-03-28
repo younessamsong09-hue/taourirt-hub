@@ -879,3 +879,96 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
     cursor: pointer;
     font-size: 13px;
 }
+
+/* ========== رادار العروض والهميزات ========== */
+.deals-section {
+    background: #1e293b;
+    border-radius: 20px;
+    padding: 20px;
+    margin: 20px 0;
+}
+.deals-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.add-deal-btn {
+    background: #f59e0b;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 30px;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+}
+.deals-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.deal-card {
+    background: #0f172a;
+    border-radius: 16px;
+    padding: 15px;
+    border-right: 3px solid #f59e0b;
+    position: relative;
+}
+.deal-badge {
+    position: absolute;
+    top: -8px;
+    right: 15px;
+    background: #f59e0b;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+}
+.deal-store {
+    font-size: 18px;
+    font-weight: bold;
+    color: #facc15;
+    margin-bottom: 5px;
+}
+.deal-offer {
+    font-size: 20px;
+    font-weight: bold;
+    color: #f59e0b;
+    margin-bottom: 8px;
+}
+.deal-desc {
+    color: #94a3b8;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+.deal-details {
+    display: flex;
+    gap: 15px;
+    font-size: 12px;
+    color: #64748b;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+.deal-footer {
+    display: flex;
+    gap: 10px;
+}
+.deal-call {
+    background: #3b82f6;
+    padding: 6px 15px;
+    border-radius: 25px;
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+}
+.deal-share {
+    background: #25D366;
+    border: none;
+    padding: 6px 15px;
+    border-radius: 25px;
+    color: white;
+    cursor: pointer;
+    font-size: 13px;
+}

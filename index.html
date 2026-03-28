@@ -538,3 +538,123 @@
         showLostItems();
         showFoundItems();
     </script>
+        <!-- رادار العروض والهميزات -->
+        <div class="deals-section">
+            <div class="deals-header">
+                <div class="section-title">🛍️ رادار العروض والهميزات</div>
+                <button onclick="showAddDeal()" class="add-deal-btn">+ أضف عرض</button>
+            </div>
+            
+            <div id="dealsList" class="deals-list">
+                <div class="loading">⏳ جاري التحميل...</div>
+            </div>
+        </div>
+    <!-- نافذة إضافة عرض -->
+    <div id="dealModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:10000; align-items:center; justify-content:center;">
+        <div style="background:#1e293b; border-radius:24px; padding:25px; width:90%; max-width:450px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+                <h3 style="color:#f59e0b;"><i class="fas fa-tag"></i> إضافة عرض جديد</h3>
+                <span onclick="closeModal()" style="font-size:28px; cursor:pointer;">&times;</span>
+            </div>
+            <input type="text" id="dealTitle" placeholder="اسم المتجر *" style="width:100%; padding:10px; margin-bottom:10px; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;">
+            <input type="text" id="dealOffer" placeholder="العرض (مثال: 50% تخفيض) *" style="width:100%; padding:10px; margin-bottom:10px; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;">
+            <textarea id="dealDesc" rows="2" placeholder="تفاصيل العرض" style="width:100%; padding:10px; margin-bottom:10px; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;"></textarea>
+            <input type="text" id="dealLocation" placeholder="الموقع (الحي، الشارع)" style="width:100%; padding:10px; margin-bottom:10px; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;">
+            <input type="tel" id="dealPhone" placeholder="رقم الهاتف *" style="width:100%; padding:10px; margin-bottom:10px; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;">
+            <input type="date" id="dealExpiry" style="width:100%; padding:10px; margin-bottom:15px; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;">
+            <button onclick="addDeal()" style="width:100%; background:#f59e0b; border:none; padding:12px; border-radius:30px; color:white; font-size:16px; cursor:pointer;">نشر العرض</button>
+        </div>
+    </div>
+    <script>
+        let deals = JSON.parse(localStorage.getItem('taourirt_deals')) || [];
+        
+        // العروض التجريبية
+        if (deals.length === 0) {
+            deals = [
+                { id: 1, title: 'مركز المنار', offer: 'تخفيضات تصل إلى 40%', desc: 'على جميع الملابس', location: 'وسط المدينة', phone: '0536123463', expiry: '2026-04-15', date: '2026-03-28' },
+                { id: 2, title: 'صيدلية الجابري', offer: 'خصم 20%', desc: 'على أدوية الحساسية', location: 'شارع مولاي عبد الله', phone: '0536699222', expiry: '2026-04-10', date: '2026-03-27' }
+            ];
+            localStorage.setItem('taourirt_deals', JSON.stringify(deals));
+        }
+        
+        function showDeals() {
+            const container = document.getElementById('dealsList');
+            if (deals.length === 0) {
+                container.innerHTML = '<div class="card" style="text-align:center">📭 لا توجد عروض حالياً</div>';
+                return;
+            }
+            
+            // ترتيب حسب التاريخ (الأحدث أولاً)
+            const sorted = [...deals].sort((a,b) => new Date(b.date) - new Date(a.date));
+            
+            container.innerHTML = sorted.map(deal => `
+                <div class="deal-card">
+                    <div class="deal-badge">🔥 عرض خاص</div>
+                    <div class="deal-store">🏪 ${deal.title}</div>
+                    <div class="deal-offer">🎁 ${deal.offer}</div>
+                    <div class="deal-desc">${deal.desc}</div>
+                    <div class="deal-details">
+                        <span><i class="fas fa-location-dot"></i> ${deal.location || 'تاوريرت'}</span>
+                        <span><i class="fas fa-calendar"></i> حتى ${deal.expiry ? new Date(deal.expiry).toLocaleDateString('ar-MA') : 'قريباً'}</span>
+                    </div>
+                    <div class="deal-footer">
+                        <a href="tel:${deal.phone}" class="deal-call"><i class="fas fa-phone"></i> اتصل</a>
+                        <button onclick="shareDeal('${deal.title}', '${deal.offer}')" class="deal-share"><i class="fab fa-whatsapp"></i> مشاركة</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function showAddDeal() {
+            document.getElementById('dealModal').style.display = 'flex';
+        }
+        
+        function closeModal() {
+            document.getElementById('dealModal').style.display = 'none';
+            document.getElementById('dealTitle').value = '';
+            document.getElementById('dealOffer').value = '';
+            document.getElementById('dealDesc').value = '';
+            document.getElementById('dealLocation').value = '';
+            document.getElementById('dealPhone').value = '';
+            document.getElementById('dealExpiry').value = '';
+        }
+        
+        function addDeal() {
+            const title = document.getElementById('dealTitle').value;
+            const offer = document.getElementById('dealOffer').value;
+            const desc = document.getElementById('dealDesc').value;
+            const location = document.getElementById('dealLocation').value;
+            const phone = document.getElementById('dealPhone').value;
+            const expiry = document.getElementById('dealExpiry').value;
+            
+            if (!title || !offer || !phone) {
+                alert('الرجاء ملء الحقول المطلوبة');
+                return;
+            }
+            
+            const newDeal = {
+                id: Date.now(),
+                title: title,
+                offer: offer,
+                desc: desc,
+                location: location,
+                phone: phone,
+                expiry: expiry,
+                date: new Date().toISOString().split('T')[0]
+            };
+            
+            deals.unshift(newDeal);
+            localStorage.setItem('taourirt_deals', JSON.stringify(deals));
+            showDeals();
+            closeModal();
+            alert('تم إضافة العرض بنجاح!');
+        }
+        
+        function shareDeal(title, offer) {
+            const msg = `🛍️ عرض مميز في تاوريرت!\n\n🏪 ${title}\n🎁 ${offer}\n\n📱 تاوريرت هب - دليل المدينة`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+        
+        // عرض العروض عند التحميل
+        showDeals();
+    </script>
