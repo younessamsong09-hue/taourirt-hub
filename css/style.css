@@ -681,3 +681,95 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
     border-radius: 20px;
     font-size: 11px;
 }
+
+/* ========== قسم التبرع بالدم ========== */
+.blood-section {
+    background: #1e293b;
+    border-radius: 20px;
+    padding: 20px;
+    margin: 20px 0;
+}
+.blood-tabs {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+.blood-tab {
+    background: #334155;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 30px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.blood-tab.active {
+    background: #ef4444;
+}
+.blood-tab-content {
+    display: none;
+}
+.blood-tab-content.active {
+    display: block;
+}
+.blood-form {
+    background: #0f172a;
+    border-radius: 16px;
+    padding: 20px;
+}
+.blood-form h3 {
+    color: #ef4444;
+    margin-bottom: 15px;
+}
+.blood-input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 12px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    color: white;
+}
+.blood-btn {
+    width: 100%;
+    background: #22c55e;
+    border: none;
+    padding: 12px;
+    border-radius: 30px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+.blood-btn.urgent {
+    background: #ef4444;
+}
+.blood-type {
+    background: #ef4444;
+    padding: 3px 8px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: bold;
+}
+.blood-type.urgent {
+    background: #dc2626;
+    animation: pulse 1s infinite;
+}
+.emergency-row {
+    background: rgba(239,68,68,0.1);
+    border-right: 3px solid #ef4444;
+}
+.blood-types-stats {
+    margin-top: 15px;
+    grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+}
+.stat-card.small {
+    padding: 8px;
+}
+.stat-card.small .stat-number {
+    font-size: 18px;
+}
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}

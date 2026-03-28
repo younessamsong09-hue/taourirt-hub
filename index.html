@@ -107,6 +107,7 @@
     <script src="js/map.js"></script>
     <script src="js/ui.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/blood.js"></script>
     <script src="js/assistant.js"></script>
     <script src="js/jobs.js"></script>
     <script src="js/complaints.js"></script>
@@ -174,4 +175,96 @@
                 }
             }, 1000);
         })();
+    </script>
+        <!-- قسم التبرع بالدم -->
+        <div class="blood-section">
+            <div class="section-title">🩸 منصة التبرع بالدم - تاوريرت</div>
+            
+            <div class="blood-tabs">
+                <button class="blood-tab active" onclick="showBloodTab('register')">تسجيل متبرع</button>
+                <button class="blood-tab" onclick="showBloodTab('emergency')">حالة استعجالية</button>
+                <button class="blood-tab" onclick="showBloodTab('donors')">قائمة المتبرعين</button>
+                <button class="blood-tab" onclick="showBloodTab('emergencies')">حالات نشطة</button>
+                <button class="blood-tab" onclick="showBloodTab('stats')">إحصائيات</button>
+            </div>
+            
+            <div id="bloodRegister" class="blood-tab-content active">
+                <div class="blood-form">
+                    <h3><i class="fas fa-user-plus"></i> تسجيل متبرع جديد</h3>
+                    <input type="text" id="donorName" placeholder="الاسم الكامل *" class="blood-input">
+                    <input type="tel" id="donorPhone" placeholder="رقم الهاتف *" class="blood-input">
+                    <select id="donorBloodType" class="blood-input">
+                        <option value="">اختر فصيلة الدم *</option>
+                        <option value="A+">A+</option><option value="A-">A-</option>
+                        <option value="B+">B+</option><option value="B-">B-</option>
+                        <option value="AB+">AB+</option><option value="AB-">AB-</option>
+                        <option value="O+">O+</option><option value="O-">O-</option>
+                    </select>
+                    <input type="text" id="donorLocation" placeholder="الموقع (الحي، الشارع)" class="blood-input">
+                    <button onclick="registerDonor()" class="blood-btn">تسجيل 🩸</button>
+                </div>
+            </div>
+            
+            <div id="bloodEmergency" class="blood-tab-content">
+                <div class="blood-form">
+                    <h3><i class="fas fa-ambulance"></i> حالة استعجالية - طلب متبرع</h3>
+                    <input type="text" id="emergencyPatient" placeholder="اسم المريض *" class="blood-input">
+                    <select id="emergencyBloodType" class="blood-input">
+                        <option value="">فصيلة الدم المطلوبة *</option>
+                        <option value="A+">A+</option><option value="A-">A-</option>
+                        <option value="B+">B+</option><option value="B-">B-</option>
+                        <option value="AB+">AB+</option><option value="AB-">AB-</option>
+                        <option value="O+">O+</option><option value="O-">O-</option>
+                    </select>
+                    <input type="text" id="emergencyHospital" placeholder="المستشفى" class="blood-input">
+                    <input type="tel" id="emergencyContact" placeholder="رقم جهة الاتصال *" class="blood-input">
+                    <button onclick="requestEmergency()" class="blood-btn urgent">نشر استغاثة 🚨</button>
+                </div>
+            </div>
+            
+            <div id="bloodDonors" class="blood-tab-content">
+                <div id="donorsList">جاري التحميل...</div>
+            </div>
+            
+            <div id="bloodEmergencies" class="blood-tab-content">
+                <div id="emergenciesList">جاري التحميل...</div>
+            </div>
+            
+            <div id="bloodStats" class="blood-tab-content">
+                <div id="bloodStats">جاري التحميل...</div>
+            </div>
+        </div>
+    <script>
+        // تبديل تبويبات التبرع بالدم
+        function showBloodTab(tab) {
+            document.querySelectorAll('.blood-tab').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.blood-tab-content').forEach(content => content.classList.remove('active'));
+            
+            if (tab === 'register') {
+                document.querySelector('#bloodRegister').classList.add('active');
+                document.querySelector('.blood-tab:first-child').classList.add('active');
+            } else if (tab === 'emergency') {
+                document.querySelector('#bloodEmergency').classList.add('active');
+                document.querySelector('.blood-tab:nth-child(2)').classList.add('active');
+            } else if (tab === 'donors') {
+                document.querySelector('#bloodDonors').classList.add('active');
+                document.querySelector('.blood-tab:nth-child(3)').classList.add('active');
+                showDonorsList();
+            } else if (tab === 'emergencies') {
+                document.querySelector('#bloodEmergencies').classList.add('active');
+                document.querySelector('.blood-tab:nth-child(4)').classList.add('active');
+                showEmergenciesList();
+            } else if (tab === 'stats') {
+                document.querySelector('#bloodStats').classList.add('active');
+                document.querySelector('.blood-tab:nth-child(5)').classList.add('active');
+                showBloodStats();
+            }
+        }
+        
+        // عرض القوائم عند تحميل الصفحة
+        setTimeout(() => {
+            if (document.getElementById('donorsList')) showDonorsList();
+            if (document.getElementById('emergenciesList')) showEmergenciesList();
+            if (document.getElementById('bloodStats')) showBloodStats();
+        }, 500);
     </script>
