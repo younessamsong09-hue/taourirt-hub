@@ -1376,3 +1376,113 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
     gap: 8px;
     margin-top: 8px;
 }
+
+/* الأيقونات العائمة */
+.float-btn {
+    position: fixed;
+    left: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 998;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    transition: all 0.2s;
+}
+.float-btn:hover { transform: scale(1.05); }
+.report-float {
+    bottom: 90px;
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+.rental-float {
+    bottom: 150px;
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+.float-btn i { font-size: 24px; color: white; }
+
+.float-panel {
+    position: fixed;
+    bottom: 160px;
+    left: 80px;
+    width: 280px;
+    max-height: 450px;
+    background: #1e293b;
+    border-radius: 16px;
+    z-index: 999;
+    overflow: hidden;
+    border: 1px solid #334155;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+.float-header {
+    background: #0f172a;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    color: #22d3ee;
+}
+.float-buttons {
+    display: flex;
+    gap: 6px;
+    padding: 10px;
+}
+.float-buttons button {
+    flex: 1;
+    background: #334155;
+    border: none;
+    padding: 5px;
+    border-radius: 20px;
+    color: white;
+    cursor: pointer;
+    font-size: 11px;
+}
+.float-input {
+    width: 100%;
+    padding: 6px;
+    margin-bottom: 6px;
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    color: white;
+    font-size: 11px;
+}
+.float-location {
+    font-size: 10px;
+    color: #94a3b8;
+    margin-bottom: 6px;
+}
+.float-submit {
+    width: 100%;
+    background: #22c55e;
+    border: none;
+    padding: 6px;
+    border-radius: 20px;
+    color: white;
+    cursor: pointer;
+}
+.float-filters {
+    padding: 8px;
+    border-top: 1px solid #334155;
+}
+.float-filters select {
+    width: 100%;
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 20px;
+    padding: 5px;
+    color: white;
+}
+.float-item {
+    padding: 8px;
+    border-bottom: 1px solid #334155;
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+}
+.float-item a {
+    color: #3b82f6;
+    text-decoration: none;
+}
