@@ -367,3 +367,174 @@
         showLostList();
         showFoundList();
     </script>
+        <!-- قسم المفقودات والموجودات -->
+        <div class="lostfound-card">
+            <div class="section-title">🔑 المفقودات والموجودات</div>
+            
+            <div class="lostfound-btns">
+                <button onclick="toggleLostForm()" class="btn-lost">📦 أضف مفقود</button>
+                <button onclick="toggleFoundForm()" class="btn-found">🎁 أضف موجود</button>
+            </div>
+            
+            <div id="lostForm" style="display:none; margin-top:15px;">
+                <input type="text" id="lostTitle" placeholder="العنوان (مثال: مفاتيح)" class="lost-input">
+                <textarea id="lostDesc" placeholder="الوصف" rows="2" class="lost-input"></textarea>
+                <input type="text" id="lostPlace" placeholder="المكان" class="lost-input">
+                <input type="tel" id="lostPhone" placeholder="رقم الهاتف" class="lost-input">
+                <button onclick="addLostItem()" class="submit-lost">نشر</button>
+            </div>
+            
+            <div id="foundForm" style="display:none; margin-top:15px;">
+                <input type="text" id="foundTitle" placeholder="العنوان (مثال: بطاقة تعريف)" class="lost-input">
+                <textarea id="foundDesc" placeholder="الوصف" rows="2" class="lost-input"></textarea>
+                <input type="text" id="foundPlace" placeholder="المكان" class="lost-input">
+                <input type="tel" id="foundPhone" placeholder="رقم الهاتف" class="lost-input">
+                <button onclick="addFoundItem()" class="submit-found">نشر</button>
+            </div>
+            
+            <div id="lostItems"></div>
+            <div id="foundItems"></div>
+        </div>
+    <script>
+        // بيانات المفقودات والموجودات
+        let lostList = JSON.parse(localStorage.getItem('lost_items')) || [];
+        let foundList = JSON.parse(localStorage.getItem('found_items')) || [];
+        
+        function toggleLostForm() {
+            document.getElementById('lostForm').style.display = 'block';
+            document.getElementById('foundForm').style.display = 'none';
+        }
+        
+        function toggleFoundForm() {
+            document.getElementById('foundForm').style.display = 'block';
+            document.getElementById('lostForm').style.display = 'none';
+        }
+        
+        function addLostItem() {
+            let title = document.getElementById('lostTitle').value;
+            let desc = document.getElementById('lostDesc').value;
+            let place = document.getElementById('lostPlace').value;
+            let phone = document.getElementById('lostPhone').value;
+            
+            if (!title || !desc || !phone) {
+                alert('الرجاء ملء الحقول المطلوبة');
+                return;
+            }
+            
+            lostList.unshift({
+                id: Date.now(),
+                title: title,
+                desc: desc,
+                place: place,
+                phone: phone,
+                date: new Date().toLocaleDateString('ar-MA')
+            });
+            
+            localStorage.setItem('lost_items', JSON.stringify(lostList));
+            showLostItems();
+            
+            document.getElementById('lostTitle').value = '';
+            document.getElementById('lostDesc').value = '';
+            document.getElementById('lostPlace').value = '';
+            document.getElementById('lostPhone').value = '';
+            document.getElementById('lostForm').style.display = 'none';
+            alert('تم إضافة العنصر المفقود');
+        }
+        
+        function addFoundItem() {
+            let title = document.getElementById('foundTitle').value;
+            let desc = document.getElementById('foundDesc').value;
+            let place = document.getElementById('foundPlace').value;
+            let phone = document.getElementById('foundPhone').value;
+            
+            if (!title || !desc || !phone) {
+                alert('الرجاء ملء الحقول المطلوبة');
+                return;
+            }
+            
+            foundList.unshift({
+                id: Date.now(),
+                title: title,
+                desc: desc,
+                place: place,
+                phone: phone,
+                date: new Date().toLocaleDateString('ar-MA')
+            });
+            
+            localStorage.setItem('found_items', JSON.stringify(foundList));
+            showFoundItems();
+            
+            document.getElementById('foundTitle').value = '';
+            document.getElementById('foundDesc').value = '';
+            document.getElementById('foundPlace').value = '';
+            document.getElementById('foundPhone').value = '';
+            document.getElementById('foundForm').style.display = 'none';
+            alert('تم إضافة العنصر الموجود');
+        }
+        
+        function showLostItems() {
+            let container = document.getElementById('lostItems');
+            if (lostList.length === 0) {
+                container.innerHTML = '<div class="card" style="text-align:center">📭 لا توجد إعلانات مفقودة</div>';
+                return;
+            }
+            
+            container.innerHTML = lostList.map(item => `
+                <div class="lost-card">
+                    <div class="lost-card-header">
+                        <h3>📦 ${item.title}</h3>
+                        <span class="badge-lost">مفقود</span>
+                    </div>
+                    <p>${item.desc}</p>
+                    <p><i class="fas fa-location-dot"></i> ${item.place || 'تاوريرت'}</p>
+                    <p><i class="fas fa-calendar"></i> ${item.date}</p>
+                    <div class="lost-card-footer">
+                        <a href="tel:${item.phone}" class="call-btn">📞 اتصل</a>
+                        <button onclick="removeLost(${item.id})" class="done-btn">تم الحل ✓</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function showFoundItems() {
+            let container = document.getElementById('foundItems');
+            if (foundList.length === 0) {
+                container.innerHTML = '<div class="card" style="text-align:center">📭 لا توجد إعلانات موجودة</div>';
+                return;
+            }
+            
+            container.innerHTML = foundList.map(item => `
+                <div class="found-card">
+                    <div class="found-card-header">
+                        <h3>🎁 ${item.title}</h3>
+                        <span class="badge-found">موجود</span>
+                    </div>
+                    <p>${item.desc}</p>
+                    <p><i class="fas fa-location-dot"></i> ${item.place || 'تاوريرت'}</p>
+                    <p><i class="fas fa-calendar"></i> ${item.date}</p>
+                    <div class="found-card-footer">
+                        <a href="tel:${item.phone}" class="call-btn">📞 اتصل</a>
+                        <button onclick="removeFound(${item.id})" class="done-btn">تم التسليم ✓</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function removeLost(id) {
+            lostList = lostList.filter(item => item.id !== id);
+            localStorage.setItem('lost_items', JSON.stringify(lostList));
+            showLostItems();
+            alert('تم إزالة الإعلان');
+        }
+        
+        function removeFound(id) {
+            foundList = foundList.filter(item => item.id !== id);
+            localStorage.setItem('found_items', JSON.stringify(foundList));
+            showFoundItems();
+            alert('تم إزالة الإعلان');
+        }
+        
+        // عرض القوائم عند التحميل
+        showLostItems();
+        showFoundItems();
+    </script>

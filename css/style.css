@@ -773,3 +773,109 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
     0%, 100% { opacity: 1; }
     50% { opacity: 0.6; }
 }
+
+/* قسم المفقودات والموجودات */
+.lostfound-card {
+    background: #1e293b;
+    border-radius: 20px;
+    padding: 20px;
+    margin: 20px 0;
+}
+.lostfound-btns {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+.btn-lost, .btn-found {
+    flex: 1;
+    border: none;
+    padding: 10px;
+    border-radius: 30px;
+    color: white;
+    cursor: pointer;
+}
+.btn-lost {
+    background: #ef4444;
+}
+.btn-found {
+    background: #22c55e;
+}
+.lost-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    color: white;
+}
+.submit-lost {
+    width: 100%;
+    background: #ef4444;
+    border: none;
+    padding: 10px;
+    border-radius: 30px;
+    color: white;
+    cursor: pointer;
+}
+.submit-found {
+    width: 100%;
+    background: #22c55e;
+    border: none;
+    padding: 10px;
+    border-radius: 30px;
+    color: white;
+    cursor: pointer;
+}
+.lost-card, .found-card {
+    background: #0f172a;
+    border-radius: 16px;
+    padding: 15px;
+    margin-bottom: 12px;
+}
+.lost-card {
+    border-right: 3px solid #ef4444;
+}
+.found-card {
+    border-right: 3px solid #22c55e;
+}
+.lost-card-header, .found-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.badge-lost {
+    background: #ef4444;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+}
+.badge-found {
+    background: #22c55e;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+}
+.lost-card-footer, .found-card-footer {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+.call-btn {
+    background: #3b82f6;
+    padding: 6px 15px;
+    border-radius: 25px;
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+}
+.done-btn {
+    background: #334155;
+    border: none;
+    padding: 6px 15px;
+    border-radius: 25px;
+    color: white;
+    cursor: pointer;
+    font-size: 13px;
+}
