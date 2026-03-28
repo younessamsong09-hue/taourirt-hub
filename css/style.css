@@ -1310,3 +1310,28 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
     justify-content: space-between;
     align-items: center;
 }
+
+/* أزرار الفلتر */
+.filter-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+.filter-btn {
+    flex: 1;
+    background: #1e293b;
+    border: none;
+    padding: 8px;
+    border-radius: 30px;
+    color: white;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s;
+}
+.filter-btn.active {
+    background: #22c55e;
+    color: white;
+}
+.filter-btn:hover {
+    transform: scale(1.02);
+}

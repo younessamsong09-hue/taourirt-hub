@@ -99,6 +99,10 @@
 
         <!-- بحث -->
         <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="🔍 بحث..."><button id="clearSearch" class="search-clear" style="display:none;">✖</button></div>
+        <div class="filter-buttons">
+            <button id="showAllBtn" class="filter-btn active">📋 جميع الصيدليات</button>
+            <button id="showOpenBtn" class="filter-btn">🟢 المفتوحة الآن</button>
+        </div>
         <div id="neighborhoods-container"></div>
         <div id="map-container"><div id="map"></div></div>
         <div id="duty-container"><div class="loading">⏳</div></div>
@@ -356,5 +360,77 @@
             input.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') sendMessage();
             });
+        }
+    </script>
+    <script>
+        // فلتر الصيدليات المفتوحة
+        let currentFilter = 'all'; // 'all' or 'open'
+        
+        // دالة لتحديد إذا كانت الصيدلية مفتوحة الآن
+        function isPharmacyOpen(pharmacy) {
+            // صيدلية الحراسة (الموجودة في قاعدة البيانات)
+            if (pharmacy.is_on_duty) return true;
+            
+            // يمكن إضافة منطق أوقات العمل هنا لاحقاً
+            // حالياً نعتمد على is_on_duty
+            
+            return false;
+        }
+        
+        // تحديث عرض الصيدليات حسب الفلتر
+        function filterPharmacies() {
+            let filtered = allPharmacies;
+            
+            if (currentFilter === 'open') {
+                filtered = allPharmacies.filter(p => isPharmacyOpen(p));
+            }
+            
+            // تحديث الخريطة
+            updateMap(filtered);
+            
+            // تحديث قائمة الصيدليات
+            const container = document.getElementById('pharmacies-container');
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="card" style="text-align:center">📭 لا توجد صيدليات مفتوحة حالياً</div>';
+            } else {
+                container.innerHTML = filtered.map(p => renderPharmacyCard(p)).join('');
+            }
+            
+            // تحديث العداد
+            const pharmCount = document.getElementById('pharmCount');
+            if (pharmCount) pharmCount.innerHTML = `(${filtered.length})`;
+        }
+        
+        // ربط أزرار الفلتر
+        document.addEventListener('DOMContentLoaded', () => {
+            const showAllBtn = document.getElementById('showAllBtn');
+            const showOpenBtn = document.getElementById('showOpenBtn');
+            
+            if (showAllBtn) {
+                showAllBtn.onclick = () => {
+                    currentFilter = 'all';
+                    showAllBtn.classList.add('active');
+                    showOpenBtn.classList.remove('active');
+                    filterPharmacies();
+                };
+            }
+            
+            if (showOpenBtn) {
+                showOpenBtn.onclick = () => {
+                    currentFilter = 'open';
+                    showOpenBtn.classList.add('active');
+                    showAllBtn.classList.remove('active');
+                    filterPharmacies();
+                };
+            }
+        });
+        
+        // حفظ الدالة الأصلية
+        const originalRenderAll = window.renderAll;
+        if (originalRenderAll) {
+            window.renderAll = function() {
+                originalRenderAll();
+                filterPharmacies();
+            };
         }
     </script>
