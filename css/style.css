@@ -1335,3 +1335,44 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
 .filter-btn:hover {
     transform: scale(1.02);
 }
+
+/* عناصر المفقودات والموجودات مع الصور */
+.lost-card-item, .found-card-item {
+    background: #0f172a;
+    border-radius: 16px;
+    padding: 12px;
+    margin-bottom: 12px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+.item-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 12px;
+    background: #1e293b;
+}
+.no-image {
+    width: 80px;
+    height: 80px;
+    background: #1e293b;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+}
+.item-info {
+    flex: 1;
+}
+.item-info p {
+    font-size: 12px;
+    margin: 4px 0;
+    color: #94a3b8;
+}
+.item-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
