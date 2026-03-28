@@ -26,16 +26,16 @@
         <div class="blood-card">
             <div class="section-title">🩸 التبرع بالدم</div>
             <div class="blood-buttons">
-                <button onclick="showBloodReg()" class="btn-blood">🩸 سجل متبرع</button>
-                <button onclick="showBloodEmer()" class="btn-blood-emergency">🚨 حالة استعجالية</button>
+                <button class="btn-blood" onclick="showBloodReg()">🩸 سجل متبرع</button>
+                <button class="btn-blood-emergency" onclick="showBloodEmer()">🚨 حالة استعجالية</button>
             </div>
-            <div id="bloodRegForm" style="display:none; margin-top:8px;">
+            <div id="bloodReg" style="display:none; margin-top:8px;">
                 <input type="text" id="donorName" placeholder="الاسم" class="blood-input">
                 <input type="tel" id="donorPhone" placeholder="الهاتف" class="blood-input">
                 <select id="donorBlood" class="blood-input"><option>فصيلة الدم</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select>
                 <button onclick="addDonor()" class="submit-blood">تسجيل</button>
             </div>
-            <div id="bloodEmerForm" style="display:none; margin-top:8px;">
+            <div id="bloodEmer" style="display:none; margin-top:8px;">
                 <input type="text" id="emergPatient" placeholder="اسم المريض" class="blood-input">
                 <select id="emergBlood" class="blood-input"><option>فصيلة الدم</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select>
                 <input type="tel" id="emergPhone" placeholder="رقم التواصل" class="blood-input">
@@ -46,25 +46,25 @@
         </div>
 
         <!-- المفقودات والموجودات -->
-        <div class="lostfound-card">
+        <div class="lost-card">
             <div class="section-title">🔑 المفقودات والموجودات</div>
-            <div class="lostfound-buttons">
-                <button onclick="showLost()" class="btn-lost">📦 أضف مفقود</button>
-                <button onclick="showFound()" class="btn-found">🎁 أضف موجود</button>
+            <div class="lost-buttons">
+                <button class="btn-lost" onclick="showLostForm()">📦 أضف مفقود</button>
+                <button class="btn-found" onclick="showFoundForm()">🎁 أضف موجود</button>
             </div>
             <div id="lostForm" style="display:none; margin-top:8px;">
                 <input type="text" id="lostTitle" placeholder="العنوان" class="lost-input">
                 <textarea id="lostDesc" placeholder="الوصف" rows="2" class="lost-input"></textarea>
                 <input type="text" id="lostPlace" placeholder="المكان" class="lost-input">
                 <input type="tel" id="lostPhone" placeholder="الهاتف" class="lost-input">
-                <button onclick="addLostItem()" class="submit-lost">نشر</button>
+                <button onclick="addLost()" class="submit-lost">نشر</button>
             </div>
             <div id="foundForm" style="display:none; margin-top:8px;">
                 <input type="text" id="foundTitle" placeholder="العنوان" class="lost-input">
                 <textarea id="foundDesc" placeholder="الوصف" rows="2" class="lost-input"></textarea>
                 <input type="text" id="foundPlace" placeholder="المكان" class="lost-input">
                 <input type="tel" id="foundPhone" placeholder="الهاتف" class="lost-input">
-                <button onclick="addFoundItem()" class="submit-found">نشر</button>
+                <button onclick="addFound()" class="submit-found">نشر</button>
             </div>
             <div id="lostList"></div>
             <div id="foundList"></div>
@@ -99,114 +99,7 @@
     <script src="js/main.js"></script>
     <script src="js/jobs.js"></script>
     <script src="js/complaints.js"></script>
-
-    <script>
-        // التبرع بالدم
-        let donors = JSON.parse(localStorage.getItem('donors')) || [];
-        let emergencies = JSON.parse(localStorage.getItem('emergencies')) || [];
-
-        function showBloodReg() { document.getElementById('bloodRegForm').style.display = 'block'; document.getElementById('bloodEmerForm').style.display = 'none'; }
-        function showBloodEmer() { document.getElementById('bloodEmerForm').style.display = 'block'; document.getElementById('bloodRegForm').style.display = 'none'; }
-
-        function addDonor() {
-            let name = document.getElementById('donorName').value;
-            let phone = document.getElementById('donorPhone').value;
-            let blood = document.getElementById('donorBlood').value;
-            if (!name || !phone || !blood) { alert('املأ الحقول'); return; }
-            donors.push({id:Date.now(), name, phone, blood});
-            localStorage.setItem('donors', JSON.stringify(donors));
-            showDonors();
-            document.getElementById('donorName').value = '';
-            document.getElementById('donorPhone').value = '';
-            document.getElementById('donorBlood').value = 'فصيلة الدم';
-            document.getElementById('bloodRegForm').style.display = 'none';
-        }
-
-        function addEmergency() {
-            let patient = document.getElementById('emergPatient').value;
-            let blood = document.getElementById('emergBlood').value;
-            let phone = document.getElementById('emergPhone').value;
-            if (!patient || !blood || !phone) { alert('املأ الحقول'); return; }
-            emergencies.push({id:Date.now(), patient, blood, phone, status:'active'});
-            localStorage.setItem('emergencies', JSON.stringify(emergencies));
-            showEmergencies();
-            document.getElementById('emergPatient').value = '';
-            document.getElementById('emergBlood').value = 'فصيلة الدم';
-            document.getElementById('emergPhone').value = '';
-            document.getElementById('bloodEmerForm').style.display = 'none';
-        }
-
-        function showDonors() {
-            let c = document.getElementById('donorsList');
-            if (donors.length === 0) { c.innerHTML = '<div class="card">📭 لا متبرعين</div>'; return; }
-            c.innerHTML = donors.map(d => `<div class="donor-card"><span>🩸 ${d.name} (${d.blood})</span><a href="tel:${d.phone}" class="call-btn">اتصل</a></div>`).join('');
-        }
-
-        function showEmergencies() {
-            let c = document.getElementById('emergList');
-            let active = emergencies.filter(e => e.status === 'active');
-            if (active.length === 0) { c.innerHTML = '<div class="card">✅ لا حالات</div>'; return; }
-            c.innerHTML = active.map(e => `<div class="emergency-card"><span>🚨 ${e.patient} (${e.blood})</span><a href="tel:${e.phone}" class="call-btn">اتصل</a></div>`).join('');
-        }
-
-        // المفقودات
-        let lost = JSON.parse(localStorage.getItem('lost')) || [];
-        let found = JSON.parse(localStorage.getItem('found')) || [];
-
-        function showLost() { document.getElementById('lostForm').style.display = 'block'; document.getElementById('foundForm').style.display = 'none'; }
-        function showFound() { document.getElementById('foundForm').style.display = 'block'; document.getElementById('lostForm').style.display = 'none'; }
-
-        function addLostItem() {
-            let title = document.getElementById('lostTitle').value;
-            let desc = document.getElementById('lostDesc').value;
-            let place = document.getElementById('lostPlace').value;
-            let phone = document.getElementById('lostPhone').value;
-            if (!title || !desc || !phone) return;
-            lost.unshift({id:Date.now(), title, desc, place, phone, date:new Date().toLocaleDateString()});
-            localStorage.setItem('lost', JSON.stringify(lost));
-            showLostList();
-            document.getElementById('lostTitle').value = '';
-            document.getElementById('lostDesc').value = '';
-            document.getElementById('lostPlace').value = '';
-            document.getElementById('lostPhone').value = '';
-            document.getElementById('lostForm').style.display = 'none';
-        }
-
-        function addFoundItem() {
-            let title = document.getElementById('foundTitle').value;
-            let desc = document.getElementById('foundDesc').value;
-            let place = document.getElementById('foundPlace').value;
-            let phone = document.getElementById('foundPhone').value;
-            if (!title || !desc || !phone) return;
-            found.unshift({id:Date.now(), title, desc, place, phone, date:new Date().toLocaleDateString()});
-            localStorage.setItem('found', JSON.stringify(found));
-            showFoundList();
-            document.getElementById('foundTitle').value = '';
-            document.getElementById('foundDesc').value = '';
-            document.getElementById('foundPlace').value = '';
-            document.getElementById('foundPhone').value = '';
-            document.getElementById('foundForm').style.display = 'none';
-        }
-
-        function showLostList() {
-            let c = document.getElementById('lostList');
-            if (lost.length === 0) { c.innerHTML = '<div class="card">📭 لا مفقودات</div>'; return; }
-            c.innerHTML = lost.map(i => `<div class="lost-card"><div><strong>📦 ${i.title}</strong><span class="badge-lost">مفقود</span></div><p>${i.desc}</p><p>📍 ${i.place}</p><div><a href="tel:${i.phone}" class="call-btn">اتصل</a><button onclick="removeLost(${i.id})" class="done-btn">تم</button></div></div>`).join('');
-        }
-
-        function showFoundList() {
-            let c = document.getElementById('foundList');
-            if (found.length === 0) { c.innerHTML = '<div class="card">📭 لا موجودات</div>'; return; }
-            c.innerHTML = found.map(i => `<div class="found-card"><div><strong>🎁 ${i.title}</strong><span class="badge-found">موجود</span></div><p>${i.desc}</p><p>📍 ${i.place}</p><div><a href="tel:${i.phone}" class="call-btn">اتصل</a><button onclick="removeFound(${i.id})" class="done-btn">تم</button></div></div>`).join('');
-        }
-
-        function removeLost(id) { lost = lost.filter(i => i.id !== id); localStorage.setItem('lost', JSON.stringify(lost)); showLostList(); }
-        function removeFound(id) { found = found.filter(i => i.id !== id); localStorage.setItem('found', JSON.stringify(found)); showFoundList(); }
-
-        showDonors();
-        showEmergencies();
-        showLostList();
-        showFoundList();
-    </script>
+    <script src="js/blood.js"></script>
+    <script src="js/lostfound.js"></script>
 </body>
 </html>

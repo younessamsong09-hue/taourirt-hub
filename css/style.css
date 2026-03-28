@@ -1086,3 +1086,32 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
 }
 .lost-card { border-right: 3px solid #ef4444; }
 .found-card { border-right: 3px solid #22c55e; }
+
+/* التبرع بالدم */
+.blood-card { background: #1e293b; border-radius: 20px; padding: 12px; margin: 15px 0; }
+.blood-buttons { display: flex; gap: 8px; margin-bottom: 8px; }
+.btn-blood, .btn-blood-emergency { flex: 1; border: none; padding: 6px; border-radius: 30px; color: white; cursor: pointer; font-size: 12px; }
+.btn-blood { background: #ef4444; }
+.btn-blood-emergency { background: #dc2626; }
+.blood-input { width: 100%; padding: 6px; margin-bottom: 6px; background: #0f172a; border: 1px solid #334155; border-radius: 12px; color: white; font-size: 12px; }
+.submit-blood, .submit-blood-emergency { width: 100%; border: none; padding: 6px; border-radius: 30px; color: white; cursor: pointer; }
+.submit-blood { background: #ef4444; }
+.submit-blood-emergency { background: #dc2626; }
+.donor-card, .emergency-card { background: #0f172a; border-radius: 12px; padding: 6px 10px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; }
+
+/* المفقودات والموجودات */
+.lost-card { background: #1e293b; border-radius: 20px; padding: 12px; margin: 15px 0; }
+.lost-buttons { display: flex; gap: 8px; margin-bottom: 8px; }
+.btn-lost, .btn-found { flex: 1; border: none; padding: 6px; border-radius: 30px; color: white; cursor: pointer; font-size: 12px; }
+.btn-lost { background: #ef4444; }
+.btn-found { background: #22c55e; }
+.lost-input { width: 100%; padding: 6px; margin-bottom: 6px; background: #0f172a; border: 1px solid #334155; border-radius: 12px; color: white; font-size: 12px; }
+.submit-lost, .submit-found { width: 100%; border: none; padding: 6px; border-radius: 30px; color: white; cursor: pointer; }
+.submit-lost { background: #ef4444; }
+.submit-found { background: #22c55e; }
+.lost-card-item, .found-card-item { background: #0f172a; border-radius: 12px; padding: 8px; margin-bottom: 8px; }
+.badge-lost, .badge-found { padding: 2px 6px; border-radius: 12px; font-size: 10px; margin-right: 8px; }
+.badge-lost { background: #ef4444; }
+.badge-found { background: #22c55e; }
+.call-btn { background: #3b82f6; padding: 3px 8px; border-radius: 15px; color: white; text-decoration: none; font-size: 11px; margin-left: 8px; }
+.done-btn { background: #334155; border: none; padding: 3px 8px; border-radius: 15px; color: white; cursor: pointer; font-size: 11px; }
