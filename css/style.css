@@ -613,3 +613,71 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
     padding: 12px;
     border: 1px solid #334155;
 }
+
+/* زر الاتجاهات - تصميم جميل */
+.direction-btn, .btn-direction {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    border: none;
+    padding: 6px 14px;
+    border-radius: 25px;
+    color: white;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 2px 5px rgba(59,130,246,0.3);
+}
+.direction-btn:hover, .btn-direction:hover {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59,130,246,0.4);
+}
+.direction-btn:active, .btn-direction:active {
+    transform: translateY(0);
+}
+.direction-btn i, .btn-direction i {
+    font-size: 12px;
+}
+
+/* بطاقة الحراسة */
+.duty-card .btn-direction {
+    padding: 10px 20px;
+    font-size: 14px;
+    gap: 8px;
+}
+.duty-card .btn-direction i {
+    font-size: 14px;
+}
+
+/* تنسيق عام للأزرار */
+.card-footer {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.share-btn {
+    background: #25D366;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 25px;
+    color: white;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.share-btn:hover {
+    background: #128C7E;
+    transform: translateY(-2px);
+}
+.status-on, .status-off {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+}
