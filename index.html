@@ -17,8 +17,83 @@
     <div class="container" style="max-width: 550px; margin: auto;">
         <!-- الصف العلوي: إحصائيات -->
         <div class="stats-row">
+
+        <!-- المفقودات والموجودات -->
+        <div class="lostfound-card">
+            <div class="section-title">🔑 المفقودات والموجودات</div>
+            <div class="lostfound-buttons">
+                <button onclick="showLostForm()" class="btn-lost">📦 أضف مفقود</button>
+                <button onclick="showFoundForm()" class="btn-found">🎁 أضف موجود</button>
+            </div>
+            <div id="lostForm" style="display:none; margin-top:15px;">
+                <input type="text" id="lostTitle" placeholder="العنوان" class="lost-input">
+                <textarea id="lostDesc" placeholder="الوصف" rows="2" class="lost-input"></textarea>
+                <input type="text" id="lostPlace" placeholder="المكان" class="lost-input">
+                <input type="tel" id="lostPhone" placeholder="رقم الهاتف" class="lost-input">
+                <button onclick="addLost()" class="submit-lost">نشر</button>
+            </div>
+            <div id="foundForm" style="display:none; margin-top:15px;">
+                <input type="text" id="foundTitle" placeholder="العنوان" class="lost-input">
+                <textarea id="foundDesc" placeholder="الوصف" rows="2" class="lost-input"></textarea>
+                <input type="text" id="foundPlace" placeholder="المكان" class="lost-input">
+                <input type="tel" id="foundPhone" placeholder="رقم الهاتف" class="lost-input">
+                <button onclick="addFound()" class="submit-found">نشر</button>
+            </div>
+            <div id="lostList"></div>
+            <div id="foundList"></div>
+        </div>
             <div class="stat-card">
+
+        <!-- المفقودات والموجودات -->
+        <div class="lostfound-card">
+            <div class="section-title">🔑 المفقودات والموجودات</div>
+            <div class="lostfound-buttons">
+                <button onclick="showLostForm()" class="btn-lost">📦 أضف مفقود</button>
+                <button onclick="showFoundForm()" class="btn-found">🎁 أضف موجود</button>
+            </div>
+            <div id="lostForm" style="display:none; margin-top:15px;">
+                <input type="text" id="lostTitle" placeholder="العنوان" class="lost-input">
+                <textarea id="lostDesc" placeholder="الوصف" rows="2" class="lost-input"></textarea>
+                <input type="text" id="lostPlace" placeholder="المكان" class="lost-input">
+                <input type="tel" id="lostPhone" placeholder="رقم الهاتف" class="lost-input">
+                <button onclick="addLost()" class="submit-lost">نشر</button>
+            </div>
+            <div id="foundForm" style="display:none; margin-top:15px;">
+                <input type="text" id="foundTitle" placeholder="العنوان" class="lost-input">
+                <textarea id="foundDesc" placeholder="الوصف" rows="2" class="lost-input"></textarea>
+                <input type="text" id="foundPlace" placeholder="المكان" class="lost-input">
+                <input type="tel" id="foundPhone" placeholder="رقم الهاتف" class="lost-input">
+                <button onclick="addFound()" class="submit-found">نشر</button>
+            </div>
+            <div id="lostList"></div>
+            <div id="foundList"></div>
+        </div>
                 <div class="number" id="visitorCount">0</div>
+
+        <!-- المفقودات والموجودات -->
+        <div class="lostfound-card">
+            <div class="section-title">🔑 المفقودات والموجودات</div>
+            <div class="lostfound-buttons">
+                <button onclick="showLostForm()" class="btn-lost">📦 أضف مفقود</button>
+                <button onclick="showFoundForm()" class="btn-found">🎁 أضف موجود</button>
+            </div>
+            <div id="lostForm" style="display:none; margin-top:15px;">
+                <input type="text" id="lostTitle" placeholder="العنوان" class="lost-input">
+                <textarea id="lostDesc" placeholder="الوصف" rows="2" class="lost-input"></textarea>
+                <input type="text" id="lostPlace" placeholder="المكان" class="lost-input">
+                <input type="tel" id="lostPhone" placeholder="رقم الهاتف" class="lost-input">
+                <button onclick="addLost()" class="submit-lost">نشر</button>
+            </div>
+            <div id="foundForm" style="display:none; margin-top:15px;">
+                <input type="text" id="foundTitle" placeholder="العنوان" class="lost-input">
+                <textarea id="foundDesc" placeholder="الوصف" rows="2" class="lost-input"></textarea>
+                <input type="text" id="foundPlace" placeholder="المكان" class="lost-input">
+                <input type="tel" id="foundPhone" placeholder="رقم الهاتف" class="lost-input">
+                <button onclick="addFound()" class="submit-found">نشر</button>
+            </div>
+            <div id="lostList"></div>
+            <div id="foundList"></div>
+        </div>
                 <div class="label"><i class="fas fa-eye"></i> زائر</div>
             </div>
             <div class="stat-card">
@@ -177,8 +252,6 @@
         })();
     </script>
         <!-- قسم التبرع بالدم -->
-        <div class="blood-section">
-            <div class="section-title">🩸 منصة التبرع بالدم - تاوريرت</div>
             
             <div class="blood-tabs">
                 <button class="blood-tab active" onclick="showBloodTab('register')">تسجيل متبرع</button>
@@ -368,8 +441,6 @@
         showFoundList();
     </script>
         <!-- قسم المفقودات والموجودات -->
-        <div class="lostfound-card">
-            <div class="section-title">🔑 المفقودات والموجودات</div>
             
             <div class="lostfound-btns">
                 <button onclick="toggleLostForm()" class="btn-lost">📦 أضف مفقود</button>
@@ -539,9 +610,6 @@
         showFoundItems();
     </script>
         <!-- رادار العروض والهميزات -->
-        <div class="deals-section">
-            <div class="deals-header">
-                <div class="section-title">🛍️ رادار العروض والهميزات</div>
                 <button onclick="showAddDeal()" class="add-deal-btn">+ أضف عرض</button>
             </div>
             
@@ -659,8 +727,6 @@
         showDeals();
     </script>
         <!-- المفقودات والموجودات -->
-        <div class="lostfound-card">
-            <div class="section-title">🔑 المفقودات والموجودات</div>
             
             <div class="lostfound-buttons">
                 <button onclick="showLostForm()" class="btn-lost">📦 أضف مفقود</button>
@@ -819,3 +885,76 @@
     </script>
  
  
+    <script>
+        let lostItems = JSON.parse(localStorage.getItem('lost_items')) || [];
+        let foundItems = JSON.parse(localStorage.getItem('found_items')) || [];
+        
+        function showLostForm() {
+            document.getElementById('lostForm').style.display = 'block';
+            document.getElementById('foundForm').style.display = 'none';
+        }
+        function showFoundForm() {
+            document.getElementById('foundForm').style.display = 'block';
+            document.getElementById('lostForm').style.display = 'none';
+        }
+        
+        function addLost() {
+            let title = document.getElementById('lostTitle').value;
+            let desc = document.getElementById('lostDesc').value;
+            let place = document.getElementById('lostPlace').value;
+            let phone = document.getElementById('lostPhone').value;
+            if (!title || !desc || !phone) { alert('املأ الحقول'); return; }
+            lostItems.unshift({id:Date.now(), title, desc, place, phone, date:new Date().toLocaleDateString('ar-MA')});
+            localStorage.setItem('lost_items', JSON.stringify(lostItems));
+            showLostList();
+            document.getElementById('lostTitle').value = '';
+            document.getElementById('lostDesc').value = '';
+            document.getElementById('lostPlace').value = '';
+            document.getElementById('lostPhone').value = '';
+            document.getElementById('lostForm').style.display = 'none';
+        }
+        
+        function addFound() {
+            let title = document.getElementById('foundTitle').value;
+            let desc = document.getElementById('foundDesc').value;
+            let place = document.getElementById('foundPlace').value;
+            let phone = document.getElementById('foundPhone').value;
+            if (!title || !desc || !phone) { alert('املأ الحقول'); return; }
+            foundItems.unshift({id:Date.now(), title, desc, place, phone, date:new Date().toLocaleDateString('ar-MA')});
+            localStorage.setItem('found_items', JSON.stringify(foundItems));
+            showFoundList();
+            document.getElementById('foundTitle').value = '';
+            document.getElementById('foundDesc').value = '';
+            document.getElementById('foundPlace').value = '';
+            document.getElementById('foundPhone').value = '';
+            document.getElementById('foundForm').style.display = 'none';
+        }
+        
+        function showLostList() {
+            let c = document.getElementById('lostList');
+            if (lostItems.length === 0) { c.innerHTML = '<div class="card">📭 لا توجد إعلانات مفقودة</div>'; return; }
+            c.innerHTML = lostItems.map(i => `
+                <div class="lost-card"><div><strong>📦 ${i.title}</strong> <span style="background:#ef4444;padding:2px 8px;border-radius:15px;">مفقود</span></div>
+                <p>${i.desc}</p><p>📍 ${i.place || 'تاوريرت'}</p><p>📅 ${i.date}</p>
+                <div><a href="tel:${i.phone}" style="background:#3b82f6;padding:5px 12px;border-radius:20px;color:white;">📞 اتصل</a>
+                <button onclick="removeLost(${i.id})" style="background:#334155;border:none;padding:5px 12px;border-radius:20px;color:white;">✓ تم الحل</button></div></div>
+            `).join('');
+        }
+        
+        function showFoundList() {
+            let c = document.getElementById('foundList');
+            if (foundItems.length === 0) { c.innerHTML = '<div class="card">📭 لا توجد إعلانات موجودة</div>'; return; }
+            c.innerHTML = foundItems.map(i => `
+                <div class="found-card"><div><strong>🎁 ${i.title}</strong> <span style="background:#22c55e;padding:2px 8px;border-radius:15px;">موجود</span></div>
+                <p>${i.desc}</p><p>📍 ${i.place || 'تاوريرت'}</p><p>📅 ${i.date}</p>
+                <div><a href="tel:${i.phone}" style="background:#3b82f6;padding:5px 12px;border-radius:20px;color:white;">📞 اتصل</a>
+                <button onclick="removeFound(${i.id})" style="background:#334155;border:none;padding:5px 12px;border-radius:20px;color:white;">✓ تم التسليم</button></div></div>
+            `).join('');
+        }
+        
+        function removeLost(id) { lostItems = lostItems.filter(i => i.id !== id); localStorage.setItem('lost_items', JSON.stringify(lostItems)); showLostList(); }
+        function removeFound(id) { foundItems = foundItems.filter(i => i.id !== id); localStorage.setItem('found_items', JSON.stringify(foundItems)); showFoundList(); }
+        
+        showLostList();
+        showFoundList();
+    </script>

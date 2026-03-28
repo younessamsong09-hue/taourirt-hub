@@ -1030,3 +1030,59 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
 }
 .lost-card { border-right: 3px solid #ef4444; }
 .found-card { border-right: 3px solid #22c55e; }
+.lostfound-card {
+    background: #1e293b;
+    border-radius: 20px;
+    padding: 20px;
+    margin: 20px 0;
+}
+.lostfound-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+.btn-lost, .btn-found {
+    flex: 1;
+    border: none;
+    padding: 10px;
+    border-radius: 30px;
+    color: white;
+    cursor: pointer;
+}
+.btn-lost { background: #ef4444; }
+.btn-found { background: #22c55e; }
+.lost-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    color: white;
+}
+.submit-lost {
+    width: 100%;
+    background: #ef4444;
+    border: none;
+    padding: 10px;
+    border-radius: 30px;
+    color: white;
+    cursor: pointer;
+}
+.submit-found {
+    width: 100%;
+    background: #22c55e;
+    border: none;
+    padding: 10px;
+    border-radius: 30px;
+    color: white;
+    cursor: pointer;
+}
+.lost-card, .found-card {
+    background: #0f172a;
+    border-radius: 16px;
+    padding: 15px;
+    margin-bottom: 12px;
+}
+.lost-card { border-right: 3px solid #ef4444; }
+.found-card { border-right: 3px solid #22c55e; }
