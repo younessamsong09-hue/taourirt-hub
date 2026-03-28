@@ -1115,3 +1115,89 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
 .badge-found { background: #22c55e; }
 .call-btn { background: #3b82f6; padding: 3px 8px; border-radius: 15px; color: white; text-decoration: none; font-size: 11px; margin-left: 8px; }
 .done-btn { background: #334155; border: none; padding: 3px 8px; border-radius: 15px; color: white; cursor: pointer; font-size: 11px; }
+
+/* تصغير جميع الأقسام */
+.blood-card, .lost-card {
+    padding: 8px;
+    margin: 8px 0;
+    border-radius: 16px;
+}
+
+.blood-buttons, .lost-buttons {
+    gap: 6px;
+    margin-bottom: 6px;
+}
+
+.btn-blood, .btn-blood-emergency, .btn-lost, .btn-found {
+    padding: 4px 8px;
+    font-size: 11px;
+    border-radius: 25px;
+}
+
+.blood-input, .lost-input {
+    padding: 4px 8px;
+    font-size: 11px;
+    margin-bottom: 4px;
+    border-radius: 10px;
+}
+
+.submit-blood, .submit-blood-emergency, .submit-lost, .submit-found {
+    padding: 4px;
+    font-size: 11px;
+    border-radius: 25px;
+}
+
+.donor-card, .emergency-card, .lost-card-item, .found-card-item {
+    padding: 4px 8px;
+    margin-bottom: 4px;
+    font-size: 11px;
+    border-radius: 10px;
+}
+
+.donor-card span, .emergency-card span, .lost-card-item div, .found-card-item div {
+    font-size: 11px;
+}
+
+.call-btn, .done-btn {
+    padding: 2px 6px;
+    font-size: 10px;
+    border-radius: 12px;
+}
+
+.badge-lost, .badge-found {
+    padding: 1px 4px;
+    font-size: 9px;
+    border-radius: 10px;
+}
+
+.section-title {
+    font-size: 14px;
+    margin: 8px 0;
+}
+
+.stat-card {
+    padding: 4px;
+}
+.stat-card .number {
+    font-size: 14px;
+}
+.stat-card .label {
+    font-size: 8px;
+}
+
+.jobs-card {
+    padding: 4px 8px;
+}
+.jobs-icon {
+    width: 24px;
+    height: 24px;
+}
+.jobs-icon i {
+    font-size: 12px;
+}
+.jobs-title {
+    font-size: 9px;
+}
+.jobs-count {
+    font-size: 12px;
+}
