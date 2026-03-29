@@ -665,3 +665,26 @@
         showReportFloatList();
         showRentalFloatList();
     </script>
+<style>
+/* إعادة الأيقونات لمكانها الأصلي مع فك الاشتباك */
+.report-float {
+    bottom: 20px !important;
+    right: 20px !important;
+    z-index: 1005 !important; /* التبليغ في الأسفل */
+}
+
+.rental-float {
+    bottom: 85px !important; /* العقار فوقه مباشرة بمسافة كافية */
+    right: 20px !important;
+    z-index: 1005 !important;
+}
+
+/* إصلاح اللوحة لتظهر فوق الأيقونة مباشرة */
+.float-panel {
+    bottom: 150px !important;
+    right: 20px !important;
+    z-index: 2000 !important;
+    width: 280px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+</style>
