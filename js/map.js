@@ -85,11 +85,27 @@ function clearMarkers() {
 }
 
 function addMarker(pharmacy, coords) {
+    const isOpen = pharmacy.status === "open" || pharmacy.isDuty; 
+    const markerClass = isOpen ? "pulse-pharmacy" : ""; 
     const customIcon = L.divIcon({
-        html: `<div style="color:#10b981; font-size:20px;"><i class="fas fa-plus-square"></i></div>`,
-        className: 'custom-pin',
-        iconSize: [20, 20]
+        html: `<div class="${markerClass}" style="color:${isOpen ? "#10b981" : "#64748b"}; font-size:22px; filter: drop-shadow(0 0 5px ${isOpen ? "#10b981" : "transparent"});">
+                <i class="fas fa-plus-square"></i>
+               </div>`,
+        className: "custom-pin",
+        iconSize: [22, 22]
     });
+    const marker = L.marker(coords, { icon: customIcon }).addTo(map);
+    const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${coords[0]},${coords[1]}`;
+    marker.bindPopup(`
+        <div style="direction:rtl; text-align:right; font-family:inherit; padding:5px;">
+            <b style="color:#1e293b; font-size:14px;">${pharmacy.name}</b><br>
+            <div style="margin-top:8px;">
+                <a href="tel:${pharmacy.phone}" style="background:#10b981; color:white; padding:4px 8px; border-radius:5px; text-decoration:none; font-size:11px; margin-left:5px;">📞 اتصل</a>
+                <a href="${googleMapsUrl}" target="_blank" style="background:#3b82f6; color:white; padding:4px 8px; border-radius:5px; text-decoration:none; font-size:11px;">📍 الاتجاهات</a>
+            </div>
+        </div>`);
+    markers.push(marker);
+}
     const marker = L.marker(coords, { icon: customIcon }).addTo(map);
     marker.bindPopup(`<div style="direction:rtl; text-align:right;"><b>${pharmacy.name}</b><br>📞 <a href="tel:${pharmacy.phone}">${pharmacy.phone}</a></div>`);
     markers.push(marker);
