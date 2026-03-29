@@ -95,6 +95,17 @@
                 <div class="toggle-arrow"><i id="jobsArrow" class="fas fa-chevron-down"></i></div>
             </div>
             <div id="jobsContent" class="toggle-content" style="display:none;">
+                <button onclick="toggleJobForm()" style="width:100%; background:#ff4757; color:white; border:none; padding:10px; border-radius:30px; margin-bottom:15px; font-weight:bold; cursor:pointer; box-shadow: 0 4px 15px rgba(255,71,87,0.4);">
+                    🚀 جرب إضافة وظيفة الآن
+                </button>
+                <div id="addJobForm" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); width:90%; background:#2f3542; padding:20px; border-radius:20px; border:2px solid #ff4757; z-index:9999; box-shadow: 0 0 50px rgba(0,0,0,0.8);">
+                    <h3 style="color:#ff4757; text-align:center; margin-bottom:15px;">إضافة سريعة (تجريبي)</h3>
+                    <input type="text" id="newJobTitle" placeholder="شنو هي الخدمة؟" style="width:100%; padding:10px; margin-bottom:10px; border-radius:10px; border:none; background:#57606f; color:white;">
+                    <input type="text" id="newJobCompany" placeholder="فين بلاصة؟" style="width:100%; padding:10px; margin-bottom:10px; border-radius:10px; border:none; background:#57606f; color:white;">
+                    <input type="number" id="newJobPhone" placeholder="رقم الهاتف" style="width:100%; padding:10px; margin-bottom:15px; border-radius:10px; border:none; background:#57606f; color:white;">
+                    <button onclick="saveNewJob()" style="width:100%; background:#2ed573; color:white; border:none; padding:12px; border-radius:10px; font-weight:bold;">أنشرها دابا ✅</button>
+                    <button onclick="toggleJobForm()" style="width:100%; background:transparent; color:#ced4da; border:none; margin-top:10px;">إلغاء</button>
+                </div>
                 <button onclick="toggleJobForm()" id="mainAddJobBtn" style="width:100%; background:linear-gradient(135deg, #3b82f6, #2563eb); color:white; border:none; padding:12px; border-radius:12px; margin-bottom:15px; font-weight:bold; cursor:pointer; box-shadow: 0 4px 10px rgba(59,130,246,0.3);">
                     <i class="fas fa-plus-circle"></i> أنشر وظيفة جديدة
                 </button>
