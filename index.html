@@ -70,7 +70,8 @@
                 <textarea id="lostDesc" placeholder="الوصف *" rows="2" class="toggle-input"></textarea>
                 <input type="text" id="lostPlace" placeholder="المكان" class="toggle-input">
                 <input type="tel" id="lostPhone" placeholder="رقم الهاتف *" class="toggle-input">
-                <input type="file" id="lostImage" onchange="previewImage(this, 'lostPreview')" accept="image/*" class="toggle-input" style="background:#1e293b;">
+                <input type="file" id="lostImage" onchange="previewImage(this, 'lostPreview')" onchange="previewImage(this, 'lostPreview')" accept="image/*" class="toggle-input" style="background:#1e293b;">
+                <img id="lostPreview" style="display:none; width:100%; max-height:160px; border-radius:15px; margin:10px 0; object-fit:cover; border:2px dashed #6366f1;">
                 <img id="lostPreview" style="display:none; width:100%; max-height:150px; border-radius:12px; margin-top:10px; object-fit:cover; border:2px solid #ef4444;">
                 <button onclick="addLost()" class="toggle-submit-lost">نشر</button>
             </div>
@@ -79,7 +80,8 @@
                 <textarea id="foundDesc" placeholder="الوصف *" rows="2" class="toggle-input"></textarea>
                 <input type="text" id="foundPlace" placeholder="المكان" class="toggle-input">
                 <input type="tel" id="foundPhone" placeholder="رقم الهاتف *" class="toggle-input">
-                <input type="file" id="foundImage" onchange="previewImage(this, 'foundPreview')" accept="image/*" class="toggle-input" style="background:#1e293b;">
+                <input type="file" id="foundImage" onchange="previewImage(this, 'foundPreview')" onchange="previewImage(this, 'foundPreview')" accept="image/*" class="toggle-input" style="background:#1e293b;">
+                <img id="foundPreview" style="display:none; width:100%; max-height:160px; border-radius:15px; margin:10px 0; object-fit:cover; border:2px dashed #10b981;">
                 <img id="foundPreview" style="display:none; width:100%; max-height:150px; border-radius:12px; margin-top:10px; object-fit:cover; border:2px solid #10b981;">
                 <button onclick="addFound()" class="toggle-submit-found">نشر</button>
             </div>
