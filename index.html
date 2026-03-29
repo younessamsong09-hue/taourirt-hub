@@ -95,9 +95,19 @@
                 <div class="toggle-arrow"><i id="jobsArrow" class="fas fa-chevron-down"></i></div>
             </div>
             <div id="jobsContent" class="toggle-content" style="display:none;">
-                <button onclick="toggleJobForm()" style="width:100%; background:#ff4757; color:white; border:none; padding:10px; border-radius:30px; margin-bottom:15px; font-weight:bold; cursor:pointer; box-shadow: 0 4px 15px rgba(255,71,87,0.4);">
-                    🚀 جرب إضافة وظيفة الآن
-                </button>
+                <div id="jobs-control" style="margin-bottom:20px;">
+                    <button onclick="toggleJobForm()" style="width:100%; background:linear-gradient(135deg, #6366f1, #3b82f6); color:white; border:none; padding:14px; border-radius:16px; font-weight:bold; cursor:pointer; box-shadow: 0 10px 15px -3px rgba(59,130,246,0.3); transition: transform 0.2s;">
+                        <i class="fas fa-plus-circle"></i> إضافة فرصة عمل جديدة
+                    </button>
+                </div>
+                <div id="addJobForm" style="display:none; background:#1e293b; padding:20px; border-radius:20px; border:1px solid #3b82f6; margin-bottom:25px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
+                    <h3 style="color:white; margin-bottom:15px; text-align:center; font-size:16px;">تفاصيل الوظيفة</h3>
+                    <input type="text" id="newJobTitle" placeholder="المسمى الوظيفي (مثلاً: نجار)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:10px; border:1px solid #334155; background:#0f172a; color:white;">
+                    <input type="text" id="newJobCompany" placeholder="المكان أو اسم المحل" style="width:100%; padding:12px; margin-bottom:10px; border-radius:10px; border:1px solid #334155; background:#0f172a; color:white;">
+                    <input type="number" id="newJobPhone" placeholder="رقم الواتساب (06...)" style="width:100%; padding:12px; margin-bottom:15px; border-radius:10px; border:1px solid #334155; background:#0f172a; color:white;">
+                    <button onclick="saveNewJob()" style="width:100%; background:#10b981; color:white; border:none; padding:12px; border-radius:10px; font-weight:bold;">نشر العرض الآن ✅</button>
+                </div>
+                <div id="jobsList" style="display:grid; gap:15px;"></div>
                 <div id="addJobForm" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); width:90%; background:#2f3542; padding:20px; border-radius:20px; border:2px solid #ff4757; z-index:9999; box-shadow: 0 0 50px rgba(0,0,0,0.8);">
                     <h3 style="color:#ff4757; text-align:center; margin-bottom:15px;">إضافة سريعة (تجريبي)</h3>
                     <input type="text" id="newJobTitle" placeholder="شنو هي الخدمة؟" style="width:100%; padding:10px; margin-bottom:10px; border-radius:10px; border:none; background:#57606f; color:white;">
