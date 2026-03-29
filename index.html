@@ -530,6 +530,7 @@
         let currentReportType = '';
         let userLat = null, userLng = null;
         
+window.toggleReportFloat = function() { let p = document.getElementById("reportFloatPanel"); p.style.display = (p.style.display === "none" || p.style.display === "") ? "block" : "none"; };
         function toggleReportFloat() {
             let p = document.getElementById('reportFloatPanel');
             p.style.display = p.style.display === 'none' ? 'block' : 'none';
@@ -600,6 +601,7 @@
         let rentalsFloat = JSON.parse(localStorage.getItem('rentals')) || [];
         let currentRentalType = '';
         
+window.toggleRentalFloat = function() { let p = document.getElementById("rentalFloatPanel"); p.style.display = (p.style.display === "none" || p.style.display === "") ? "block" : "none"; };
         function toggleRentalFloat() {
             let p = document.getElementById('rentalFloatPanel');
             p.style.display = p.style.display === 'none' ? 'block' : 'none';
@@ -665,3 +667,26 @@
         showReportFloatList();
         showRentalFloatList();
     </script>
+<style>
+/* فك الاشتباك بين الأيقونات العائمة */
+.report-float {
+    bottom: 20px !important;
+    right: 20px !important;
+    z-index: 1001 !important;
+}
+
+.rental-float {
+    bottom: 90px !important; /* رفع أيقونة العقار فوق التبليغ */
+    right: 20px !important;
+    z-index: 1001 !important;
+}
+
+/* إصلاح لوحة التحكم لتظهر في مكان صحيح ولا تغطي الأزرار */
+.float-panel {
+    bottom: 80px !important;
+    right: 20px !important;
+    z-index: 2000 !important;
+    max-width: 300px;
+    width: 90%;
+}
+</style>
