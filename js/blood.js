@@ -118,7 +118,7 @@ function updateBloodCounts() {
 }
 
 // عرض نموذج المتبرع
-window.showBloodReg = () => {
+window.showBloodReg = function() {
     const regForm = document.getElementById('bloodReg');
     const emerForm = document.getElementById('bloodEmer');
     if (regForm) regForm.style.display = 'block';
@@ -126,7 +126,7 @@ window.showBloodReg = () => {
 };
 
 // عرض نموذج الحالة الطارئة
-window.showBloodEmer = () => {
+window.showBloodEmer = function() {
     const regForm = document.getElementById('bloodReg');
     const emerForm = document.getElementById('bloodEmer');
     if (emerForm) emerForm.style.display = 'block';
@@ -134,7 +134,7 @@ window.showBloodEmer = () => {
 };
 
 // إضافة متبرع جديد
-window.addDonor = async () => {
+window.addDonor = async function() {
     const name = document.getElementById('donorName')?.value;
     const phone = document.getElementById('donorPhone')?.value;
     const blood = document.getElementById('donorBlood')?.value;
@@ -199,7 +199,7 @@ window.addDonor = async () => {
 };
 
 // إضافة حالة طارئة
-window.addEmergency = async () => {
+window.addEmergency = async function() {
     const patient = document.getElementById('emergPatient')?.value;
     const blood = document.getElementById('emergBlood')?.value;
     const phone = document.getElementById('emergPhone')?.value;
