@@ -486,7 +486,8 @@
         </div>
         <div id="reportFloatForm" style="display:none;">
             <textarea id="reportFloatDesc" rows="2" placeholder="الوصف" class="float-input"></textarea>
-            <input type="file" id="reportFloatImage" accept="image/*" class="float-input">
+            <input type="file" id="reportFloatImage" onchange="previewReportImage(this)" accept="image/*" class="float-input">
+            <div id="imagePreviewArea" style="display:none; margin-top:8px; position:relative;"><img id="previewImg" style="width:100%; border-radius:12px; max-height:100px; object-fit:cover;"><button onclick="removeSelectedImage()" style="position:absolute; top:5px; right:5px; background:#ef4444; color:white; border:none; border-radius:50%; width:25px; height:25px; cursor:pointer;">✖</button></div>
             <div id="reportFloatLocation" class="float-location"></div>
             <button onclick="addReportFloat()" class="float-submit">إرسال</button>
         </div>
@@ -536,6 +537,26 @@
             showReportFloatList();
         }
         
+        function previewReportImage(input) {
+            let previewArea = document.getElementById("imagePreviewArea");
+            let previewImg = document.getElementById("previewImg");
+            if (input.files && input.files[0]) {
+                selectedImageFile = input.files[0];
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    previewArea.style.display = "block";
+                };
+                reader.readAsDataURL(selectedImageFile);
+            }
+        }
+        
+        function removeSelectedImage() {
+            selectedImageFile = null;
+            document.getElementById("reportFloatImage").value = "";
+            document.getElementById("imagePreviewArea").style.display = "none";
+            document.getElementById("previewImg").src = "";
+        }
         function getReportLocationFloat() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
@@ -555,28 +576,71 @@
             getReportLocationFloat();
         }
         
-        function addReportFloat() {
-            let desc = document.getElementById('reportFloatDesc').value.trim();
-            if (!desc) { alert('اكتب الوصف'); return; }
-            let newReport = { id: Date.now(), type: currentReportType, desc: desc, lat: userLat, lng: userLng, date: new Date().toLocaleString('ar-MA'), status: 'pending' };
-            let img = document.getElementById('reportFloatImage').files[0];
-            if (img) {
-                let reader = new FileReader();
-                reader.onload = function(e) {
-                    newReport.image = e.target.result;
-                    reportsFloat.unshift(newReport);
-                    localStorage.setItem('city_reports', JSON.stringify(reportsFloat));
-                    showReportFloatList();
-                    clearReportFloat();
-                    alert('تم الإرسال');
-                };
-                reader.readAsDataURL(img);
-            } else {
-                reportsFloat.unshift(newReport);
-                localStorage.setItem('city_reports', JSON.stringify(reportsFloat));
+        async function addReportFloat() {
+            let desc = document.getElementById("reportFloatDesc").value.trim();
+            if (!desc) { alert("❌ اكتب الوصف"); return; }
+            let img = document.getElementById("reportFloatImage").files[0];
+            let submitBtn = document.querySelector("#reportFloatForm .float-submit");
+            if (submitBtn) {
+                submitBtn.innerHTML = "<i class=\"fas fa-spinner fa-spin\"></i> جاري الإرسال...";
+                submitBtn.disabled = true;
+            }
+            try {
+                let imageUrl = null;
+                let newReport = { id: Date.now(), type: currentReportType, desc: desc, lat: userLat, lng: userLng, date: new Date().toLocaleString("ar-MA"), status: "pending" };
+                if (supabaseClient) {
+                    const { data, error } = await supabaseClient
+                        .from("reports")
+                        .insert([{
+                            category: currentReportType,
+                            description: desc,
+                            location_lat: userLat,
+                            location_lng: userLng,
+                            status: "pending",
+                            created_at: new Date().toISOString()
+                        }])
+                        .select();
+                    if (!error && data && data[0]) {
+                        newReport.id = data[0].id;
+                        if (img) {
+                            imageUrl = await uploadImageToSupabase(img, data[0].id);
+                            if (imageUrl) {
+                                await supabaseClient
+                                    .from("reports")
+                                    .update({ image_url: imageUrl })
+                                    .eq("id", data[0].id);
+                                newReport.image = imageUrl;
+                            }
+                        }
+                        reportsFloat.unshift(newReport);
+                        localStorage.setItem("city_reports", JSON.stringify(reportsFloat));
+                    } else { throw error; }
+                } else {
+                    if (img) {
+                        let reader = new FileReader();
+                        reader.onload = function(e) {
+                            newReport.image = e.target.result;
+                            reportsFloat.unshift(newReport);
+                            localStorage.setItem("city_reports", JSON.stringify(reportsFloat));
+                            showReportFloatList();
+                            clearReportFloat();
+                            alert("✅ تم الإرسال (محلياً)");
+                        };
+                        reader.readAsDataURL(img);
+                        if (submitBtn) { submitBtn.innerHTML = "إرسال"; submitBtn.disabled = false; }
+                        return;
+                    } else {
+                        reportsFloat.unshift(newReport);
+                        localStorage.setItem("city_reports", JSON.stringify(reportsFloat));
+                    }
+                }
                 showReportFloatList();
                 clearReportFloat();
-                alert('تم الإرسال');
+                alert("✅ تم الإرسال بنجاح!");
+            } catch(e) { console.error(e); alert("❌ حدث خطأ"); }
+            if (submitBtn) {
+                submitBtn.innerHTML = "إرسال";
+                submitBtn.disabled = false;
             }
         }
         
