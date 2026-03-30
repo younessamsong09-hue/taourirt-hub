@@ -1871,3 +1871,83 @@ textarea.float-input {
     font-size: 24px;
   }
 }
+
+/* ========== ترتيب الأيقونات العائمة ========== */
+
+/* أيقونة المساعد - أسفل اليسار */
+.assistant-btn,
+#assistantBtn {
+  position: fixed !important;
+  bottom: 20px !important;
+  left: 20px !important;
+  right: auto !important;
+  z-index: 999 !important;
+}
+
+/* أيقونة التبليغ - أعلى بقليل من المساعد */
+.float-btn.report-float,
+#reportFloatBtn {
+  position: fixed !important;
+  bottom: 95px !important;
+  left: 20px !important;
+  right: auto !important;
+  z-index: 998 !important;
+}
+
+/* أيقونة الكراء - أسفل اليمين */
+.float-btn.rental-float,
+#rentalFloatBtn {
+  position: fixed !important;
+  bottom: 20px !important;
+  right: 20px !important;
+  left: auto !important;
+  z-index: 999 !important;
+}
+
+/* اللوحة المنبثقة للتبليغ */
+#reportFloatPanel {
+  position: fixed !important;
+  bottom: 165px !important;
+  left: 20px !important;
+  right: auto !important;
+  z-index: 1000 !important;
+}
+
+/* لوحة المساعد */
+#assistantPanel {
+  position: fixed !important;
+  bottom: 90px !important;
+  left: 20px !important;
+  right: auto !important;
+  z-index: 1000 !important;
+}
+
+/* لوحة الكراء */
+#rentalFloatPanel {
+  position: fixed !important;
+  bottom: 90px !important;
+  right: 20px !important;
+  left: auto !important;
+  z-index: 1000 !important;
+}
+
+/* للهواتف الصغيرة */
+@media (max-width: 480px) {
+  #reportFloatPanel {
+    width: calc(100vw - 40px) !important;
+    left: 20px !important;
+    bottom: 165px !important;
+  }
+  
+  #assistantPanel {
+    width: calc(100vw - 40px) !important;
+    left: 20px !important;
+    bottom: 90px !important;
+  }
+  
+  #rentalFloatPanel {
+    width: calc(100vw - 40px) !important;
+    right: 20px !important;
+    bottom: 90px !important;
+  }
+}
