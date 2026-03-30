@@ -157,6 +157,7 @@
     <script src="js/ui.js"></script>
     <script src="js/main.js"></script>
     <script src="js/jobs.js"></script>
+    <script src="js/supabase-config.js"></script>
     <script src="js/complaints.js"></script>
     <script src="js/blood.js"></script>
     <script src="js/lostfound.js"></script>
@@ -485,6 +486,7 @@
             <button onclick="startReportFloat('garbage')">🗑️ نفايات</button>
         </div>
         <div id="reportFloatForm" style="display:none;">
+                <div id="reportFloatList" class="float-list" style="max-height: 200px; overflow-y: auto; margin-top: 10px;"></div>
             <textarea id="reportFloatDesc" rows="2" placeholder="الوصف" class="float-input"></textarea>
             <input type="file" id="reportFloatImage" accept="image/*" class="float-input">
             <div id="reportFloatLocation" class="float-location"></div>
