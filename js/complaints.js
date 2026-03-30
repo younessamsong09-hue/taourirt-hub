@@ -232,3 +232,109 @@ function clearReportFloat() {
 document.addEventListener('DOMContentLoaded', () => {
   initComplaintsSystem()
 })
+
+// تحديث عداد البلاغات على الأيقونة
+function updateReportBadge() {
+  const badge = document.getElementById('reportBadge')
+  if (!badge) return
+  
+  const count = reportsFloat.length
+  if (count > 0) {
+    badge.style.display = 'flex'
+    badge.textContent = count > 99 ? '99+' : count
+  } else {
+    badge.style.display = 'none'
+  }
+}
+
+// تأثير اهتزاز الأيقونة عند بلاغ جديد
+function shakeReportButton() {
+  const btn = document.getElementById('reportFloatBtn')
+  if (!btn) return
+  btn.classList.add('shake')
+  setTimeout(() => {
+    btn.classList.remove('shake')
+  }, 500)
+}
+
+// إضافة تأثير عند إرسال بلاغ
+function showSuccessAnimation() {
+  const btn = document.getElementById('reportFloatBtn')
+  if (btn) {
+    btn.style.transform = 'scale(1.2)'
+    setTimeout(() => {
+      btn.style.transform = ''
+    }, 300)
+  }
+}
+
+// تعديل دالة addReportFloat لإضافة التأثيرات
+const originalAddReportFloat = addReportFloat
+window.addReportFloat = async function() {
+  const result = await originalAddReportFloat()
+  updateReportBadge()
+  showSuccessAnimation()
+  return result
+}
+
+// تحديث عرض البلاغات بشكل أفضل
+function showReportFloatListEnhanced() {
+  const container = document.getElementById('reportFloatList')
+  if (!container) return
+  
+  if (reportsFloat.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 40px 20px;">
+        <i class="fas fa-check-circle" style="font-size: 48px; color: #10b981; margin-bottom: 12px; display: block;"></i>
+        <p style="color: #94a3b8;">لا توجد بلاغات حالياً</p>
+        <p style="color: #64748b; font-size: 12px;">ساعد في تحسين مدينتك</p>
+      </div>
+    `
+    return
+  }
+  
+  const typeIcon = { 'pothole': '🕳️', 'light': '💡', 'garbage': '🗑️' }
+  const typeName = { 'pothole': 'حفرة', 'light': 'إنارة', 'garbage': 'نفايات' }
+  
+  container.innerHTML = reportsFloat.slice(0, 5).map(r => `
+    <div class="report-item">
+      <span class="report-type ${r.type}">${typeIcon[r.type]} ${typeName[r.type]}</span>
+      <div class="report-desc">${r.description && r.description.length > 60 ? r.description.substring(0, 60) + '...' : (r.description || r.desc)}</div>
+      <div class="report-footer">
+        <span class="report-status status-${r.status || 'pending'}">
+          ${r.status === 'resolved' ? '✅ تم الحل' : '⏳ قيد المراجعة'}
+        </span>
+        ${r.location_lat && r.location_lng ? `
+          <a href="https://www.google.com/maps?q=${r.location_lat},${r.location_lng}" target="_blank" class="report-location">
+            <i class="fas fa-map-marker-alt"></i> موقع
+          </a>
+        ` : ''}
+        <span><i class="far fa-clock"></i> ${new Date(r.created_at).toLocaleTimeString('ar-MA', {hour:'2-digit', minute:'2-digit'})}</span>
+      </div>
+    </div>
+  `).join('')
+  
+  if (reportsFloat.length > 5) {
+    container.innerHTML += `
+      <div style="text-align: center; padding: 12px;">
+        <a href="#" style="color: #3b82f6; text-decoration: none; font-size: 12px;" onclick="showAllReports()">
+          عرض الكل (${reportsFloat.length}) <i class="fas fa-arrow-left"></i>
+        </a>
+      </div>
+    `
+  }
+}
+
+// عرض كل البلاغات
+function showAllReports() {
+  alert(`📋 إجمالي البلاغات: ${reportsFloat.length}\n\n` + 
+    reportsFloat.map((r, i) => `${i+1}. ${typeName[r.type]}: ${r.description?.substring(0, 50)}...`).join('\n'))
+}
+
+// استبدال دالة العرض
+window.showReportFloatList = showReportFloatListEnhanced
+
+// تهيئة العداد عند تحميل الصفحة
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(updateReportBadge, 500)
+})
