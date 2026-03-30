@@ -1,0 +1,9 @@
+@import "leaflet/dist/leaflet.css";
+.user-location-icon {
+  background: #3b82f6;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 3px solid white;
+  box-shadow: 0 0 10px #3b82f6;
+}
