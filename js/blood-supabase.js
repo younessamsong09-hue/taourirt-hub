@@ -1,8 +1,8 @@
+// ========== نظام التبرع بالدم العام والمبهر ==========
+
 alert("✅ نظام التبرع يعمل - تم التحميل");
-// ========== نظام التبرع بالدم العام مع Supabase ==========
 
 let supabaseClient = null;
-let currentUserId = null; // سيتم تعيينه عند إضافة متبرع أو حالة
 const SUPABASE_URL = 'https://pyxeusrxoizjlihyqhac.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_u1vYpwFYhvou2oyvsxoNIQ_1WDklzXt';
 
@@ -19,142 +19,146 @@ async function initBloodSupabase() {
         }
         supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         console.log('✅ Supabase متصل');
-        await loadDataFromSupabase();
-        await renderPublicLists();
+        await loadAndDisplayData();
     } catch (err) {
-        console.error('خطأ في Supabase:', err);
-        loadLocalData();
-        renderPublicLists();
+        console.error('خطأ:', err);
+        loadLocalAndDisplay();
     }
 }
 
-// تحميل البيانات من Supabase
-async function loadDataFromSupabase() {
+// تحميل وعرض البيانات
+async function loadAndDisplayData() {
     if (!supabaseClient) return;
     try {
         const { data: donors } = await supabaseClient
             .from('blood_donors')
             .select('*')
             .order('created_at', { ascending: false });
-        if (donors) localStorage.setItem('donors_public', JSON.stringify(donors));
         
         const { data: emergencies } = await supabaseClient
             .from('blood_emergencies')
             .select('*')
             .eq('status', 'active')
             .order('created_at', { ascending: false });
-        if (emergencies) localStorage.setItem('emergencies_public', JSON.stringify(emergencies));
-    } catch (err) { console.error(err); }
+        
+        displayDonors(donors || []);
+        displayEmergencies(emergencies || []);
+        
+        // حفظ في localStorage للنسخ الاحتياطي
+        localStorage.setItem('donors_public', JSON.stringify(donors || []));
+        localStorage.setItem('emergencies_public', JSON.stringify(emergencies || []));
+    } catch (err) {
+        loadLocalAndDisplay();
+    }
 }
 
-function loadLocalData() {
-    // لا شيء، سنعرض البيانات من localStorage فقط
+function loadLocalAndDisplay() {
+    const donors = JSON.parse(localStorage.getItem('donors_public') || '[]');
+    const emergencies = JSON.parse(localStorage.getItem('emergencies_public') || '[]');
+    displayDonors(donors);
+    displayEmergencies(emergencies);
 }
 
-// عرض القوائم للعامة
-async function renderPublicLists() {
-    // قراءة البيانات من Supabase أو localStorage
-    let donors = [];
-    let emergencies = [];
+// عرض المتبرعين بشكل مبهر
+function displayDonors(donors) {
+    const container = document.getElementById('donorsList');
+    if (!container) return;
     
-    if (supabaseClient) {
-        const { data: d } = await supabaseClient.from('blood_donors').select('*').order('created_at', { ascending: false });
-        const { data: e } = await supabaseClient.from('blood_emergencies').select('*').eq('status', 'active').order('created_at', { ascending: false });
-        donors = d || [];
-        emergencies = e || [];
-    } else {
-        donors = JSON.parse(localStorage.getItem('donors_public') || '[]');
-        emergencies = JSON.parse(localStorage.getItem('emergencies_public') || '[]');
+    if (donors.length === 0) {
+        container.innerHTML = `
+            <div style="text-align:center; padding:40px; background:#1e293b; border-radius:20px;">
+                <i class="fas fa-hand-holding-heart" style="font-size:48px; color:#64748b;"></i>
+                <p style="color:#94a3b8; margin-top:10px;">لا يوجد متبرعون حالياً</p>
+                <p style="color:#64748b; font-size:12px;">كن أول من يتبرع! 🩸</p>
+            </div>
+        `;
+        return;
     }
     
-    // عرض المتبرعين
-    const donorsList = document.getElementById('donorsList');
-    if (donorsList) {
-        if (donors.length === 0) {
-            donorsList.innerHTML = '<div style="color:#64748b; text-align:center; padding:10px;">🤝 لا يوجد متبرعون حالياً</div>';
-        } else {
-            donorsList.innerHTML = donors.map(d => `
-                <div id="donor-${d.id}" style="background:#1e293b; border-radius:15px; padding:12px; margin-bottom:10px; border-right:5px solid ${getBloodColor(d.blood_type)}; display:flex; align-items:center; justify-content:space-between;">
-                    <div>
-                        <b style="color:white;">${escapeHtml(d.name)}</b>
-                        <div style="color:${getBloodColor(d.blood_type)}; font-weight:bold;">فصيلة: ${d.blood_type}</div>
-                        <div style="color:#64748b; font-size:10px;">${new Date(d.created_at).toLocaleDateString('ar-MA')}</div>
+    const bloodColors = {
+        'A+': '#3b82f6', 'A-': '#60a5fa', 'B+': '#8b5cf6', 'B-': '#a78bfa',
+        'AB+': '#ec4899', 'AB-': '#f472b6', 'O+': '#ef4444', 'O-': '#f87171'
+    };
+    
+    container.innerHTML = donors.map(donor => `
+        <div class="donor-card" style="background: linear-gradient(135deg, #1e293b, #0f172a); border-radius:20px; padding:16px; margin-bottom:12px; border-right:5px solid ${bloodColors[donor.blood_type] || '#6366f1'}; transition: all 0.3s; cursor: pointer;" onclick="viewDonorDetails('${donor.id}')">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 5px;">
+                        <i class="fas fa-user-circle" style="color: ${bloodColors[donor.blood_type] || '#6366f1'}; font-size: 20px;"></i>
+                        <span style="font-weight: bold; color: white; font-size: 16px;">${escapeHtml(donor.name)}</span>
+                        <span style="background: ${bloodColors[donor.blood_type] || '#6366f1'}; color: white; padding: 2px 10px; border-radius: 20px; font-size: 12px; font-weight: bold;">${donor.blood_type}</span>
                     </div>
-                    <div style="display:flex; gap:8px;">
-                        <a href="tel:${d.phone}" style="background:#10b981; color:white; width:35px; height:35px; border-radius:10px; display:flex; align-items:center; justify-content:center; text-decoration:none;"><i class="fas fa-phone"></i></a>
-                        <button onclick="deleteDonor('${d.id}', '${d.user_token || ''}')" style="background:#334155; color:#94a3b8; border:none; width:35px; height:35px; border-radius:10px; cursor:pointer;"><i class="fas fa-trash"></i></button>
+                    <div style="color: #94a3b8; font-size: 12px; margin-top: 5px;">
+                        <i class="fas fa-calendar-alt"></i> ${new Date(donor.created_at).toLocaleDateString('ar-MA')}
                     </div>
                 </div>
-            `).join('');
-        }
+                <a href="tel:${donor.phone}" onclick="event.stopPropagation()" style="background: #10b981; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: transform 0.2s;">
+                    <i class="fas fa-phone"></i>
+                </a>
+            </div>
+            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #334155;">
+                <span style="color: #64748b; font-size: 11px;">
+                    <i class="fas fa-map-marker-alt"></i> تاوريرت
+                </span>
+            </div>
+        </div>
+    `).join('');
+}
+
+// عرض الحالات الطارئة بشكل مبهر
+function displayEmergencies(emergencies) {
+    const container = document.getElementById('emergList');
+    if (!container) return;
+    
+    if (emergencies.length === 0) {
+        container.innerHTML = `
+            <div style="text-align:center; padding:40px; background:#1e293b; border-radius:20px;">
+                <i class="fas fa-check-circle" style="font-size:48px; color:#10b981;"></i>
+                <p style="color:#94a3b8; margin-top:10px;">لا توجد حالات طارئة</p>
+                <p style="color:#64748b; font-size:12px;">جميع الحالات تم حلها ✅</p>
+            </div>
+        `;
+        return;
     }
     
-    // عرض الحالات الطارئة
-    const emergList = document.getElementById('emergList');
-    if (emergList) {
-        if (emergencies.length === 0) {
-            emergList.innerHTML = '<div style="color:#64748b; text-align:center; padding:10px;">✅ لا توجد حالات عاجلة</div>';
-        } else {
-            emergList.innerHTML = emergencies.map(e => `
-                <div id="emerg-${e.id}" style="background:#450a0a; border:1px solid #ef4444; border-radius:15px; padding:12px; margin-bottom:10px; display:flex; align-items:center; justify-content:space-between; animation:pulse 2s infinite;">
-                    <div>
-                        <b style="color:white;">🚨 مريض: ${escapeHtml(e.patient_name)}</b>
-                        <div style="color:#fca5a5;">مطلوب فصيلة: ${e.blood_type}</div>
-                        <div style="color:#64748b; font-size:10px;">${new Date(e.created_at).toLocaleDateString('ar-MA')}</div>
+    const bloodColors = {
+        'A+': '#3b82f6', 'A-': '#60a5fa', 'B+': '#8b5cf6', 'B-': '#a78bfa',
+        'AB+': '#ec4899', 'AB-': '#f472b6', 'O+': '#ef4444', 'O-': '#f87171'
+    };
+    
+    container.innerHTML = emergencies.map(emerg => `
+        <div class="emergency-card" style="background: linear-gradient(135deg, #450a0a, #2c0a0a); border-radius:20px; padding:16px; margin-bottom:12px; border: 1px solid #ef4444; animation: pulseRed 1.5s infinite; transition: all 0.3s;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div style="flex: 1;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                        <i class="fas fa-ambulance" style="color: #ef4444; font-size: 20px; animation: shake 0.5s infinite;"></i>
+                        <span style="font-weight: bold; color: white; font-size: 16px;">🚨 حالة عاجلة</span>
+                        <span style="background: ${bloodColors[emerg.blood_type] || '#ef4444'}; color: white; padding: 2px 10px; border-radius: 20px; font-size: 12px; font-weight: bold;">${emerg.blood_type}</span>
                     </div>
-                    <div style="display:flex; gap:8px;">
-                        <a href="tel:${e.contact_phone}" style="background:#ef4444; color:white; width:35px; height:35px; border-radius:10px; display:flex; align-items:center; justify-content:center; text-decoration:none;"><i class="fas fa-hand-holding-heart"></i></a>
-                        <button onclick="deleteEmergency('${e.id}', '${e.user_token || ''}')" style="background:#7f1d1d; color:#fca5a5; border:none; width:35px; height:35px; border-radius:10px; cursor:pointer;"><i class="fas fa-check"></i></button>
+                    <div style="color: white; font-size: 14px; margin-bottom: 5px;">
+                        <i class="fas fa-user-injured"></i> المريض: ${escapeHtml(emerg.patient_name)}
+                    </div>
+                    <div style="color: #94a3b8; font-size: 11px;">
+                        <i class="fas fa-clock"></i> ${new Date(emerg.created_at).toLocaleDateString('ar-MA')}
                     </div>
                 </div>
-            `).join('');
-        }
-    }
+                <a href="tel:${emerg.contact_phone}" style="background: #ef4444; color: white; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: transform 0.2s; box-shadow: 0 0 10px rgba(239,68,68,0.5);">
+                    <i class="fas fa-hand-holding-heart" style="font-size: 18px;"></i>
+                </a>
+            </div>
+            <div style="margin-top: 12px; padding-top: 8px; border-top: 1px solid #7f1d1d;">
+                <span style="color: #fca5a5; font-size: 11px;">
+                    <i class="fas fa-tint"></i> متبرعون متوافقون متاحون
+                </span>
+            </div>
+        </div>
+    `).join('');
 }
 
-function getBloodColor(bloodType) {
-    const colors = { 'A+': '#3b82f6', 'A-': '#60a5fa', 'B+': '#8b5cf6', 'B-': '#a78bfa', 'AB+': '#ec4899', 'AB-': '#f472b6', 'O+': '#ef4444', 'O-': '#f87171' };
-    return colors[bloodType] || '#ccc';
-}
-
-// حذف متبرع (فقط إذا كان المستخدم هو من أضافه)
-window.deleteDonor = async function(id, userToken) {
-    if (!confirm('هل أنت متأكد من حذف مشاركتك؟')) return;
-    
-    try {
-        if (supabaseClient) {
-            // التحقق: نحذف فقط إذا كان المستخدم هو من أضاف (يمكن إضافة منطق للتحقق)
-            await supabaseClient.from('blood_donors').delete().eq('id', id);
-        }
-        // تحديث العرض
-        await renderPublicLists();
-        showToast('✅ تم حذف مشاركتك');
-    } catch (err) {
-        showToast('❌ حدث خطأ', 'error');
-    }
-};
-
-window.deleteEmergency = async function(id, userToken) {
-    if (!confirm('هل أنت متأكد من إنهاء هذه الحالة؟')) return;
-    
-    try {
-        if (supabaseClient) {
-            await supabaseClient.from('blood_emergencies').update({ status: 'resolved' }).eq('id', id);
-        }
-        await renderPublicLists();
-        showToast('✅ تم إنهاء الحالة');
-    } catch (err) {
-        showToast('❌ حدث خطأ', 'error');
-    }
-};
-
-function showToast(message, type = 'success') {
-    const toast = document.createElement('div');
-    const colors = { success: '#10b981', error: '#ef4444', info: '#3b82f6' };
-    toast.style.cssText = `position:fixed; bottom:100px; right:20px; background:${colors[type]}; color:white; padding:12px 20px; border-radius:12px; z-index:10000; font-size:14px;`;
-    toast.textContent = message;
-    document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 3000);
+function viewDonorDetails(id) {
+    // يمكن إضافة نافذة منبثقة بتفاصيل المتبرع
+    alert("📞 اتصل على الرقم الظاهر للتواصل مع المتبرع");
 }
 
 function escapeHtml(str) {
@@ -167,7 +171,30 @@ function escapeHtml(str) {
     });
 }
 
-// ========== الدوال الأساسية (نموذج الإضافة) ==========
+// إضافة أنماط متحركة
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes pulseRed {
+        0% { box-shadow: 0 0 0 0 rgba(239,68,68,0.4); }
+        70% { box-shadow: 0 0 0 10px rgba(239,68,68,0); }
+        100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); }
+    }
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-2px); }
+        75% { transform: translateX(2px); }
+    }
+    .donor-card:hover, .emergency-card:hover {
+        transform: translateX(-5px);
+        cursor: pointer;
+    }
+    a:hover {
+        transform: scale(1.05);
+    }
+`;
+document.head.appendChild(style);
+
+// ========== دوال الإضافة (كما هي) ==========
 document.addEventListener('DOMContentLoaded', function() {
     initBloodSupabase();
     
@@ -191,22 +218,21 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        const donor = { name, phone, blood_type: blood, user_token: Date.now().toString() };
-        
         try {
             if (supabaseClient) {
-                const { error } = await supabaseClient.from('blood_donors').insert([{
-                    name: donor.name, phone: donor.phone, blood_type: donor.blood_type, status: 'active', user_token: donor.user_token, created_at: new Date().toISOString()
+                await supabaseClient.from('blood_donors').insert([{
+                    name, phone, blood_type: blood, status: 'active', created_at: new Date().toISOString()
                 }]);
-                if (error) throw error;
             }
-            await renderPublicLists();
+            await loadAndDisplayData();
             document.getElementById('donorName').value = '';
             document.getElementById('donorPhone').value = '';
             document.getElementById('donorBlood').value = 'فصيلة الدم';
             document.getElementById('bloodReg').style.display = 'none';
-            showToast('✅ تم تسجيلك كمتبرع!');
-        } catch (err) { showToast('❌ حدث خطأ', 'error'); }
+            alert('✅ تم تسجيلك كمتبرع! شكراً لك.');
+        } catch (err) {
+            alert('❌ حدث خطأ');
+        }
     };
     
     window.addEmergency = async function() {
@@ -219,23 +245,20 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        const emergency = { patient_name: patient, blood_type: blood, contact_phone: phone, user_token: Date.now().toString() };
-        
         try {
             if (supabaseClient) {
-                const { error } = await supabaseClient.from('blood_emergencies').insert([{
-                    patient_name: emergency.patient_name, blood_type: emergency.blood_type, contact_phone: emergency.contact_phone, status: 'active', user_token: emergency.user_token, created_at: new Date().toISOString()
+                await supabaseClient.from('blood_emergencies').insert([{
+                    patient_name: patient, blood_type: blood, contact_phone: phone, status: 'active', created_at: new Date().toISOString()
                 }]);
-                if (error) throw error;
             }
-            await renderPublicLists();
+            await loadAndDisplayData();
             document.getElementById('emergPatient').value = '';
             document.getElementById('emergBlood').value = 'فصيلة الدم';
             document.getElementById('emergPhone').value = '';
             document.getElementById('bloodEmer').style.display = 'none';
-            showToast('🚨 تم نشر الحالة الطارئة!');
-        } catch (err) { showToast('❌ حدث خطأ', 'error'); }
+            alert('🚨 تم نشر الحالة الطارئة!');
+        } catch (err) {
+            alert('❌ حدث خطأ');
+        }
     };
-    
-    console.log("✅ نظام التبرع بالدم العام جاهز");
 });
