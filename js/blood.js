@@ -405,3 +405,98 @@ if (!document.getElementById('blood-style')) {
 
 // تهيئة النظام
 initBloodSupabase();
+
+// ========== إصلاح دوال العرض ==========
+
+// التأكد من أن الدوال تعمل
+function fixBloodDisplay() {
+    console.log("🔧 جاري إصلاح عرض التبرع");
+    
+    // إعادة تعريف دوال العرض
+    if (typeof renderAll !== 'function') {
+        window.renderAll = function() {
+            console.log("🔄 تحديث العرض");
+            const dList = document.getElementById('donorsList');
+            const eList = document.getElementById('emergList');
+            
+            if (dList) {
+                if (donors.length === 0) {
+                    dList.innerHTML = '<div style="text-align:center; padding:20px;">🤝 لا يوجد متبرعون</div>';
+                } else {
+                    const bloodColors = {
+                        'A+': '#3b82f6', 'A-': '#60a5fa', 'B+': '#8b5cf6', 'B-': '#a78bfa',
+                        'AB+': '#ec4899', 'AB-': '#f472b6', 'O+': '#ef4444', 'O-': '#f87171'
+                    };
+                    dList.innerHTML = donors.map(d => `
+                        <div style="background:#1e293b; border-radius:12px; padding:12px; margin-bottom:8px; border-right:4px solid ${bloodColors[d.blood_type] || '#10b981'};">
+                            <div style="display:flex; justify-content:space-between;">
+                                <div>
+                                    <b style="color:white;">${escapeHtml(d.name)}</b>
+                                    <div style="color:${bloodColors[d.blood_type] || '#10b981'}; font-size:12px;">فصيلة: ${d.blood_type}</div>
+                                </div>
+                                <a href="tel:${d.phone}" style="background:#10b981; color:white; padding:6px 12px; border-radius:20px; text-decoration:none; font-size:12px;">
+                                    <i class="fas fa-phone"></i> اتصل
+                                </a>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            }
+            
+            if (eList) {
+                if (emergencies.length === 0) {
+                    eList.innerHTML = '<div style="text-align:center; padding:20px;">✅ لا توجد حالات طارئة</div>';
+                } else {
+                    const bloodColors = {
+                        'A+': '#3b82f6', 'A-': '#60a5fa', 'B+': '#8b5cf6', 'B-': '#a78bfa',
+                        'AB+': '#ec4899', 'AB-': '#f472b6', 'O+': '#ef4444', 'O-': '#f87171'
+                    };
+                    eList.innerHTML = emergencies.map(e => `
+                        <div style="background:#450a0a; border-radius:12px; padding:12px; margin-bottom:8px; border:1px solid #ef4444;">
+                            <div style="display:flex; justify-content:space-between;">
+                                <div>
+                                    <b style="color:white;">🚨 ${escapeHtml(e.patient_name)}</b>
+                                    <div style="color:#fca5a5; font-size:12px;">مطلوب: ${e.blood_type}</div>
+                                </div>
+                                <a href="tel:${e.contact_phone}" style="background:#ef4444; color:white; padding:6px 12px; border-radius:20px; text-decoration:none; font-size:12px;">
+                                    <i class="fas fa-hand-holding-heart"></i> مساعدة
+                                </a>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            }
+        };
+    }
+    
+    if (typeof updateBloodCounts !== 'function') {
+        window.updateBloodCounts = function() {
+            const countElem = document.getElementById('bloodCount');
+            if (countElem) {
+                countElem.innerText = (donors?.length || 0) + (emergencies?.length || 0);
+            }
+        };
+    }
+    
+    // إضافة دالة مساعدة
+    window.escapeHtml = function(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    };
+    
+    console.log("✅ تم إصلاح دوال العرض");
+}
+
+// تشغيل الإصلاح بعد تحميل الصفحة
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(fixBloodDisplay, 100);
+    setTimeout(function() {
+        if (typeof renderAll === 'function') renderAll();
+        if (typeof updateBloodCounts === 'function') updateBloodCounts();
+    }, 200);
+});
