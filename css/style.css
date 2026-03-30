@@ -1522,3 +1522,318 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
 }
 .apply-job { background: #3b82f6; }
 .share-job { background: #25D366; }
+
+/* ========== تطوير لوحة التبليغ المبهرة ========== */
+
+/* اللوحة المتطورة */
+.float-panel {
+    background: linear-gradient(135deg, #1e293b, #0f172a) !important;
+    border-radius: 28px !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+    border: 1px solid rgba(239, 68, 68, 0.3) !important;
+    animation: slideUpModal 0.4s cubic-bezier(0.34, 1.2, 0.64, 1) !important;
+    overflow: hidden !important;
+    width: 380px !important;
+    max-width: calc(100vw - 40px) !important;
+}
+
+/* رأس اللوحة */
+.float-header {
+    background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+    padding: 18px 24px !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+.float-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+    animation: rotateBg 20s linear infinite;
+}
+
+.float-header span:first-child {
+    font-size: 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    position: relative !important;
+    z-index: 1 !important;
+}
+
+.float-header span:first-child::before {
+    content: "⚠️";
+    font-size: 24px;
+}
+
+.float-header span:last-child {
+    background: rgba(255,255,255,0.2) !important;
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.3s !important;
+    position: relative !important;
+    z-index: 1 !important;
+}
+
+.float-header span:last-child:hover {
+    transform: rotate(90deg) !important;
+    background: rgba(255,255,255,0.3) !important;
+}
+
+/* أزرار أنواع المشاكل */
+.float-buttons {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 12px !important;
+    padding: 20px !important;
+    margin: 0 !important;
+}
+
+.float-buttons button {
+    padding: 14px 8px !important;
+    border-radius: 20px !important;
+    font-weight: bold !important;
+    transition: all 0.3s !important;
+    border: none !important;
+    cursor: pointer !important;
+    font-size: 13px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+}
+
+.float-buttons button:first-child {
+    background: linear-gradient(135deg, #8b5cf6, #6d28d9) !important;
+    color: white !important;
+}
+
+.float-buttons button:nth-child(2) {
+    background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+    color: white !important;
+}
+
+.float-buttons button:last-child {
+    background: linear-gradient(135deg, #10b981, #059669) !important;
+    color: white !important;
+}
+
+.float-buttons button:hover {
+    transform: translateY(-3px) !important;
+    filter: brightness(1.05) !important;
+}
+
+/* نموذج الإبلاغ */
+.float-input {
+    width: 100% !important;
+    padding: 14px !important;
+    margin-bottom: 12px !important;
+    border: 2px solid #334155 !important;
+    border-radius: 20px !important;
+    background: #0f172a !important;
+    color: white !important;
+    font-size: 14px !important;
+    transition: all 0.3s !important;
+    box-sizing: border-box !important;
+}
+
+.float-input:focus {
+    outline: none !important;
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2) !important;
+    transform: translateY(-2px) !important;
+}
+
+textarea.float-input {
+    resize: vertical !important;
+    font-family: inherit !important;
+    min-height: 80px !important;
+}
+
+/* حقل الموقع */
+.float-location {
+    font-size: 12px !important;
+    padding: 10px !important;
+    background: rgba(16, 185, 129, 0.1) !important;
+    border-radius: 16px !important;
+    text-align: center !important;
+    margin-bottom: 12px !important;
+    color: #10b981 !important;
+    border: 1px solid rgba(16, 185, 129, 0.3) !important;
+}
+
+/* زر الإرسال */
+.float-submit {
+    width: 100% !important;
+    padding: 14px !important;
+    background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 24px !important;
+    font-weight: bold !important;
+    cursor: pointer !important;
+    transition: all 0.3s !important;
+    font-size: 16px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    margin-top: 8px !important;
+}
+
+.float-submit:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3) !important;
+}
+
+.float-submit:disabled {
+    opacity: 0.6 !important;
+    transform: none !important;
+    cursor: not-allowed !important;
+}
+
+/* قائمة البلاغات */
+#reportFloatList {
+    max-height: 250px !important;
+    overflow-y: auto !important;
+    padding: 0 16px 16px 16px !important;
+}
+
+#reportFloatList::-webkit-scrollbar {
+    width: 4px !important;
+}
+
+#reportFloatList::-webkit-scrollbar-track {
+    background: #1e293b !important;
+    border-radius: 10px !important;
+}
+
+#reportFloatList::-webkit-scrollbar-thumb {
+    background: #ef4444 !important;
+    border-radius: 10px !important;
+}
+
+/* عنصر البلاغ */
+.report-item {
+    background: #1e293b !important;
+    border-radius: 16px !important;
+    padding: 12px !important;
+    margin-bottom: 10px !important;
+    transition: all 0.3s !important;
+    border: 1px solid #334155 !important;
+    cursor: pointer !important;
+}
+
+.report-item:hover {
+    transform: translateX(-5px) !important;
+    border-color: #ef4444 !important;
+    background: #2d3a4e !important;
+}
+
+.report-type {
+    display: inline-block !important;
+    padding: 4px 12px !important;
+    border-radius: 20px !important;
+    font-size: 11px !important;
+    font-weight: bold !important;
+    margin-bottom: 8px !important;
+}
+
+.report-type.pothole { background: #8b5cf6 !important; color: white !important; }
+.report-type.light { background: #f59e0b !important; color: white !important; }
+.report-type.garbage { background: #10b981 !important; color: white !important; }
+
+.report-desc {
+    font-size: 13px !important;
+    color: #cbd5e1 !important;
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+}
+
+.report-footer {
+    display: flex !important;
+    justify-content: space-between !important;
+    font-size: 10px !important;
+    color: #64748b !important;
+}
+
+/* معاينة الصورة */
+.image-preview-area {
+    margin-top: 10px;
+    margin-bottom: 12px;
+    position: relative;
+    display: none;
+}
+
+.image-preview-area img {
+    width: 100%;
+    border-radius: 16px;
+    max-height: 120px;
+    object-fit: cover;
+    border: 2px solid #ef4444;
+}
+
+.remove-image-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #ef4444;
+    color: white;
+    border: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+
+/* الرسوم المتحركة */
+@keyframes slideUpModal {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes rotateBg {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes pulseIcon {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+/* للهواتف */
+@media (max-width: 480px) {
+    .float-panel {
+        width: calc(100vw - 40px) !important;
+        left: 20px !important;
+        bottom: 100px !important;
+    }
+    
+    .float-buttons {
+        gap: 8px !important;
+    }
+    
+    .float-buttons button {
+        padding: 10px 4px !important;
+        font-size: 11px !important;
+    }
+}
