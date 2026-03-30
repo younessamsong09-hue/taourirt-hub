@@ -1,28 +1,56 @@
 'use client';
-import TaourirtMap, { Pharmacy } from '@/components/TaourirtMap';
 import { useState } from 'react';
+import dynamic from 'next/dynamic';
+import FilterBar from '@/components/FilterBar';
 
-const samplePharmacies: Pharmacy[] = [
-  { id: 1, name: "صيدلية المزينين", address: "وسط المدينة", phone: "0536-123456", lat: 34.4180, lng: -2.8820, isOpenNow: true },
-  { id: 2, name: "صيدلية الأندلس", address: "حي السلام", phone: "0536-654321", lat: 34.4250, lng: -2.8750 },
-  { id: 3, name: "صيدلية النور", address: "حي النور", phone: "0536-000000", lat: 34.4100, lng: -2.8900 },
-  { id: 4, name: "صيدلية الفتح", address: "حي الفتح", phone: "0536-111111", lat: 34.4050, lng: -2.8850 },
-  { id: 5, name: "صيدلية السلام", address: "حي السلام المرتفع", phone: "0536-222222", lat: 34.4200, lng: -2.8780 }
-];
+// استدعاء الخريطة بشكل ديناميكي لتجنب مشاكل السيرفر في بيئة أندرويد
+const TaourirtMap = dynamic(() => import('@/components/TaourirtMap'), { 
+  ssr: false,
+  loading: () => (
+    <div className="h-[600px] w-full bg-zinc-900 animate-pulse rounded-3xl flex items-center justify-center text-zinc-500 border border-zinc-800">
+      جاري تجهيز خريطة تاوريرت...
+    </div>
+  )
+});
 
 export default function PharmaciesPage() {
-  const [selected, setSelected] = useState<Pharmacy | null>(null);
+  const [type, setType] = useState('all');
+  const [neighborhood, setNeighborhood] = useState('');
+
   return (
-    <div className="min-h-screen bg-black text-white p-6">
-      <h1 className="text-3xl font-bold mb-6 text-right">💊 صيدليات تاوريرت</h1>
-      <TaourirtMap pharmacies={samplePharmacies} height="600px" onMarkerClick={(p) => setSelected(p)} />
-      {selected && (
-        <div className="mt-6 p-6 bg-zinc-900 rounded-3xl border border-zinc-800 animate-in fade-in slide-in-from-bottom-4">
-          <h2 className="text-xl font-bold">{selected.name}</h2>
-          <p className="text-zinc-400 mt-2">📍 {selected.address}</p>
-          <a href={`tel:${selected.phone}`} className="inline-block mt-4 bg-blue-600 px-6 py-2 rounded-xl font-bold text-white">اتصال هاتفي</a>
+    <div className="min-h-screen bg-black text-white p-4 md:p-10 font-sans" dir="rtl">
+      {/* الهيدر الاحترافي */}
+      <header className="mb-8 flex justify-between items-center px-2">
+        <div>
+          <h1 className="text-3xl font-black bg-gradient-to-l from-blue-400 to-emerald-400 bg-clip-text text-transparent italic">
+            TAOURIRT HUB
+          </h1>
+          <p className="text-zinc-500 mt-1 text-xs tracking-widest uppercase">Smart City Guide 2026</p>
         </div>
-      )}
+        <div className="bg-zinc-900 p-3 rounded-2xl border border-zinc-800 shadow-xl">📍</div>
+      </header>
+
+      {/* شريط الفلاتر الذي أنشأناه */}
+      <FilterBar 
+        currentType={type} 
+        currentNeighborhood={neighborhood}
+        onTypeChange={setType}
+        onNeighborhoodChange={setNeighborhood}
+      />
+
+      {/* حاوية الخريطة مع تأثير زجاجي بسيط */}
+      <div className="relative rounded-[2.5rem] overflow-hidden border border-zinc-800 shadow-2xl bg-zinc-900">
+        <TaourirtMap 
+          filterType={type} 
+          neighborhood={neighborhood} 
+          height="600px" 
+        />
+      </div>
+
+      {/* تذييل الصفحة */}
+      <footer className="mt-12 text-center text-zinc-800 text-[10px] tracking-[0.2em] uppercase pb-6">
+        Designed & Coded by Youssef Azahrai
+      </footer>
     </div>
   );
 }
