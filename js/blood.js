@@ -405,3 +405,97 @@ if (!document.getElementById('blood-style')) {
 
 // تهيئة النظام
 initBloodSupabase();
+
+// ========== دوال التبرع الأساسية ==========
+
+function showBloodReg() {
+    console.log("فتح نموذج المتبرع");
+    const regForm = document.getElementById('bloodReg');
+    const emerForm = document.getElementById('bloodEmer');
+    if (regForm) regForm.style.display = 'block';
+    if (emerForm) emerForm.style.display = 'none';
+}
+
+function showBloodEmer() {
+    console.log("فتح نموذج الحالة الطارئة");
+    const regForm = document.getElementById('bloodReg');
+    const emerForm = document.getElementById('bloodEmer');
+    if (emerForm) emerForm.style.display = 'block';
+    if (regForm) regForm.style.display = 'none';
+}
+
+function addDonor() {
+    console.log("إضافة متبرع");
+    const name = document.getElementById('donorName')?.value;
+    const phone = document.getElementById('donorPhone')?.value;
+    const blood = document.getElementById('donorBlood')?.value;
+    
+    if (!name || !phone || blood === 'فصيلة الدم') {
+        alert('❌ الرجاء ملء جميع الحقول');
+        return;
+    }
+    
+    let donors = JSON.parse(localStorage.getItem('donors') || '[]');
+    donors.unshift({
+        id: Date.now(),
+        name: name,
+        phone: phone,
+        blood: blood,
+        date: new Date().toISOString()
+    });
+    localStorage.setItem('donors', JSON.stringify(donors));
+    
+    document.getElementById('donorName').value = '';
+    document.getElementById('donorPhone').value = '';
+    document.getElementById('donorBlood').value = 'فصيلة الدم';
+    document.getElementById('bloodReg').style.display = 'none';
+    
+    alert('✅ تم تسجيلك كمتبرع!');
+    
+    if (typeof renderAll === 'function') renderAll();
+}
+
+function addEmergency() {
+    console.log("إضافة حالة طارئة");
+    const patient = document.getElementById('emergPatient')?.value;
+    const blood = document.getElementById('emergBlood')?.value;
+    const phone = document.getElementById('emergPhone')?.value;
+    
+    if (!patient || blood === 'فصيلة الدم' || !phone) {
+        alert('❌ الرجاء ملء جميع الحقول');
+        return;
+    }
+    
+    let emergencies = JSON.parse(localStorage.getItem('emergencies') || '[]');
+    emergencies.unshift({
+        id: Date.now(),
+        patient: patient,
+        blood: blood,
+        phone: phone,
+        status: 'active',
+        date: new Date().toISOString()
+    });
+    localStorage.setItem('emergencies', JSON.stringify(emergencies));
+    
+    document.getElementById('emergPatient').value = '';
+    document.getElementById('emergBlood').value = 'فصيلة الدم';
+    document.getElementById('emergPhone').value = '';
+    document.getElementById('bloodEmer').style.display = 'none';
+    
+    alert('🚨 تم نشر الحالة الطارئة!');
+    
+    if (typeof renderAll === 'function') renderAll();
+}
+
+// تأكيد وجود الدوال في النطاق العام
+window.showBloodReg = showBloodReg;
+window.showBloodEmer = showBloodEmer;
+window.addDonor = addDonor;
+window.addEmergency = addEmergency;
+
+console.log("✅ دوال التبرع جاهزة:", {
+    showBloodReg: typeof showBloodReg,
+    showBloodEmer: typeof showBloodEmer,
+    addDonor: typeof addDonor,
+    addEmergency: typeof addEmergency
+});
