@@ -211,6 +211,172 @@
         updateBloodCount();
         updateLostCount();
     </script>
+    <script>
+    // دوال نظام التبليغات الجديد
+    function openReportPanel() {
+        document.getElementById("reportPanel").style.display = "block";
+    }
+    
+    function closeReportPanel() {
+        document.getElementById("reportPanel").style.display = "none";
+        resetReportForm();
+    }
+    
+    function resetReportForm() {
+        document.getElementById("reportName").value = "";
+        document.getElementById("reportPhone").value = "";
+        document.getElementById("reportTitle").value = "";
+        document.getElementById("reportDesc").value = "";
+    }
+    
+    function submitNewReport() {
+        const name = document.getElementById("reportName").value;
+        const phone = document.getElementById("reportPhone").value;
+        const category = document.getElementById("reportCategory").value;
+        const title = document.getElementById("reportTitle").value;
+        const desc = document.getElementById("reportDesc").value;
+        
+        if (!name || !phone || !title || !desc) {
+            alert("❌ الرجاء ملء جميع الحقول المطلوبة");
+            return;
+        }
+        
+        const report = {
+            id: Date.now(),
+            name: name,
+            phone: phone,
+            category: category,
+            title: title,
+            description: desc,
+            date: new Date().toISOString(),
+            status: "pending"
+        };
+        
+        let reports = JSON.parse(localStorage.getItem("reports_list") || "[]");
+        reports.unshift(report);
+        localStorage.setItem("reports_list", JSON.stringify(reports));
+        
+        alert("✅ تم إرسال البلاغ بنجاح! شكراً لك.");
+        closeReportPanel();
+    }
+    
+    // تعديل الدالة الأصلية لفتح اللوحة الجديدة
+    const originalToggle = window.toggleReportFloat;
+    window.toggleReportFloat = function() {
+        openReportPanel();
+    };
+    </script>
+    <script>
+    // ========== ربط التبليغات مع Supabase ==========
+    let supabaseReports = null;
+    const SUPABASE_URL = "https://pyxeusrxoizjlihyqhac.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_u1vYpwFYhvou2oyvsxoNIQ_1WDklzXt";
+    
+    async function initReportsSupabase() {
+        if (typeof supabase === "undefined") {
+            await new Promise((resolve) => {
+                const script = document.createElement("script");
+                script.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js";
+                script.onload = resolve;
+                document.head.appendChild(script);
+            });
+        }
+        supabaseReports = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        console.log("✅ Supabase متصل - نظام التبليغات");
+        await loadReportsFromSupabase();
+    }
+    
+    async function loadReportsFromSupabase() {
+        if (!supabaseReports) return;
+        const { data, error } = await supabaseReports
+            .from("reports")
+            .select("*")
+            .order("created_at", { ascending: false })
+            .limit(10);
+        if (!error && data) {
+            localStorage.setItem("reports_list", JSON.stringify(data));
+        }
+    }
+    
+    async function saveReportToSupabase(report) {
+        if (!supabaseReports) {
+            saveReportToLocal(report);
+            return;
+        }
+        try {
+            const { data, error } = await supabaseReports
+                .from("reports")
+                .insert([{
+                    category: report.category,
+                    description: report.title + "\n\n" + report.description,
+                    location_lat: null,
+                    location_lng: null,
+                    status: "pending",
+                    created_at: new Date().toISOString()
+                }])
+                .select();
+            if (!error && data) {
+                report.id = data[0].id;
+                saveReportToLocal(report);
+                return true;
+            }
+        } catch(e) { console.error(e); }
+        saveReportToLocal(report);
+        return false;
+    }
+    
+    function saveReportToLocal(report) {
+        let reports = JSON.parse(localStorage.getItem("reports_list") || "[]");
+        reports.unshift(report);
+        localStorage.setItem("reports_list", JSON.stringify(reports));
+    }
+    
+    // تحديث دالة submitNewReport
+    const originalSubmit = window.submitNewReport;
+    window.submitNewReport = async function() {
+        const name = document.getElementById("reportName").value;
+        const phone = document.getElementById("reportPhone").value;
+        const category = document.getElementById("reportCategory").value;
+        const title = document.getElementById("reportTitle").value;
+        const desc = document.getElementById("reportDesc").value;
+        
+        if (!name || !phone || !title || !desc) {
+            alert("❌ الرجاء ملء جميع الحقول المطلوبة");
+            return;
+        }
+        
+        const btn = document.querySelector("#reportPanel button");
+        if (btn) {
+            btn.innerHTML = "<i class=\"fas fa-spinner fa-spin\"></i> جاري الإرسال...";
+            btn.disabled = true;
+        }
+        
+        const report = {
+            id: Date.now(),
+            name: name,
+            phone: phone,
+            category: category,
+            title: title,
+            description: desc,
+            date: new Date().toISOString(),
+            status: "pending"
+        };
+        
+        await saveReportToSupabase(report);
+        
+        alert("✅ تم إرسال البلاغ بنجاح! شكراً لك.");
+        closeReportPanel();
+        
+        if (btn) {
+            btn.innerHTML = "<i class=\"fas fa-paper-plane\"></i> إرسال البلاغ";
+            btn.disabled = false;
+        }
+    };
+    
+    document.addEventListener("DOMContentLoaded", () => {
+        initReportsSupabase();
+    });
+    </script>
 </body>
 </html>
     <!-- مساعد تاوريرت الذكي -->
@@ -472,6 +638,29 @@
     </script>
     <!-- أيقونة التبليغ العائمة -->
     <div id="reportFloatBtn" class="float-btn report-float" onclick="toggleReportFloat()">
+    <!-- لوحة التبليغ الجديدة -->
+    <div id="reportPanel" style="display:none; position:fixed; bottom:180px; left:20px; width:350px; background:#1e293b; border-radius:20px; z-index:1001; box-shadow:0 10px 40px rgba(0,0,0,0.3); border:1px solid #ef4444;">
+        <div style="background:linear-gradient(135deg,#ef4444,#dc2626); padding:15px; border-radius:20px 20px 0 0; display:flex; justify-content:space-between;">
+            <span style="color:white; font-weight:bold;"><i class="fas fa-exclamation-triangle"></i> تبليغ عن مشكلة</span>
+            <span onclick="closeReportPanel()" style="color:white; cursor:pointer;">✖</span>
+        </div>
+        <div style="padding:20px;">
+            <input type="text" id="reportName" placeholder="الاسم الكامل *" style="width:100%; padding:12px; margin-bottom:12px; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;">
+            <input type="tel" id="reportPhone" placeholder="رقم الهاتف *" style="width:100%; padding:12px; margin-bottom:12px; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;">
+            <select id="reportCategory" style="width:100%; padding:12px; margin-bottom:12px; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;">
+                <option value="roads">🕳️ حفرة / طريق متضرر</option>
+                <option value="lights">💡 إنارة معطلة</option>
+                <option value="garbage">🗑️ تراكم نفايات</option>
+                <option value="water">💧 تسرب مياه</option>
+                <option value="other">📌 مشكلة أخرى</option>
+            </select>
+            <input type="text" id="reportTitle" placeholder="عنوان البلاغ *" style="width:100%; padding:12px; margin-bottom:12px; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;">
+            <textarea id="reportDesc" rows="3" placeholder="وصف المشكلة *" style="width:100%; padding:12px; margin-bottom:12px; background:#0f172a; border:1px solid #334155; border-radius:12px; color:white;"></textarea>
+            <button onclick="submitNewReport()" style="width:100%; background:linear-gradient(135deg,#ef4444,#dc2626); color:white; border:none; padding:14px; border-radius:12px; font-weight:bold; cursor:pointer;">
+                <i class="fas fa-paper-plane"></i> إرسال البلاغ
+            </button>
+        </div>
+    </div>
         <i class="fas fa-exclamation-triangle"></i>
     </div>
     <div id="reportFloatPanel" class="float-panel" style="display:none;">
