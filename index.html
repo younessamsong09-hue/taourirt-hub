@@ -472,6 +472,7 @@
     </script>
     <!-- أيقونة التبليغ العائمة -->
     <div id="reportFloatBtn" class="float-btn report-float" onclick="toggleReportFloat()">
+        <span id="reportBadge" class="report-badge" style="display: none;">0</span>
         <i class="fas fa-exclamation-triangle"></i>
     </div>
     <div id="reportFloatPanel" class="float-panel" style="display:none;">
@@ -527,10 +528,73 @@
     <script>
         // ========== أيقونة التبليغ ==========
         let reportsFloat = JSON.parse(localStorage.getItem('city_reports')) || [];
+        let supabaseClient = null;
+        const SUPABASE_URL = "https://pyxeusrxoizjlihyqhac.supabase.co";
+        const SUPABASE_ANON_KEY = "sb_publishable_u1vYpwFYhvou2oyvsxoNIQ_1WDklzXt";
+        
+        async function initSupabaseReports() {
+            if (typeof supabase === "undefined") {
+                await new Promise((resolve) => {
+                    const script = document.createElement("script");
+                    script.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js";
+                    script.onload = resolve;
+                    document.head.appendChild(script);
+                });
+            }
+            supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            console.log("✅ Supabase جاهز");
+            await loadReportsFromSupabase();
+        }
+        
+        async function loadReportsFromSupabase() {
+            if (!supabaseClient) return;
+            const { data, error } = await supabaseClient
+                .from("reports")
+                .select("*")
+                .order("created_at", { ascending: false })
+                .limit(10);
+            if (!error && data && data.length > 0) {
+                reportsFloat = data;
+                localStorage.setItem("city_reports", JSON.stringify(data));
+                showReportFloatList();
+            }
+        }
+        
+        async function saveReportToSupabase(report) {
+            if (!supabaseClient) return null;
+            const { data, error } = await supabaseClient
+                .from("reports")
+                .insert([{
+                    type: report.type,
+                    description: report.desc,
+                    location_lat: report.lat,
+                    location_lng: report.lng,
+                    status: "pending",
+                    created_at: new Date().toISOString()
+                }])
+                .select();
+            if (error) throw error;
+            return data[0];
+        }
+        
+        async function uploadReportImage(file, reportId) {
+            if (!supabaseClient || !file) return null;
+            const ext = file.name.split(".").pop();
+            const fileName = `${reportId}_${Date.now()}.${ext}`;
+            const { error } = await supabaseClient.storage
+                .from("reports-media")
+                .upload(`reports/${fileName}`, file);
+            if (error) return null;
+            const { data: { publicUrl } } = supabaseClient.storage
+                .from("reports-media")
+                .getPublicUrl(`reports/${fileName}`);
+            return publicUrl;
+        }
         let currentReportType = '';
         let userLat = null, userLng = null;
         
         function toggleReportFloat() {
+            updateReportBadge();
             let p = document.getElementById('reportFloatPanel');
             p.style.display = p.style.display === 'none' ? 'block' : 'none';
             showReportFloatList();
@@ -555,29 +619,46 @@
             getReportLocationFloat();
         }
         
-        function addReportFloat() {
-            let desc = document.getElementById('reportFloatDesc').value.trim();
-            if (!desc) { alert('اكتب الوصف'); return; }
-            let newReport = { id: Date.now(), type: currentReportType, desc: desc, lat: userLat, lng: userLng, date: new Date().toLocaleString('ar-MA'), status: 'pending' };
-            let img = document.getElementById('reportFloatImage').files[0];
-            if (img) {
-                let reader = new FileReader();
-                reader.onload = function(e) {
-                    newReport.image = e.target.result;
-                    reportsFloat.unshift(newReport);
-                    localStorage.setItem('city_reports', JSON.stringify(reportsFloat));
+        async function addReportFloat() {
+            let desc = document.getElementById("reportFloatDesc").value.trim();
+            if (!desc) { alert("اكتب الوصف"); return; }
+            let img = document.getElementById("reportFloatImage").files[0];
+            let submitBtn = document.querySelector("#reportFloatForm button");
+            if (submitBtn) { submitBtn.textContent = "جاري الإرسال..."; submitBtn.disabled = true; }
+            try {
+                let reportId = null;
+                let imageUrl = null;
+                let newReport = { id: Date.now(), type: currentReportType, desc: desc, lat: userLat, lng: userLng, date: new Date().toLocaleString("ar-MA"), status: "pending" };
+                if (supabaseClient) {
+                    const saved = await saveReportToSupabase(newReport);
+                    if (saved) {
+                        reportId = saved.id;
+                        newReport.id = reportId;
+                        if (img) {
+                            imageUrl = await uploadReportImage(img, reportId);
+                            if (imageUrl) {
+                                await supabaseClient.from("reports").update({ image_url: imageUrl }).eq("id", reportId);
+                                newReport.image = imageUrl;
+                            }
+                        }
+                    }
+                }
+                if (img && !imageUrl && !supabaseClient) {
+                    let reader = new FileReader();
+                    reader.onload = function(e) { newReport.image = e.target.result; finalizeReport(newReport); };
+                    reader.readAsDataURL(img);
+                } else {
+                    finalizeReport(newReport);
+                }
+                function finalizeReport(report) {
+                    reportsFloat.unshift(report);
+                    localStorage.setItem("city_reports", JSON.stringify(reportsFloat));
                     showReportFloatList();
                     clearReportFloat();
-                    alert('تم الإرسال');
-                };
-                reader.readAsDataURL(img);
-            } else {
-                reportsFloat.unshift(newReport);
-                localStorage.setItem('city_reports', JSON.stringify(reportsFloat));
-                showReportFloatList();
-                clearReportFloat();
-                alert('تم الإرسال');
-            }
+                    alert("✅ تم إرسال البلاغ بنجاح");
+                    if (submitBtn) { submitBtn.textContent = "إرسال"; submitBtn.disabled = false; }
+                }
+            } catch(e) { console.error(e); alert("❌ حدث خطأ"); if (submitBtn) { submitBtn.textContent = "إرسال"; submitBtn.disabled = false; } }
         }
         
         function clearReportFloat() {
@@ -586,14 +667,36 @@
             document.getElementById('reportFloatForm').style.display = 'none';
         }
         
+        function updateReportBadge() {
+            let badge = document.getElementById("reportBadge");
+            if (!badge) return;
+            let count = reportsFloat.length;
+            if (count > 0) {
+                badge.style.display = "flex";
+                badge.textContent = count > 99 ? "99+" : count;
+            } else {
+                badge.style.display = "none";
+            }
+        }
         function showReportFloatList() {
-            let c = document.getElementById('reportFloatList');
+            let c = document.getElementById("reportFloatList");
             if (!c) return;
-            if (reportsFloat.length === 0) { c.innerHTML = '<div class="card">📭 لا بلاغات</div>'; return; }
-            let typeIcon = { 'pothole': '🕳️', 'light': '💡', 'garbage': '🗑️' };
-            c.innerHTML = reportsFloat.slice(0, 3).map(r => `
-                <div class="float-item"><span>${typeIcon[r.type]} ${r.desc.substring(0, 30)}</span><a href="https://www.google.com/maps?q=${r.lat},${r.lng}" target="_blank">🗺️</a></div>
-            `).join('');
+            if (reportsFloat.length === 0) {
+                c.innerHTML = "<div style="text-align:center; padding:20px; color:#64748b;">📭 لا توجد بلاغات</div>";
+                return;
+            }
+            let typeIcon = { "pothole": "🕳️", "light": "💡", "garbage": "🗑️" };
+            let typeName = { "pothole": "حفرة", "light": "إنارة", "garbage": "نفايات" };
+            c.innerHTML = reportsFloat.slice(0, 5).map(r => `
+                <div style="background:#1e293b; border-radius:12px; padding:10px; margin-bottom:8px; border-right:3px solid #ef4444;">
+                    <div style="display:flex; justify-content:space-between;">
+                        <span style="font-weight:bold; color:#ef4444; font-size:12px;">${typeIcon[r.type]} ${typeName[r.type] || r.type}</span>
+                        <span style="font-size:10px; color:#64748b;">${new Date(r.created_at || r.date).toLocaleTimeString()}</span>
+                    </div>
+                    <div style="font-size:12px; color:#cbd5e1; margin-top:5px;">${(r.desc || r.description).substring(0, 50)}${(r.desc || r.description).length > 50 ? "..." : ""}</div>
+                    ${r.lat || r.location_lat ? `<div style="font-size:10px; color:#3b82f6; margin-top:5px;"><i class="fas fa-map-marker-alt"></i> موقع</div>` : ""}
+                </div>
+            `).join("");
         }
         
         // ========== أيقونة الكراء ==========
