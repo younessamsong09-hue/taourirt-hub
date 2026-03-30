@@ -1635,3 +1635,121 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
         height: 50px !important;
     }
 }
+
+/* ========== تطوير لوحة التبليغ ========== */
+
+/* عرض الصور في قائمة البلاغات */
+.report-image-thumb {
+    width: 100%;
+    max-height: 120px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-top: 8px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.report-image-thumb:hover {
+    transform: scale(1.02);
+}
+
+/* معاينة الصورة في نموذج الإضافة */
+.image-preview-area {
+    margin: 10px 0;
+    position: relative;
+    display: none;
+}
+
+.image-preview-area img {
+    width: 100%;
+    border-radius: 12px;
+    max-height: 150px;
+    object-fit: cover;
+}
+
+.remove-preview-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: #ef4444;
+    color: white;
+    border: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* تحسين عرض البلاغات */
+.report-item {
+    background: #1e293b;
+    border-radius: 16px;
+    padding: 12px;
+    margin-bottom: 12px;
+    border-right: 3px solid #ef4444;
+    transition: all 0.2s;
+}
+
+.report-item:hover {
+    transform: translateX(-3px);
+    background: #2d3a4e;
+}
+
+.report-type-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.report-type-pothole { background: #8b5cf6; color: white; }
+.report-type-light { background: #f59e0b; color: white; }
+.report-type-garbage { background: #10b981; color: white; }
+
+.report-desc-text {
+    font-size: 13px;
+    color: #cbd5e1;
+    margin: 5px 0;
+    line-height: 1.4;
+}
+
+.report-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: #64748b;
+    margin-top: 8px;
+}
+
+.report-location-link {
+    color: #3b82f6;
+    text-decoration: none;
+}
+
+/* حالة البلاغ */
+.report-status {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 10px;
+}
+
+.status-pending { background: #f59e0b20; color: #f59e0b; }
+.status-resolved { background: #10b98120; color: #10b981; }
+
+/* مؤشر التحميل */
+.loading-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
