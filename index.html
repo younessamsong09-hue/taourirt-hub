@@ -211,6 +211,159 @@
         updateBloodCount();
         updateLostCount();
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script>
+    // ========== ربط التبليغات مع Supabase ==========
+    let supabaseClientReports = null;
+    const SUPABASE_URL = "https://pyxeusrxoizjlihyqhac.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_u1vYpwFYhvou2oyvsxoNIQ_1WDklzXt";
+    
+    async function initSupabaseReports() {
+        try {
+            supabaseClientReports = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            console.log("✅ Supabase متصل");
+            await loadReportsFromSupabase();
+        } catch(e) { console.error("خطأ:", e); }
+    }
+    
+    async function loadReportsFromSupabase() {
+        if (!supabaseClientReports) return;
+        const { data, error } = await supabaseClientReports
+            .from("reports")
+            .select("*")
+            .order("created_at", { ascending: false })
+            .limit(10);
+        if (!error && data) {
+            window.reportsFloat = data;
+            localStorage.setItem("city_reports", JSON.stringify(data));
+            showReportFloatList();
+        }
+    }
+    
+    async function uploadReportImage(file, reportId) {
+        if (!supabaseClientReports || !file) return null;
+        const ext = file.name.split(".").pop();
+        const fileName = `${reportId}_${Date.now()}.${ext}`;
+        const { error } = await supabaseClientReports.storage
+            .from("reports-media")
+            .upload(`reports/${fileName}`, file);
+        if (error) return null;
+        const { data: { publicUrl } } = supabaseClientReports.storage
+            .from("reports-media")
+            .getPublicUrl(`reports/${fileName}`);
+        return publicUrl;
+    }
+    
+    async function addReportFloatToSupabase(desc, type, lat, lng, imageFile) {
+        if (!supabaseClientReports) {
+            saveReportToLocal(desc, type, lat, lng, null);
+            return;
+        }
+        try {
+            const { data, error } = await supabaseClientReports
+                .from("reports")
+                .insert([{
+                    type: type,
+                    description: desc,
+                    location_lat: lat,
+                    location_lng: lng,
+                    status: "pending",
+                    created_at: new Date().toISOString()
+                }])
+                .select();
+            if (error) throw error;
+            if (data && data[0]) {
+                let imageUrl = null;
+                if (imageFile) {
+                    imageUrl = await uploadReportImage(imageFile, data[0].id);
+                    if (imageUrl) {
+                        await supabaseClientReports
+                            .from("reports")
+                            .update({ image_url: imageUrl })
+                            .eq("id", data[0].id);
+                    }
+                }
+                saveReportToLocal(desc, type, lat, lng, imageUrl, data[0].id);
+            }
+        } catch(e) { console.error(e); saveReportToLocal(desc, type, lat, lng, null); }
+    }
+    
+    function saveReportToLocal(desc, type, lat, lng, imageUrl, id) {
+        let reports = JSON.parse(localStorage.getItem("city_reports") || "[]");
+        reports.unshift({
+            id: id || Date.now(),
+            type: type,
+            description: desc,
+            location_lat: lat,
+            location_lng: lng,
+            image_url: imageUrl,
+            status: "pending",
+            created_at: new Date().toISOString()
+        });
+        localStorage.setItem("city_reports", JSON.stringify(reports));
+        window.reportsFloat = reports;
+    }
+    
+    function updateReportBadge() {
+        const badge = document.getElementById("reportBadge");
+        if (!badge) return;
+        const reports = JSON.parse(localStorage.getItem("city_reports") || "[]");
+        const count = reports.length;
+        if (count > 0) {
+            badge.style.display = "flex";
+            badge.textContent = count > 99 ? "99+" : count;
+        } else {
+            badge.style.display = "none";
+        }
+    }
+    
+    const originalAddReportFloat = window.addReportFloat || function() {};
+    window.addReportFloat = async function() {
+        const desc = document.getElementById("reportFloatDesc")?.value.trim();
+        const type = window.currentReportType;
+        const lat = window.userLat;
+        const lng = window.userLng;
+        const imageFile = document.getElementById("reportFloatImage")?.files[0];
+        if (!desc) { alert("❌ الرجاء كتابة وصف"); return; }
+        const btn = document.querySelector("#reportFloatForm button[onclick=\"addReportFloat()\"]");
+        if (btn) { btn.textContent = "جاري الإرسال... 📤"; btn.disabled = true; }
+        await addReportFloatToSupabase(desc, type, lat, lng, imageFile);
+        if (btn) { btn.textContent = "إرسال البلاغ"; btn.disabled = false; }
+        clearReportFloat();
+        showReportFloatList();
+        updateReportBadge();
+        alert("✅ تم إرسال البلاغ بنجاح!");
+    };
+    
+    const originalShowReportFloatList = window.showReportFloatList || function() {};
+    window.showReportFloatList = function() {
+        const container = document.getElementById("reportFloatList");
+        if (!container) return;
+        const reports = JSON.parse(localStorage.getItem("city_reports") || "[]");
+        if (reports.length === 0) {
+            container.innerHTML = "<div style=\"text-align:center; padding:20px; color:#64748b;\">📭 لا توجد بلاغات</div>";
+            return;
+        }
+        const typeIcon = { pothole: "🕳️", light: "💡", garbage: "🗑️" };
+        const typeName = { pothole: "حفرة", light: "إنارة", garbage: "نفايات" };
+        container.innerHTML = reports.slice(0, 5).map(r => `
+            <div style="background:#1e293b; border-radius:12px; padding:10px; margin-bottom:8px; border-right:3px solid #ef4444;">
+                <div style="display:flex; justify-content:space-between;">
+                    <span style="font-weight:bold; color:#ef4444; font-size:12px;">${typeIcon[r.type]} ${typeName[r.type] || r.type}</span>
+                    <span style="font-size:10px; color:#64748b;">${new Date(r.created_at).toLocaleTimeString()}</span>
+                </div>
+                <div style="font-size:12px; color:#cbd5e1; margin-top:5px;">${r.description.substring(0, 50)}${r.description.length > 50 ? "..." : ""}</div>
+                ${r.location_lat ? `<div style="font-size:10px; color:#3b82f6; margin-top:5px;"><i class="fas fa-map-marker-alt"></i> موقع</div>` : ""}
+            </div>
+        `).join("");
+        updateReportBadge();
+    };
+    
+    document.addEventListener("DOMContentLoaded", () => {
+        initSupabaseReports();
+        setTimeout(updateReportBadge, 500);
+    });
+    </script>
 </body>
 </html>
     <!-- مساعد تاوريرت الذكي -->
