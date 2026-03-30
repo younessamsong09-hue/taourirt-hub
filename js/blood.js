@@ -405,3 +405,13 @@ if (!document.getElementById('blood-style')) {
 
 // تهيئة النظام
 initBloodSupabase();
+
+// اختبار الأزرار
+console.log("=== اختبار دوال التبرع ===");
+console.log("showBloodReg:", typeof window.showBloodReg);
+console.log("showBloodEmer:", typeof window.showBloodEmer);
+console.log("addDonor:", typeof window.addDonor);
+console.log("addEmergency:", typeof window.addEmergency);
+
+// تنبيه عند تحميل الصفحة
+alert("✅ تم تحميل نظام التبرع");
