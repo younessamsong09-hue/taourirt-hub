@@ -1522,3 +1522,116 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
 }
 .apply-job { background: #3b82f6; }
 .share-job { background: #25D366; }
+
+/* ========== ترتيب جميع الأيقونات في جهة اليسار ========== */
+
+/* أيقونة التبليغ */
+.report-float {
+    position: fixed !important;
+    bottom: 110px !important;
+    left: 20px !important;
+    right: auto !important;
+    width: 55px !important;
+    height: 55px !important;
+    background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    z-index: 998 !important;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4) !important;
+    transition: all 0.3s ease !important;
+}
+
+/* أيقونة المساعد */
+#assistantBtn {
+    position: fixed !important;
+    bottom: 50px !important;
+    left: 20px !important;
+    right: auto !important;
+    width: 55px !important;
+    height: 55px !important;
+    background: linear-gradient(135deg, #3b82f6, #06b6d4) !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    z-index: 999 !important;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4) !important;
+    transition: all 0.3s ease !important;
+}
+
+/* أيقونة الكراء - أيضاً في اليسار */
+.rental-float {
+    position: fixed !important;
+    bottom: 170px !important;
+    left: 20px !important;
+    right: auto !important;
+    width: 55px !important;
+    height: 55px !important;
+    background: linear-gradient(135deg, #10b981, #059669) !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    z-index: 997 !important;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4) !important;
+    transition: all 0.3s ease !important;
+}
+
+/* اللوحات المنبثقة */
+#reportFloatPanel {
+    position: fixed !important;
+    bottom: 180px !important;
+    left: 20px !important;
+    z-index: 1000 !important;
+}
+
+#assistantPanel {
+    position: fixed !important;
+    bottom: 120px !important;
+    left: 20px !important;
+    z-index: 1000 !important;
+}
+
+#rentalFloatPanel {
+    position: fixed !important;
+    bottom: 240px !important;
+    left: 20px !important;
+    right: auto !important;
+    z-index: 1000 !important;
+}
+
+/* تأثيرات hover */
+.report-float:hover,
+#assistantBtn:hover,
+.rental-float:hover {
+    transform: scale(1.05) !important;
+}
+
+/* للهواتف */
+@media (max-width: 640px) {
+    .report-float {
+        bottom: 100px !important;
+        left: 15px !important;
+        width: 50px !important;
+        height: 50px !important;
+    }
+    
+    #assistantBtn {
+        bottom: 45px !important;
+        left: 15px !important;
+        width: 50px !important;
+        height: 50px !important;
+    }
+    
+    .rental-float {
+        bottom: 155px !important;
+        left: 15px !important;
+        width: 50px !important;
+        height: 50px !important;
+    }
+}
