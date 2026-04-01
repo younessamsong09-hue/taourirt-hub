@@ -532,7 +532,9 @@
         let userLat = null, userLng = null;
         
         function toggleRentalFloat() {
+        let userLat = null, userLng = null;         let currentReportType = "";
         function toggleReportFloat() {
+            console.log("محاولة فتح لوحة التبليغ...");             let p = document.getElementById("reportFloatPanel");             if(!p) { console.error("خطأ: لم يتم العثور على reportFloatPanel في الـ HTML"); return; }
             let p = document.getElementById('reportFloatPanel');
             p.style.display = p.style.display === 'none' ? 'block' : 'none';
             if (p.style.display === 'block') fetchReportsFromSupabase();
