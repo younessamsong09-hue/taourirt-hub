@@ -531,77 +531,62 @@
         let currentReportType = '';
         let userLat = null, userLng = null;
         
+        function toggleRentalFloat() {
         function toggleReportFloat() {
             let p = document.getElementById('reportFloatPanel');
             p.style.display = p.style.display === 'none' ? 'block' : 'none';
-            showReportFloatList();
+            if (p.style.display === 'block') fetchReportsFromSupabase();
         }
-        
+
         function getReportLocationFloat() {
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (pos) => {
-                        userLat = pos.coords.latitude;
-                        userLng = pos.coords.longitude;
-                        document.getElementById('reportFloatLocation').innerHTML = `📍 ${userLat.toFixed(4)}, ${userLng.toFixed(4)}`;
-                    },
-                    () => { document.getElementById('reportFloatLocation').innerHTML = '⚠️ لم نتمكن'; }
-                );
+                navigator.geolocation.getCurrentPosition((pos) => {
+                    userLat = pos.coords.latitude; userLng = pos.coords.longitude;
+                    document.getElementById('reportFloatLocation').innerHTML = `📍 ${userLat.toFixed(4)}, ${userLng.toFixed(4)}`;
+                }, () => { document.getElementById('reportFloatLocation').innerHTML = '⚠️ فشل الموقع'; });
             }
         }
-        
+
         function startReportFloat(type) {
             currentReportType = type;
             document.getElementById('reportFloatForm').style.display = 'block';
             getReportLocationFloat();
         }
-        
-        function addReportFloat() {
-            let desc = document.getElementById('reportFloatDesc').value.trim();
-            if (!desc) { alert('اكتب الوصف'); return; }
-            let newReport = { id: Date.now(), type: currentReportType, desc: desc, lat: userLat, lng: userLng, date: new Date().toLocaleString('ar-MA'), status: 'pending' };
-            let img = document.getElementById('reportFloatImage').files[0];
-            if (img) {
-                let reader = new FileReader();
-                reader.onload = function(e) {
-                    newReport.image = e.target.result;
-                    reportsFloat.unshift(newReport);
-                    localStorage.setItem('city_reports', JSON.stringify(reportsFloat));
-                    showReportFloatList();
-                    clearReportFloat();
-                    alert('تم الإرسال');
-                };
-                reader.readAsDataURL(img);
-            } else {
-                reportsFloat.unshift(newReport);
-                localStorage.setItem('city_reports', JSON.stringify(reportsFloat));
-                showReportFloatList();
-                clearReportFloat();
-                alert('تم الإرسال');
+
+        async function addReportFloat() {
+            const desc = document.getElementById('reportFloatDesc').value.trim();
+            const file = document.getElementById('reportFloatImage').files[0];
+            if (!desc) return alert('اكتب الوصف');
+            try {
+                let imgUrl = null;
+                if (file) {
+                    const fName = `rep_${Date.now()}.jpg`;
+                    const { data, error } = await supabase.storage.from('report-images').upload(fName, file);
+                    if (!error) imgUrl = supabase.storage.from('report-images').getPublicUrl(fName).data.publicUrl;
+                }
+                const { error: dbErr } = await supabase.from('reports').insert([{
+                    category: currentReportType, description: desc, image_url: imgUrl,
+                    location_lat: userLat, location_lng: userLng, status: 'pending'
+                }]);
+                if (dbErr) throw dbErr;
+                alert('✅ تم الإرسال');
+                clearReportFloat(); fetchReportsFromSupabase();
+            } catch (e) { alert('❌ خطأ: ' + e.message); }
+        }
+
+        async function fetchReportsFromSupabase() {
+            const { data } = await supabase.from('reports').select('*').order('created_at', { ascending: false }).limit(3);
+            const c = document.getElementById('reportFloatList');
+            if (data && c) {
+                const icons = { 'pothole': '🕳️', 'light': '💡', 'garbage': '🗑️' };
+                c.innerHTML = data.map(r => `<div class="float-item"><span>${icons[r.category] || '⚠️'} ${r.description.substring(0,15)}</span></div>`).join('');
             }
         }
-        
+
         function clearReportFloat() {
             document.getElementById('reportFloatDesc').value = '';
-            document.getElementById('reportFloatImage').value = '';
             document.getElementById('reportFloatForm').style.display = 'none';
         }
-        
-        function showReportFloatList() {
-            let c = document.getElementById('reportFloatList');
-            if (!c) return;
-            if (reportsFloat.length === 0) { c.innerHTML = '<div class="card">📭 لا بلاغات</div>'; return; }
-            let typeIcon = { 'pothole': '🕳️', 'light': '💡', 'garbage': '🗑️' };
-            c.innerHTML = reportsFloat.slice(0, 3).map(r => `
-                <div class="float-item"><span>${typeIcon[r.type]} ${r.desc.substring(0, 30)}</span><a href="https://www.google.com/maps?q=${r.lat},${r.lng}" target="_blank">🗺️</a></div>
-            `).join('');
-        }
-        
-        // ========== أيقونة الكراء ==========
-        let rentalsFloat = JSON.parse(localStorage.getItem('rentals')) || [];
-        let currentRentalType = '';
-        
-        function toggleRentalFloat() {
             let p = document.getElementById('rentalFloatPanel');
             p.style.display = p.style.display === 'none' ? 'block' : 'none';
             showRentalFloatList();
