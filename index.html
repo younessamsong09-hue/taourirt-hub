@@ -25,22 +25,13 @@
 </style>
 <script>
     // معاينة الصورة قبل الإرسال
-    window.previewImage = function(input) {
-        const file = input.files[0];
-        const preview = document.getElementById("reportImgPreview");
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = e => {
-                preview.src = e.target.result;
-                preview.style.display = "block";
-                preview.style.border = "2px solid #2ecc71";
-            };
             reader.readAsDataURL(file);
         }
     }
             reader.readAsDataURL(file);
         }
     }
+function previewImage(input) { const file = input.files[0]; const preview = document.getElementById("reportImgPreview"); if (file) { const reader = new FileReader(); reader.onload = e => { preview.src = e.target.result; preview.style.display = "block"; preview.style.marginTop = "10px"; preview.style.width = "100%"; preview.style.height = "150px"; preview.style.objectFit = "cover"; preview.style.borderRadius = "8px"; preview.style.border = "2px dashed #3498db"; }; reader.readAsDataURL(file); } }
 </script>
             <div class="stat-card"><div class="number" id="visitorCount">0</div><div class="label">👁️ زائر</div></div>
             <div class="stat-card"><div class="number" id="pharmacyCount">0</div><div class="label">🏥 صيدلية</div></div>
@@ -175,16 +166,27 @@
 
     <div class="footer">❤️ تاوريرت هب</div>
 
+function previewImage(input) { const file = input.files[0]; const preview = document.getElementById("reportImgPreview"); if (file) { const reader = new FileReader(); reader.onload = e => { preview.src = e.target.result; preview.style.display = "block"; preview.style.marginTop = "10px"; preview.style.width = "100%"; preview.style.height = "150px"; preview.style.objectFit = "cover"; preview.style.borderRadius = "8px"; preview.style.border = "2px dashed #3498db"; }; reader.readAsDataURL(file); } }
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+function previewImage(input) { const file = input.files[0]; const preview = document.getElementById("reportImgPreview"); if (file) { const reader = new FileReader(); reader.onload = e => { preview.src = e.target.result; preview.style.display = "block"; preview.style.marginTop = "10px"; preview.style.width = "100%"; preview.style.height = "150px"; preview.style.objectFit = "cover"; preview.style.borderRadius = "8px"; preview.style.border = "2px dashed #3498db"; }; reader.readAsDataURL(file); } }
     <script src="js/config.js"></script>
+function previewImage(input) { const file = input.files[0]; const preview = document.getElementById("reportImgPreview"); if (file) { const reader = new FileReader(); reader.onload = e => { preview.src = e.target.result; preview.style.display = "block"; preview.style.marginTop = "10px"; preview.style.width = "100%"; preview.style.height = "150px"; preview.style.objectFit = "cover"; preview.style.borderRadius = "8px"; preview.style.border = "2px dashed #3498db"; }; reader.readAsDataURL(file); } }
     <script src="js/storage.js"></script>
+function previewImage(input) { const file = input.files[0]; const preview = document.getElementById("reportImgPreview"); if (file) { const reader = new FileReader(); reader.onload = e => { preview.src = e.target.result; preview.style.display = "block"; preview.style.marginTop = "10px"; preview.style.width = "100%"; preview.style.height = "150px"; preview.style.objectFit = "cover"; preview.style.borderRadius = "8px"; preview.style.border = "2px dashed #3498db"; }; reader.readAsDataURL(file); } }
     <script src="js/map.js"></script>
+function previewImage(input) { const file = input.files[0]; const preview = document.getElementById("reportImgPreview"); if (file) { const reader = new FileReader(); reader.onload = e => { preview.src = e.target.result; preview.style.display = "block"; preview.style.marginTop = "10px"; preview.style.width = "100%"; preview.style.height = "150px"; preview.style.objectFit = "cover"; preview.style.borderRadius = "8px"; preview.style.border = "2px dashed #3498db"; }; reader.readAsDataURL(file); } }
     <script src="js/ui.js"></script>
+function previewImage(input) { const file = input.files[0]; const preview = document.getElementById("reportImgPreview"); if (file) { const reader = new FileReader(); reader.onload = e => { preview.src = e.target.result; preview.style.display = "block"; preview.style.marginTop = "10px"; preview.style.width = "100%"; preview.style.height = "150px"; preview.style.objectFit = "cover"; preview.style.borderRadius = "8px"; preview.style.border = "2px dashed #3498db"; }; reader.readAsDataURL(file); } }
     <script src="js/main.js"></script>
+function previewImage(input) { const file = input.files[0]; const preview = document.getElementById("reportImgPreview"); if (file) { const reader = new FileReader(); reader.onload = e => { preview.src = e.target.result; preview.style.display = "block"; preview.style.marginTop = "10px"; preview.style.width = "100%"; preview.style.height = "150px"; preview.style.objectFit = "cover"; preview.style.borderRadius = "8px"; preview.style.border = "2px dashed #3498db"; }; reader.readAsDataURL(file); } }
     <script src="js/jobs.js"></script>
+function previewImage(input) { const file = input.files[0]; const preview = document.getElementById("reportImgPreview"); if (file) { const reader = new FileReader(); reader.onload = e => { preview.src = e.target.result; preview.style.display = "block"; preview.style.marginTop = "10px"; preview.style.width = "100%"; preview.style.height = "150px"; preview.style.objectFit = "cover"; preview.style.borderRadius = "8px"; preview.style.border = "2px dashed #3498db"; }; reader.readAsDataURL(file); } }
     <script src="js/complaints.js"></script>
+function previewImage(input) { const file = input.files[0]; const preview = document.getElementById("reportImgPreview"); if (file) { const reader = new FileReader(); reader.onload = e => { preview.src = e.target.result; preview.style.display = "block"; preview.style.marginTop = "10px"; preview.style.width = "100%"; preview.style.height = "150px"; preview.style.objectFit = "cover"; preview.style.borderRadius = "8px"; preview.style.border = "2px dashed #3498db"; }; reader.readAsDataURL(file); } }
     <script src="js/blood.js"></script>
+function previewImage(input) { const file = input.files[0]; const preview = document.getElementById("reportImgPreview"); if (file) { const reader = new FileReader(); reader.onload = e => { preview.src = e.target.result; preview.style.display = "block"; preview.style.marginTop = "10px"; preview.style.width = "100%"; preview.style.height = "150px"; preview.style.objectFit = "cover"; preview.style.borderRadius = "8px"; preview.style.border = "2px dashed #3498db"; }; reader.readAsDataURL(file); } }
     <script src="js/blood-simple.js"></script>
+function previewImage(input) { const file = input.files[0]; const preview = document.getElementById("reportImgPreview"); if (file) { const reader = new FileReader(); reader.onload = e => { preview.src = e.target.result; preview.style.display = "block"; preview.style.marginTop = "10px"; preview.style.width = "100%"; preview.style.height = "150px"; preview.style.objectFit = "cover"; preview.style.borderRadius = "8px"; preview.style.border = "2px dashed #3498db"; }; reader.readAsDataURL(file); } }
     <script src="js/lostfound.js"></script>
 
     <script>
@@ -236,6 +238,7 @@
         setInterval(() => { updateBloodCount(); updateLostCount(); }, 1000);
         updateBloodCount();
         updateLostCount();
+function previewImage(input) { const file = input.files[0]; const preview = document.getElementById("reportImgPreview"); if (file) { const reader = new FileReader(); reader.onload = e => { preview.src = e.target.result; preview.style.display = "block"; preview.style.marginTop = "10px"; preview.style.width = "100%"; preview.style.height = "150px"; preview.style.objectFit = "cover"; preview.style.borderRadius = "8px"; preview.style.border = "2px dashed #3498db"; }; reader.readAsDataURL(file); } }
     </script>
 </body>
 </html>
@@ -423,6 +426,7 @@
                 if (e.key === 'Enter') sendMessage();
             });
         }
+function previewImage(input) { const file = input.files[0]; const preview = document.getElementById("reportImgPreview"); if (file) { const reader = new FileReader(); reader.onload = e => { preview.src = e.target.result; preview.style.display = "block"; preview.style.marginTop = "10px"; preview.style.width = "100%"; preview.style.height = "150px"; preview.style.objectFit = "cover"; preview.style.borderRadius = "8px"; preview.style.border = "2px dashed #3498db"; }; reader.readAsDataURL(file); } }
     </script>
     <script>
         // فلتر الصيدليات المفتوحة
@@ -495,6 +499,7 @@
                 filterPharmacies();
             };
         }
+function previewImage(input) { const file = input.files[0]; const preview = document.getElementById("reportImgPreview"); if (file) { const reader = new FileReader(); reader.onload = e => { preview.src = e.target.result; preview.style.display = "block"; preview.style.marginTop = "10px"; preview.style.width = "100%"; preview.style.height = "150px"; preview.style.objectFit = "cover"; preview.style.borderRadius = "8px"; preview.style.border = "2px dashed #3498db"; }; reader.readAsDataURL(file); } }
     </script>
     <!-- أيقونة التبليغ العائمة -->
     <div id="reportFloatBtn" class="float-btn report-float" onclick="toggleReportFloat()">
@@ -690,4 +695,5 @@
         
         showReportFloatList();
         showRentalFloatList();
+function previewImage(input) { const file = input.files[0]; const preview = document.getElementById("reportImgPreview"); if (file) { const reader = new FileReader(); reader.onload = e => { preview.src = e.target.result; preview.style.display = "block"; preview.style.marginTop = "10px"; preview.style.width = "100%"; preview.style.height = "150px"; preview.style.objectFit = "cover"; preview.style.borderRadius = "8px"; preview.style.border = "2px dashed #3498db"; }; reader.readAsDataURL(file); } }
     </script>
