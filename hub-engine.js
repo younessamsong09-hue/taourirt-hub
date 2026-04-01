@@ -15,7 +15,7 @@ window.fetchLatestReports = async function() {
     const statusLabels = { 'pending': '⏳ قيد الانتظار', 'resolved': '✅ تم الإصلاح' };
 
     container.innerHTML = data.map(r => `
-        <div class="report-card" style="background: #fff; border-radius: 8px; padding: 12px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-right: 4px solid #e74c3c;">
+        <div class="report-card" style="background: #f9f9f9; border-radius: 8px; padding: 12px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-right: 4px solid #e74c3c;">
             <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
                 <span style="font-weight: bold; font-size: 1.1em;">${icons[r.type] || '⚠️'} ${r.type === 'pothole' ? 'حفرة' : r.type === 'light' ? 'إنارة' : 'نفايات'}</span>
                 <span style="font-size: 0.8em; color: #666;">${new Date(r.created_at).toLocaleDateString('ar-MA')}</span>
