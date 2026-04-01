@@ -18,19 +18,26 @@
         <!-- الإحصائيات -->
         <div class="stats-row">
 <style>
-    .report-card { background: #fff; border-radius: 12px; padding: 15px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-right: 5px solid #e74c3c; transition: 0.3s; }
+    .report-card { background: #2c3e50; color: #ecf0f1; border-radius: 12px; border: 1px solid #34495e; padding: 15px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-right: 5px solid #e74c3c; transition: 0.3s; }
     .report-card:hover { transform: scale(1.02); }
     .img-preview { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; margin-top: 10px; display: none; border: 2px dashed #ddd; }
-    .btn-upload { background: #f8f9fa; border: 1px solid #ddd; padding: 10px; border-radius: 8px; width: 100%; cursor: pointer; text-align: center; margin-top: 10px; }
+    .btn-upload { background: #34495e; color: #fff; border: 2px dashed #3498db; padding: 12px; border-radius: 10px; width: 100%; display: block; text-align: center; margin-top: 15px; cursor: pointer; font-weight: bold; }
 </style>
 <script>
     // معاينة الصورة قبل الإرسال
-    function previewImage(input) {
+    window.previewImage = function(input) {
         const file = input.files[0];
         const preview = document.getElementById("reportImgPreview");
         if (file) {
             const reader = new FileReader();
-            reader.onload = e => { preview.src = e.target.result; preview.style.display = "block"; };
+            reader.onload = e => {
+                preview.src = e.target.result;
+                preview.style.display = "block";
+                preview.style.border = "2px solid #2ecc71";
+            };
+            reader.readAsDataURL(file);
+        }
+    }
             reader.readAsDataURL(file);
         }
     }
