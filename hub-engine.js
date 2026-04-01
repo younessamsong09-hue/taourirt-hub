@@ -3,7 +3,7 @@ const supabase = window.supabase.createClient('https://pyxeusrxoizjlihyqhac.supa
 let userLat = null, userLng = null;
 let currentReportType = '';
 
-// --- دالة جلب وعرض التبليغات ---
+// --- جلب التبليغات (تعديل category إلى type) ---
 window.fetchLatestReports = async function() {
     const { data, error } = await supabase
         .from('reports')
@@ -19,7 +19,7 @@ window.fetchLatestReports = async function() {
     container.innerHTML = data.map(r => `
         <div class="float-item" style="border-bottom: 1px solid #eee; padding: 8px 0;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span>${icons[r.category] || '⚠️'} ${r.description.substring(0, 25)}...</span>
+                <span>${icons[r.type] || '⚠️'} ${r.description.substring(0, 25)}...</span>
                 <span style="font-size: 0.7em; background: #f0f0f0; padding: 2px 6px; border-radius: 10px;">
                     ${new Date(r.created_at).toLocaleDateString('ar-MA')}
                 </span>
@@ -28,13 +28,12 @@ window.fetchLatestReports = async function() {
     `).join('') || '<div class="float-item">لا توجد تبليغات حالياً</div>';
 };
 
-// --- تطوير دالة الفتح لتحدث البيانات ---
 window.toggleReportFloat = function() {
     const p = document.getElementById('reportFloatPanel');
     if(p) {
         const isOpening = (p.style.display === 'none' || p.style.display === '');
         p.style.display = isOpening ? 'block' : 'none';
-        if (isOpening) window.fetchLatestReports(); // تحديث القائمة عند الفتح
+        if (isOpening) window.fetchLatestReports();
     }
 };
 
@@ -50,12 +49,13 @@ window.startReportFloat = function(type) {
     }
 };
 
+// --- الإرسال (تعديل category إلى type ليتطابق مع SQL) ---
 window.addReportFloat = async function() {
     const desc = document.getElementById('reportFloatDesc').value.trim();
     if (!desc) return alert('يرجى وصف المشكلة');
     
     const { error } = await supabase.from('reports').insert([{
-        category: currentReportType,
+        type: currentReportType, // قمنا بتغييرها من category إلى type
         description: desc,
         location_lat: userLat,
         location_lng: userLng,
@@ -63,16 +63,15 @@ window.addReportFloat = async function() {
     }]);
 
     if (!error) {
-        alert('✅ شكراً لك! تم تسجيل التبليغ في تاوريرت هوب');
+        alert('✅ تم الإرسال بنجاح لـ Taourirt Hub');
         document.getElementById('reportFloatDesc').value = '';
         document.getElementById('reportFloatForm').style.display = 'none';
-        window.fetchLatestReports(); // تحديث القائمة فوراً بعد الإرسال
+        window.fetchLatestReports();
     } else {
-        alert('خطأ: ' + error.message);
+        alert('❌ خطأ في القاعدة: ' + error.message);
     }
 };
 
-// --- نظام الكراء ---
 window.toggleRentalFloat = function() {
     const p = document.getElementById('rentalFloatPanel');
     if(p) p.style.display = (p.style.display === 'none' || p.style.display === '') ? 'block' : 'none';
