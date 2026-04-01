@@ -1,33 +1,35 @@
 const supabase = window.supabase.createClient('https://pyxeusrxoizjlihyqhac.supabase.co', 'sb_publishable_u1vYpwFYhvou2oyvsxoNIQ_1WDklzXt');
 
-let userLat = null, userLng = null;
-let currentReportType = '';
-
-// دالة جلب البيانات
+// --- دالة العرض الاحترافي للتبليغات ---
 window.fetchLatestReports = async function() {
     const { data, error } = await supabase
         .from('reports')
         .select('*')
         .order('created_at', { ascending: false })
-        .limit(5);
+        .limit(6);
 
     const container = document.getElementById('reportFloatList');
     if (error || !container) return;
 
     const icons = { 'pothole': '🕳️', 'light': '💡', 'garbage': '🗑️' };
-    
+    const statusLabels = { 'pending': '⏳ قيد الانتظار', 'resolved': '✅ تم الإصلاح' };
+
     container.innerHTML = data.map(r => `
-        <div class="float-item" style="border-bottom: 1px solid #eee; padding: 8px 0;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span>${icons[r.type] || '⚠️'} ${r.description ? r.description.substring(0, 20) : 'بلا وصف'}</span>
-                <span style="font-size: 0.7em; background: #f0f0f0; padding: 2px 6px; border-radius: 10px;">
-                    ${new Date(r.created_at).toLocaleDateString('ar-MA')}
-                </span>
+        <div class="report-card" style="background: #fff; border-radius: 8px; padding: 12px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-right: 4px solid #e74c3c;">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+                <span style="font-weight: bold; font-size: 1.1em;">${icons[r.type] || '⚠️'} ${r.type === 'pothole' ? 'حفرة' : r.type === 'light' ? 'إنارة' : 'نفايات'}</span>
+                <span style="font-size: 0.8em; color: #666;">${new Date(r.created_at).toLocaleDateString('ar-MA')}</span>
+            </div>
+            <p style="margin: 5px 0; color: #444; font-size: 0.95em; line-height: 1.4;">${r.description || 'لا يوجد وصف متاح'}</p>
+            <div style="margin-top: 8px; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 0.85em; color: #2ecc71; font-weight: 500;">${statusLabels[r.status] || '⏳ جاري المعالجة'}</span>
+                ${r.location_lat ? `<a href="https://www.google.com/maps?q=${r.location_lat},${r.location_lng}" target="_blank" style="text-decoration: none; font-size: 0.8em; color: #3498db;">📍 الموقع</a>` : ''}
             </div>
         </div>
-    `).join('') || '<div class="float-item">لا توجد تبليغات حالياً</div>';
+    `).join('') || '<div style="text-align:center; padding:20px; color:#999;">📭 لا توجد بلاغات مسجلة حالياً</div>';
 };
 
+// --- باقي الدوال (الإرسال والفتح) ---
 window.toggleReportFloat = function() {
     const p = document.getElementById('reportFloatPanel');
     if(p) {
@@ -37,37 +39,20 @@ window.toggleReportFloat = function() {
     }
 };
 
-window.startReportFloat = function(type) {
-    currentReportType = type;
-    document.getElementById('reportFloatForm').style.display = 'block';
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(pos => {
-            userLat = pos.coords.latitude; userLng = pos.coords.longitude;
-            const loc = document.getElementById('reportFloatLocation');
-            if(loc) loc.innerHTML = `📍 ${userLat.toFixed(4)}, ${userLng.toFixed(4)}`;
-        });
-    }
-};
-
-// الدالة الحاسمة: إرسال البيانات
 window.addReportFloat = async function() {
     const desc = document.getElementById('reportFloatDesc').value.trim();
     if (!desc) return alert('يرجى وصف المشكلة');
     
-    // نرسل الحقول التي يقبلها الجدول فقط
-    const { data, error } = await supabase.from('reports').insert([{
-        type: currentReportType,
+    const { error } = await supabase.from('reports').insert([{
+        type: window.currentReportType,
         description: desc,
-        location_lat: userLat,
-        location_lng: userLng,
+        location_lat: window.userLat,
+        location_lng: window.userLng,
         status: 'pending'
     }]);
 
-    if (error) {
-        console.error("خطأ سوبابيس:", error);
-        alert('❌ فشل الإرسال: ' + error.message);
-    } else {
-        alert('✅ نجحت العملية! ظهر التبليغ في تاوريرت هوب');
+    if (!error) {
+        alert('✅ تم تسجيل بلاغك بنجاح');
         document.getElementById('reportFloatDesc').value = '';
         document.getElementById('reportFloatForm').style.display = 'none';
         window.fetchLatestReports();
