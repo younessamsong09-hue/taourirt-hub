@@ -587,6 +587,7 @@
             document.getElementById('reportFloatForm').style.display = 'none';
         }
         
+async function fetchReports() { const { data } = await supabase.from("reports").select("*").order("created_at", { ascending: false }).limit(3); if (data) { const c = document.getElementById("reportFloatList"); c.innerHTML = data.map(r => `<div class="float-item"><span>${r.status === "resolved" ? "✅" : "⏳"} ${r.description.substring(0,20)}</span><a href="https://www.google.com/maps?q=${r.location_lat},${r.location_lng}" target="_blank">📍</a></div>`).join(""); } }
         function showReportFloatList() {
             let c = document.getElementById('reportFloatList');
             if (!c) return;
