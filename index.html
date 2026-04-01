@@ -580,11 +580,21 @@ function previewImage(input) { const file = input.files[0]; const preview = docu
             }
         }
         
-        function startReportFloat(type) {
-            currentReportType = type;
-            document.getElementById('reportFloatForm').style.display = 'block';
-            getReportLocationFloat();
-        }
+function startReportFloat(type) {
+    window.currentReportType = type;
+    document.getElementById("reportFloatForm").style.display = "block";
+    /* تصفير المعاينة السابقة */
+    const preview = document.getElementById("reportImgPreview");
+    if(preview) { preview.src = ""; preview.style.display = "none"; }
+    document.getElementById("reportFloatImage").value = "";
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(pos => {
+            window.userLat = pos.coords.latitude; window.userLng = pos.coords.longitude;
+            const loc = document.getElementById("reportFloatLocation");
+            if(loc) loc.innerHTML = `📍 ${window.userLat.toFixed(4)}, ${window.userLng.toFixed(4)}`;
+        });
+    }
+}
         
         function addReportFloat() {
             let desc = document.getElementById('reportFloatDesc').value.trim();
