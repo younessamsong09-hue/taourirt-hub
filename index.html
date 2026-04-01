@@ -17,6 +17,41 @@
     <div class="container" style="max-width: 550px; margin: auto;">
         <!-- الإحصائيات -->
         <div class="stats-row">
+<style>
+    .social-feed { max-height: 450px; overflow-y: auto; padding: 10px; }
+    .post-card { background: #1e272e; border-radius: 15px; margin-bottom: 20px; border: 1px solid #34495e; overflow: hidden; }
+    .post-img { width: 100%; height: 220px; object-fit: cover; display: block; }
+    .post-content { padding: 15px; color: white; }
+    .post-header { display: flex; justify-content: space-between; font-size: 0.8em; color: #95a5a6; margin-bottom: 10px; }
+    .post-desc { line-height: 1.5; font-size: 1rem; margin-bottom: 15px; }
+    .post-actions { display: flex; gap: 15px; border-top: 1px solid #2c3e50; padding-top: 10px; }
+    .action-link { color: #3498db; text-decoration: none; font-weight: bold; font-size: 0.9em; cursor: pointer; }
+</style>
+<script>
+    async function fetchLatestReports() {
+        const { data, error } = await supabase.from("reports").select("*").order("created_at", { ascending: false }).limit(10);
+        const list = document.getElementById("reportFloatList");
+        if (error || !list) return;
+        list.className = "social-feed";
+        list.innerHTML = data.map(r => `
+            <div class="post-card">
+                ${r.image_url ? `<img src="${r.image_url}" class="post-img">` : ""}
+                <div class="post-content">
+                    <div class="post-header">
+                        <span>📍 ${r.type === "pothole" ? "حفرة" : "تبليغ"}</span>
+                        <span>${new Date(r.created_at).toLocaleDateString("ar-MA")}</span>
+                    </div>
+                    <p class="post-desc">${r.description || "بدون وصف"}</p>
+                    <div class="post-actions">
+                        <span class="action-link" style="color:#e74c3c">❤️ إعجاب</span>
+                        <span class="action-link">💬 تعليق</span>
+                        <a href="https://www.google.com/maps?q=${r.location_lat},${r.location_lng}" target="_blank" class="action-link" style="color:#2ecc71; margin-right:auto;">📍 الخريطة</a>
+                    </div>
+                </div>
+            </div>
+        `).join("") || "📭 لا يوجد منشورات حالياً";
+    }
+</script>
             <div class="stat-card"><div class="number" id="visitorCount">0</div><div class="label">👁️ زائر</div></div>
             <div class="stat-card"><div class="number" id="pharmacyCount">0</div><div class="label">🏥 صيدلية</div></div>
             <div class="stat-card"><div class="number" id="marketCount">0</div><div class="label">🛒 سوق</div></div>
