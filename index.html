@@ -17,6 +17,24 @@
     <div class="container" style="max-width: 550px; margin: auto;">
         <!-- الإحصائيات -->
         <div class="stats-row">
+<style>
+    .report-card { background: #fff; border-radius: 12px; padding: 15px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-right: 5px solid #e74c3c; transition: 0.3s; }
+    .report-card:hover { transform: scale(1.02); }
+    .img-preview { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; margin-top: 10px; display: none; border: 2px dashed #ddd; }
+    .btn-upload { background: #f8f9fa; border: 1px solid #ddd; padding: 10px; border-radius: 8px; width: 100%; cursor: pointer; text-align: center; margin-top: 10px; }
+</style>
+<script>
+    // معاينة الصورة قبل الإرسال
+    function previewImage(input) {
+        const file = input.files[0];
+        const preview = document.getElementById("reportImgPreview");
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = e => { preview.src = e.target.result; preview.style.display = "block"; };
+            reader.readAsDataURL(file);
+        }
+    }
+</script>
             <div class="stat-card"><div class="number" id="visitorCount">0</div><div class="label">👁️ زائر</div></div>
             <div class="stat-card"><div class="number" id="pharmacyCount">0</div><div class="label">🏥 صيدلية</div></div>
             <div class="stat-card"><div class="number" id="marketCount">0</div><div class="label">🛒 سوق</div></div>
@@ -487,7 +505,7 @@
         </div>
         <div id="reportFloatForm" style="display:none;">
             <textarea id="reportFloatDesc" rows="2" placeholder="الوصف" class="float-input"></textarea>
-            <input type="file" id="reportFloatImage" accept="image/*" class="float-input">
+            <label class="btn-upload" for="reportFloatImage">📷 إرفاق صورة للمشكلة</label><input type="file" id="reportFloatImage" accept="image/*" style="display:none" onchange="previewImage(this)"><img id="reportImgPreview" class="img-preview">
             <div id="reportFloatLocation" class="float-location"></div>
             <button onclick="addReportFloat()" class="float-submit">إرسال</button>
         </div>
