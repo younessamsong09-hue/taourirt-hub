@@ -841,173 +841,78 @@ function addComment(itemId) {
 */
 
 // ========== أيقونة التبليغ ==========
+
+// ==========================================
+// 🚨 نظام التبليغات المطور (Taourirt Hub)
+// ==========================================
 let reportsFloat = JSON.parse(localStorage.getItem('city_reports')) || [];
-let currentReportType = '';
-let userLat = null, userLng = null;
 
-function toggleReportFloat() {
-    let p = document.getElementById('reportFloatPanel');
-    p.style.display = p.style.display === 'none' ? 'block' : 'none';
+function deleteSpecificReport(id) {
+    if (!confirm('هل تريد حذف هذا البلاغ؟')) return;
+    reportsFloat = reportsFloat.filter(r => r.id !== id);
+    localStorage.setItem('city_reports', JSON.stringify(reportsFloat));
     showReportFloatList();
 }
 
-function getReportLocationFloat() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (pos) => {
-                userLat = pos.coords.latitude;
-                userLng = pos.coords.longitude;
-                document.getElementById('reportFloatLocation').innerHTML = `📍 ${userLat.toFixed(4)}, ${userLng.toFixed(4)}`;
-            },
-            () => { document.getElementById('reportFloatLocation').innerHTML = '⚠️ لم نتمكن'; }
-        );
-    }
-}
-
-function startReportFloat(type) {
-    currentReportType = type;
-    document.getElementById('reportFloatForm').style.display = 'block';
-    getReportLocationFloat();
-}
-
-function addReportFloat() {
-    let desc = document.getElementById('reportFloatDesc').value.trim();
-    if (!desc) { alert('اكتب الوصف'); return; }
-    let newReport = { id: Date.now(), type: currentReportType, desc: desc, lat: userLat, lng: userLng, date: new Date().toLocaleString('ar-MA'), status: 'pending' };
-    let img = document.getElementById('reportFloatImage').files[0];
-    if (img) {
-        let reader = new FileReader();
-        reader.onload = function(e) {
-            newReport.image = e.target.result;
-            reportsFloat.unshift(newReport);
-            localStorage.setItem('city_reports', JSON.stringify(reportsFloat));
-            showReportFloatList();
-            clearReportFloat();
-            alert('تم الإرسال');
-        };
-        reader.readAsDataURL(img);
-    } else {
-        reportsFloat.unshift(newReport);
-        localStorage.setItem('city_reports', JSON.stringify(reportsFloat));
-        showReportFloatList();
-        clearReportFloat();
-        alert('تم الإرسال');
-    }
-}
-
-function clearReportFloat() {
-    document.getElementById('reportFloatDesc').value = '';
-    document.getElementById('reportFloatImage').value = '';
-    document.getElementById('reportFloatForm').style.display = 'none';
-}
-
-
-
-}
-
-`);
+function submitReportComment(id) {
+    const input = document.getElementById(`rep-comm-input-${id}`);
     if (!input || !input.value.trim()) return;
-    
     const report = reportsFloat.find(r => r.id === id);
     if (!report) return;
-    
     if (!report.comments) report.comments = [];
     report.comments.push({
         text: input.value.trim(),
         time: new Date().toLocaleTimeString('ar-MA', {hour: '2-digit', minute:'2-digit'})
     });
-    
     localStorage.setItem('city_reports', JSON.stringify(reportsFloat));
     input.value = '';
     showReportFloatList();
 }
 
-
-
-}
-
-`);
-    if (!input || !input.value.trim()) return;
-    
-    const report = reportsFloat.find(r => r.id === id);
-    if (!report) return;
-    
-    if (!report.comments) report.comments = [];
-    report.comments.push({
-        text: input.value.trim(),
-        time: new Date().toLocaleTimeString('ar-MA', {hour: '2-digit', minute:'2-digit'})
-    });
-    
-    localStorage.setItem('city_reports', JSON.stringify(reportsFloat));
-    input.value = '';
-    showReportFloatList();
-}
-
-
-    
+function showReportFloatList() {
+    const container = document.getElementById('reportFloatList');
+    if (!container) return;
+    if (!reportsFloat || reportsFloat.length === 0) {
+        container.innerHTML = '<div style="padding:15px; text-align:center;">📭 لا بلاغات</div>';
+        return;
+    }
     const icons = { 'pothole': '🕳️', 'light': '💡', 'garbage': '🗑️' };
-    
     container.innerHTML = reportsFloat.map(r => `
-        <div class="report-item" style="border-bottom:1px solid #eee; padding:10px; margin-bottom:10px; background:#fff; border-radius:8px;">
-            <div style="display:flex; justify-content:space-between; align-items:start;">
-                <span style="font-size:14px; font-weight:bold;">${icons[r.type] || '⚠️'} ${r.desc}</span>
-                <div style="display:flex; gap:8px;">
+        <div class="report-card" style="border:1px solid #eee; margin-bottom:10px; padding:10px; border-radius:8px; background:#fff;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <strong>${icons[r.type] || '⚠️'} ${r.desc}</strong>
+                <div style="display:flex; gap:10px;">
                     <a href="https://www.google.com/maps?q=${r.lat},${r.lng}" target="_blank">📍</a>
-                    <button onclick="deleteSpecificReport(${r.id})" style="border:none; background:none; color:red; cursor:pointer;"><i class="fas fa-trash"></i></button>
+                    <button onclick="deleteSpecificReport(${r.id})" style="border:none; background:none; color:red; cursor:pointer;">🗑️</button>
                 </div>
             </div>
-            <div style="margin-top:8px; background:#f9f9f9; padding:5px; border-radius:4px;">
-                <div id="rep-comm-list-${r.id}" style="font-size:11px; color:#666; max-height:50px; overflow-y:auto;">
-                    ${(r.comments || []).map(c => `<div style="margin-bottom:2px;">💬 ${c.text} <small>(${c.time})</small></div>`).join('')}
+            <div style="margin-top:10px; background:#f8f9fa; padding:8px; border-radius:6px;">
+                <div id="rep-comm-list-${r.id}" style="font-size:12px; max-height:60px; overflow-y:auto;">
+                    ${(r.comments || []).map(c => `<div style="border-bottom:1px dashed #ddd;">💬 ${c.text}</div>`).join('')}
                 </div>
-                <div style="display:flex; margin-top:5px; gap:4px;">
-                    <input type="text" id="rep-comm-input-${r.id}" placeholder="تعليق..." style="flex:1; font-size:11px; border:1px solid #ddd; border-radius:4px; padding:2px;">
-                    <button onclick="submitReportComment(${r.id})" style="font-size:10px; background:#28a745; color:white; border:none; border-radius:4px; padding:2px 6px;">نشر</button>
+                <div style="display:flex; margin-top:5px; gap:5px;">
+                    <input type="text" id="rep-comm-input-${r.id}" placeholder="تعليق..." style="flex:1; border:1px solid #ddd; border-radius:4px; padding:2px;">
+                    <button onclick="submitReportComment(${r.id})" style="background:#28a745; color:white; border:none; border-radius:4px; padding:2px 8px;">نشر</button>
                 </div>
             </div>
         </div>
     `).join('');
 }
 
-    
-    const icons = { 'pothole': '🕳️', 'light': '💡', 'garbage': '🗑️' };
-    
-    container.innerHTML = reportsFloat.map(r => `
-        <div class="report-item" style="border-bottom:1px solid #eee; padding:10px; margin-bottom:10px; background:#fff; border-radius:8px;">
-            <div style="display:flex; justify-content:space-between; align-items:start;">
-                <span style="font-size:14px; font-weight:bold;">${icons[r.type] || '⚠️'} ${r.desc}</span>
-                <div style="display:flex; gap:8px;">
-                    <a href="https://www.google.com/maps?q=${r.lat},${r.lng}" target="_blank">📍</a>
-                    <button onclick="deleteSpecificReport(${r.id})" style="border:none; background:none; color:red; cursor:pointer;"><i class="fas fa-trash"></i></button>
-                </div>
-            </div>
-            <div style="margin-top:8px; background:#f9f9f9; padding:5px; border-radius:4px;">
-                <div id="rep-comm-list-${r.id}" style="font-size:11px; color:#666; max-height:50px; overflow-y:auto;">
-                    ${(r.comments || []).map(c => `<div style="margin-bottom:2px;">💬 ${c.text} <small>(${c.time})</small></div>`).join('')}
-                </div>
-                <div style="display:flex; margin-top:5px; gap:4px;">
-                    <input type="text" id="rep-comm-input-${r.id}" placeholder="تعليق..." style="flex:1; font-size:11px; border:1px solid #ddd; border-radius:4px; padding:2px;">
-                    <button onclick="submitReportComment(${r.id})" style="font-size:10px; background:#28a745; color:white; border:none; border-radius:4px; padding:2px 6px;">نشر</button>
-                </div>
-            </div>
-        </div>
-    `).join('');
-}
-
-    let typeIcon = { 'pothole': '🕳️', 'light': '💡', 'garbage': '🗑️' };
-    c.innerHTML = reportsFloat.slice(0, 3).map(r => `
-        <div class="float-item"><span>${typeIcon[r.type]} ${r.desc.substring(0, 30)}</span><a href="https://www.google.com/maps?q=${r.lat},${r.lng}" target="_blank">🗺️</a></div>
-    `).join('');
-}
-
-// ========== أيقونة الكراء ==========
+// ==========================================
+// 🏠 نظام العقارات (Rentals) - يبقى كما هو
+// ==========================================
 let rentalsFloat = JSON.parse(localStorage.getItem('rentals')) || [];
-let currentRentalType = '';
-
 function toggleRentalFloat() {
     let p = document.getElementById('rentalFloatPanel');
-    p.style.display = p.style.display === 'none' ? 'block' : 'none';
+    if(p) p.style.display = p.style.display === 'none' ? 'block' : 'none';
     showRentalFloatList();
+}
+function showRentalFloatList() {
+    let c = document.getElementById('rentalFloatList');
+    if (!c) return;
+    if (rentalsFloat.length === 0) { c.innerHTML = '<div class="card">📭 لا عقارات</div>'; return; }
+    c.innerHTML = rentalsFloat.map(r => `<div class="float-item"><span>🏠 ${r.desc}</span></div>`).join('');
 }
 
 function showRentalFloatForm(type) {
