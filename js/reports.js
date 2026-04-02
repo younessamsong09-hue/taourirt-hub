@@ -82,3 +82,24 @@ window.showReportFloatList = function() {
         </div>
     `).reverse().join(''); // عرض الأحدث أولاً
 };
+
+// دالة الضغط على أزرار التبليغ (حفرة، إنارة، نفايات)
+window.showReportFloatForm = function(type) {
+    const desc = prompt("اكتب وصفاً مختصراً للمشكلة (مثلاً: حفرة كبيرة قرب المسجد):");
+    if (!desc) return;
+
+    // الحصول على الإحداثيات (سنفترض وجود خريطة أو نستخدم موقع المستخدم)
+    const newReport = {
+        id: Date.now(),
+        type: type,
+        desc: desc,
+        lat: 34.4075, // إحداثيات افتراضية لتاوريرت
+        lng: -2.8973,
+        comments: []
+    };
+
+    window.reportsFloat.push(newReport);
+    localStorage.setItem('city_reports', JSON.stringify(window.reportsFloat));
+    alert("✅ تم تسجيل البلاغ بنجاح!");
+    window.showReportFloatList();
+};
