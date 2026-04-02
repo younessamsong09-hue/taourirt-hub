@@ -531,13 +531,13 @@
         }
     </script>
     <!-- أيقونة التبليغ العائمة -->
-    <div id="reportFloatBtn" class="float-btn report-float" onclick="toggleReportFloat()">
+    <div id="reportFloatBtn" class="float-btn report-float" onclick="window.toggleReportFloat()">
         <i class="fas fa-exclamation-triangle"></i>
     </div>
     <div id="reportFloatPanel" class="float-panel" style="display:none;">
         <div class="float-header">
             <span>تبليغ عن مشكلة</span>
-            <span onclick="toggleReportFloat()" style="cursor:pointer;">✖</span>
+            <span onclick="window.toggleReportFloat()" style="cursor:pointer;">✖</span>
         </div>
         <div class="float-buttons">
             <button onclick="startReportFloat('pothole')">🕳️ حفرة</button>
@@ -554,18 +554,18 @@
     </div>
 
     <!-- أيقونة الكراء العائمة -->
-    <div id="rentalFloatBtn" class="float-btn rental-float" onclick="toggleRentalFloat()">
+    <div id="rentalFloatBtn" class="float-btn rental-float" onclick="window.toggleRentalFloat()">
         <i class="fas fa-home"></i>
     </div>
     <div id="rentalFloatPanel" class="float-panel" style="display:none;">
         <div class="float-header">
             <span>كراء وعقارات</span>
-            <span onclick="toggleRentalFloat()" style="cursor:pointer;">✖</span>
+            <span onclick="window.toggleRentalFloat()" style="cursor:pointer;">✖</span>
         </div>
         <div class="float-buttons">
-            <button onclick="showRentalFloatForm('rent')">🏠 للكراء</button>
-            <button onclick="showRentalFloatForm('sale')">💰 للبيع</button>
-            <button onclick="showRentalFloatForm('land')">🌾 أرض</button>
+            <button onclick="window.showRentalFloatForm('rent')">🏠 للكراء</button>
+            <button onclick="window.showRentalFloatForm('sale')">💰 للبيع</button>
+            <button onclick="window.showRentalFloatForm('land')">🌾 أرض</button>
         </div>
         <div id="rentalFloatForm" style="display:none;">
             <input type="text" id="rentalFloatTitle" placeholder="العنوان" class="float-input">

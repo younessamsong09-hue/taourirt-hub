@@ -103,3 +103,9 @@ window.showReportFloatForm = function(type) {
     alert("✅ تم تسجيل البلاغ بنجاح!");
     window.showReportFloatList();
 };
+
+// تشغيل تلقائي
+window.showReportFloatList();
+
+// تشغيل تلقائي
+window.showReportFloatList();
