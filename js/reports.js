@@ -70,3 +70,11 @@ document.addEventListener('DOMContentLoaded', () => {
         window.showReportFloatList();
     }
 });
+
+window.toggleReportFloat = function() {
+    let p = document.getElementById('reportFloatPanel');
+    if(p) {
+        p.style.display = p.style.display === 'none' ? 'block' : 'none';
+        if(p.style.display === 'block') window.showReportFloatList();
+    }
+};
