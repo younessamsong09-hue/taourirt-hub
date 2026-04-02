@@ -269,6 +269,8 @@
         list.innerHTML = data.map(r => Modules[r.type] ? Modules[r.type](r) : `<div class="post-card" style="padding:15px;color:white;">⚠️ ${r.description}</div>`).join("");
     }
 </script>
+<script src="js/reports.js"></script>
+<script src="js/rentals.js"></script>
 </body>
 </html>
     <!-- مساعد تاوريرت الذكي -->
@@ -527,99 +529,7 @@
                 filterPharmacies();
             };
         }
-    
-
-
-`);
-    if (!input || !input.value.trim()) return;
-    const report = reportsFloat.find(r => r.id === id);
-    if (!report) return;
-    if (!report.comments) report.comments = [];
-    report.comments.push({
-        text: input.value.trim(),
-        time: new Date().toLocaleTimeString('ar-MA', {hour: '2-digit', minute:'2-digit'})
-    });
-    localStorage.setItem('city_reports', JSON.stringify(reportsFloat));
-    input.value = '';
-    showReportFloatList();
-}
-
-
-    const icons = { 'pothole': '🕳️', 'light': '💡', 'garbage': '🗑️' };
-    container.innerHTML = reportsFloat.map(r => `
-        <div style="border:1px solid #eee; margin-bottom:12px; padding:12px; border-radius:10px; background:#fff; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                <strong style="font-size:14px;">${icons[r.type] || '⚠️'} ${r.desc}</strong>
-                <div style="display:flex; gap:12px;">
-                    <a href="https://www.google.com/maps?q=${r.lat},${r.lng}" target="_blank" style="text-decoration:none;">📍</a>
-                    <button onclick="deleteSpecificReport(${r.id})" style="color:#ff4d4d; border:none; background:none; cursor:pointer; font-size:16px;">🗑️</button>
-                </div>
-            </div>
-            <div style="background:#f8f9fa; padding:8px; border-radius:6px; border:1px solid #f0f0f0;">
-                <div id="rep-comm-list-${r.id}" style="font-size:12px; color:#555; max-height:80px; overflow-y:auto; margin-bottom:8px;">
-                    ${(r.comments || []).map(c => `<div style="border-bottom:1px dashed #eee; padding:3px 0;">💬 ${c.text} <small style="float:left; color:#aaa;">${c.time}</small></div>`).join('')}
-                </div>
-                <div style="display:flex; gap:6px;">
-                    <input type="text" id="rep-comm-input-${r.id}" placeholder="اكتب رداً..." style="flex:1; border:1px solid #ddd; border-radius:15px; padding:4px 12px; font-size:12px; outline:none;">
-                    <button onclick="submitReportComment(${r.id})" style="background:#2ecc71; color:white; border:none; border-radius:15px; padding:4px 12px; font-size:12px; cursor:pointer;">نشر</button>
-                </div>
-            </div>
-        </div>
-    `).join('');
-}
-
-function deleteSpecificReport(id) {
-    if (!confirm('هل تريد حذف هذا البلاغ؟')) return;
-    reportsFloat = reportsFloat.filter(r => r.id !== id);
-    localStorage.setItem('city_reports', JSON.stringify(reportsFloat));
-    showReportFloatList();
-}
-
-function submitReportComment(id) {
-    const input = document.getElementById(`rep-comm-input-${id}`);
-    if (!input || !input.value.trim()) return;
-    const report = reportsFloat.find(r => r.id === id);
-    if (!report) return;
-    if (!report.comments) report.comments = [];
-    report.comments.push({
-        text: input.value.trim(),
-        time: new Date().toLocaleTimeString('ar-MA', {hour: '2-digit', minute:'2-digit'})
-    });
-    localStorage.setItem('city_reports', JSON.stringify(reportsFloat));
-    input.value = '';
-    showReportFloatList();
-}
-
-function showReportFloatList() {
-    const container = document.getElementById('reportFloatList');
-    if (!container) return;
-    if (!reportsFloat || reportsFloat.length === 0) {
-        container.innerHTML = '<div style="padding:15px; text-align:center; color:#888;">📭 لا بلاغات حالياً</div>';
-        return;
-    }
-    const icons = { 'pothole': '🕳️', 'light': '💡', 'garbage': '🗑️' };
-    container.innerHTML = reportsFloat.map(r => `
-        <div style="border:1px solid #eee; margin-bottom:12px; padding:12px; border-radius:10px; background:#fff; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                <strong style="font-size:14px;">${icons[r.type] || '⚠️'} ${r.desc}</strong>
-                <div style="display:flex; gap:12px;">
-                    <a href="https://www.google.com/maps?q=${r.lat},${r.lng}" target="_blank" style="text-decoration:none;">📍</a>
-                    <button onclick="deleteSpecificReport(${r.id})" style="color:#ff4d4d; border:none; background:none; cursor:pointer; font-size:16px;">🗑️</button>
-                </div>
-            </div>
-            <div style="background:#f8f9fa; padding:8px; border-radius:6px; border:1px solid #f0f0f0;">
-                <div id="rep-comm-list-${r.id}" style="font-size:12px; color:#555; max-height:80px; overflow-y:auto; margin-bottom:8px;">
-                    ${(r.comments || []).map(c => `<div style="border-bottom:1px dashed #eee; padding:3px 0;">💬 ${c.text} <small style="float:left; color:#aaa;">${c.time}</small></div>`).join('')}
-                </div>
-                <div style="display:flex; gap:6px;">
-                    <input type="text" id="rep-comm-input-${r.id}" placeholder="اكتب رداً..." style="flex:1; border:1px solid #ddd; border-radius:15px; padding:4px 12px; font-size:12px; outline:none;">
-                    <button onclick="submitReportComment(${r.id})" style="background:#2ecc71; color:white; border:none; border-radius:15px; padding:4px 12px; font-size:12px; cursor:pointer;">نشر</button>
-                </div>
-            </div>
-        </div>
-    `).join('');
-}
-</script>
+    </script>
     <!-- أيقونة التبليغ العائمة -->
     <div id="reportFloatBtn" class="float-btn report-float" onclick="toggleReportFloat()">
         <i class="fas fa-exclamation-triangle"></i>
@@ -841,78 +751,84 @@ function addComment(itemId) {
 */
 
 // ========== أيقونة التبليغ ==========
-
-// ==========================================
-// 🚨 نظام التبليغات المطور (Taourirt Hub)
-// ==========================================
 let reportsFloat = JSON.parse(localStorage.getItem('city_reports')) || [];
+let currentReportType = '';
+let userLat = null, userLng = null;
 
-function deleteSpecificReport(id) {
-    if (!confirm('هل تريد حذف هذا البلاغ؟')) return;
-    reportsFloat = reportsFloat.filter(r => r.id !== id);
-    localStorage.setItem('city_reports', JSON.stringify(reportsFloat));
+function toggleReportFloat() {
+    let p = document.getElementById('reportFloatPanel');
+    p.style.display = p.style.display === 'none' ? 'block' : 'none';
     showReportFloatList();
 }
 
-function submitReportComment(id) {
-    const input = document.getElementById(`rep-comm-input-${id}`);
-    if (!input || !input.value.trim()) return;
-    const report = reportsFloat.find(r => r.id === id);
-    if (!report) return;
-    if (!report.comments) report.comments = [];
-    report.comments.push({
-        text: input.value.trim(),
-        time: new Date().toLocaleTimeString('ar-MA', {hour: '2-digit', minute:'2-digit'})
-    });
-    localStorage.setItem('city_reports', JSON.stringify(reportsFloat));
-    input.value = '';
-    showReportFloatList();
+function getReportLocationFloat() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (pos) => {
+                userLat = pos.coords.latitude;
+                userLng = pos.coords.longitude;
+                document.getElementById('reportFloatLocation').innerHTML = `📍 ${userLat.toFixed(4)}, ${userLng.toFixed(4)}`;
+            },
+            () => { document.getElementById('reportFloatLocation').innerHTML = '⚠️ لم نتمكن'; }
+        );
+    }
+}
+
+function startReportFloat(type) {
+    currentReportType = type;
+    document.getElementById('reportFloatForm').style.display = 'block';
+    getReportLocationFloat();
+}
+
+function addReportFloat() {
+    let desc = document.getElementById('reportFloatDesc').value.trim();
+    if (!desc) { alert('اكتب الوصف'); return; }
+    let newReport = { id: Date.now(), type: currentReportType, desc: desc, lat: userLat, lng: userLng, date: new Date().toLocaleString('ar-MA'), status: 'pending' };
+    let img = document.getElementById('reportFloatImage').files[0];
+    if (img) {
+        let reader = new FileReader();
+        reader.onload = function(e) {
+            newReport.image = e.target.result;
+            reportsFloat.unshift(newReport);
+            localStorage.setItem('city_reports', JSON.stringify(reportsFloat));
+            showReportFloatList();
+            clearReportFloat();
+            alert('تم الإرسال');
+        };
+        reader.readAsDataURL(img);
+    } else {
+        reportsFloat.unshift(newReport);
+        localStorage.setItem('city_reports', JSON.stringify(reportsFloat));
+        showReportFloatList();
+        clearReportFloat();
+        alert('تم الإرسال');
+    }
+}
+
+function clearReportFloat() {
+    document.getElementById('reportFloatDesc').value = '';
+    document.getElementById('reportFloatImage').value = '';
+    document.getElementById('reportFloatForm').style.display = 'none';
 }
 
 function showReportFloatList() {
-    const container = document.getElementById('reportFloatList');
-    if (!container) return;
-    if (!reportsFloat || reportsFloat.length === 0) {
-        container.innerHTML = '<div style="padding:15px; text-align:center;">📭 لا بلاغات</div>';
-        return;
-    }
-    const icons = { 'pothole': '🕳️', 'light': '💡', 'garbage': '🗑️' };
-    container.innerHTML = reportsFloat.map(r => `
-        <div class="report-card" style="border:1px solid #eee; margin-bottom:10px; padding:10px; border-radius:8px; background:#fff;">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <strong>${icons[r.type] || '⚠️'} ${r.desc}</strong>
-                <div style="display:flex; gap:10px;">
-                    <a href="https://www.google.com/maps?q=${r.lat},${r.lng}" target="_blank">📍</a>
-                    <button onclick="deleteSpecificReport(${r.id})" style="border:none; background:none; color:red; cursor:pointer;">🗑️</button>
-                </div>
-            </div>
-            <div style="margin-top:10px; background:#f8f9fa; padding:8px; border-radius:6px;">
-                <div id="rep-comm-list-${r.id}" style="font-size:12px; max-height:60px; overflow-y:auto;">
-                    ${(r.comments || []).map(c => `<div style="border-bottom:1px dashed #ddd;">💬 ${c.text}</div>`).join('')}
-                </div>
-                <div style="display:flex; margin-top:5px; gap:5px;">
-                    <input type="text" id="rep-comm-input-${r.id}" placeholder="تعليق..." style="flex:1; border:1px solid #ddd; border-radius:4px; padding:2px;">
-                    <button onclick="submitReportComment(${r.id})" style="background:#28a745; color:white; border:none; border-radius:4px; padding:2px 8px;">نشر</button>
-                </div>
-            </div>
-        </div>
+    let c = document.getElementById('reportFloatList');
+    if (!c) return;
+    if (reportsFloat.length === 0) { c.innerHTML = '<div class="card">📭 لا بلاغات</div>'; return; }
+    let typeIcon = { 'pothole': '🕳️', 'light': '💡', 'garbage': '🗑️' };
+    c.innerHTML = reportsFloat.slice(0, 3).map(r => `
+        <div class="float-item"><span>${typeIcon[r.type]} ${r.desc.substring(0, 30)}</span><a href="https://www.google.com/maps?q=${r.lat},${r.lng}" target="_blank">🗺️</a></div>
     `).join('');
 }
 
-// ==========================================
-// 🏠 نظام العقارات (Rentals) - يبقى كما هو
-// ==========================================
+// ========== أيقونة الكراء ==========
 let rentalsFloat = JSON.parse(localStorage.getItem('rentals')) || [];
+let currentRentalType = '';
+
 function toggleRentalFloat() {
     let p = document.getElementById('rentalFloatPanel');
-    if(p) p.style.display = p.style.display === 'none' ? 'block' : 'none';
+    p.style.display = p.style.display === 'none' ? 'block' : 'none';
     showRentalFloatList();
-}
-function showRentalFloatList() {
-    let c = document.getElementById('rentalFloatList');
-    if (!c) return;
-    if (rentalsFloat.length === 0) { c.innerHTML = '<div class="card">📭 لا عقارات</div>'; return; }
-    c.innerHTML = rentalsFloat.map(r => `<div class="float-item"><span>🏠 ${r.desc}</span></div>`).join('');
 }
 
 function showRentalFloatForm(type) {
