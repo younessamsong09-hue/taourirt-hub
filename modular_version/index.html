@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html dir="rtl" lang="ar">
 <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TAOURIRT HUB</title>
@@ -34,18 +36,18 @@
                 <div class="toggle-count" id="bloodCount">0</div>
                 <div class="toggle-arrow"><i id="bloodArrow" class="fas fa-chevron-down"></i></div>
             </div>
-            <div id="bloodContent" class="toggle-content" style="display:none;">
+            <div id="bloodContent" class="toggle-content" >
                 <div class="toggle-buttons">
                     <button class="toggle-btn" onclick="showBloodReg()">🩸 سجل متبرع</button>
                     <button class="toggle-btn-emergency" onclick="showBloodEmer()">🚨 حالة استعجالية</button>
                 </div>
-                <div id="bloodReg" style="display:none;">
+                <div id="bloodReg" >
                     <input type="text" id="donorName" placeholder="الاسم" class="toggle-input">
                     <input type="tel" id="donorPhone" placeholder="الهاتف" class="toggle-input">
                     <select id="donorBlood" class="toggle-input"><option>فصيلة الدم</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select>
                     <button onclick="addDonor()" class="toggle-submit">تسجيل</button>
                 </div>
-                <div id="bloodEmer" style="display:none;">
+                <div id="bloodEmer" >
                     <input type="text" id="emergPatient" placeholder="اسم المريض" class="toggle-input">
                     <select id="emergBlood" class="toggle-input"><option>فصيلة الدم</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select>
                     <input type="tel" id="emergPhone" placeholder="رقم التواصل" class="toggle-input">
@@ -64,19 +66,19 @@
                 <div class="toggle-count" id="lostCount">0</div>
                 <div class="toggle-arrow"><i id="lostArrow" class="fas fa-chevron-down"></i></div>
             </div>
-            <div id="lostFoundContent" class="toggle-content" style="display:none;">
+            <div id="lostFoundContent" class="toggle-content" >
                 <div class="toggle-buttons">
                     <button class="toggle-btn-lost" onclick="showLostForm()">📦 أضف مفقود</button>
                     <button class="toggle-btn-found" onclick="showFoundForm()">🎁 أضف موجود</button>
                 </div>
-                <div id="lostForm" style="display:none;">
+                <div id="lostForm" >
                     <input type="text" id="lostTitle" placeholder="العنوان *" class="toggle-input">
                     <textarea id="lostDesc" placeholder="الوصف *" rows="2" class="toggle-input"></textarea>
                     <input type="text" id="lostPlace" placeholder="المكان" class="toggle-input">
                     <input type="tel" id="lostPhone" placeholder="رقم الهاتف *" class="toggle-input">
                     <button onclick="addLost()" class="toggle-submit-lost">نشر</button>
                 </div>
-                <div id="foundForm" style="display:none;">
+                <div id="foundForm" >
                     <input type="text" id="foundTitle" placeholder="العنوان *" class="toggle-input">
                     <textarea id="foundDesc" placeholder="الوصف *" rows="2" class="toggle-input"></textarea>
                     <input type="text" id="foundPlace" placeholder="المكان" class="toggle-input">
@@ -96,17 +98,17 @@
                 <div class="toggle-count" id="jobsCount">0</div>
                 <div class="toggle-arrow"><i id="jobsArrow" class="fas fa-chevron-down"></i></div>
             </div>
-            <div id="jobsContent" class="toggle-content" style="display:none;">
-                <button onclick="toggleJobForm()" style="width:100%; background:linear-gradient(135deg,#6366f1,#3b82f6); color:white; border:none; padding:12px; border-radius:16px; cursor:pointer;">
+            <div id="jobsContent" class="toggle-content" >
+                <button onclick="toggleJobForm()" >
                     <i class="fas fa-plus-circle"></i> إضافة فرصة عمل جديدة
                 </button>
-                <div id="addJobForm" style="display:none; margin-top:15px;">
+                <div id="addJobForm" >
                     <input type="text" id="newJobTitle" placeholder="المسمى الوظيفي" class="toggle-input">
                     <input type="text" id="newJobCompany" placeholder="اسم المحل/الشركة" class="toggle-input">
                     <input type="tel" id="newJobPhone" placeholder="رقم الواتساب" class="toggle-input">
                     <button onclick="saveNewJob()" class="toggle-submit">نشر العرض</button>
                 </div>
-                <div id="jobsList" class="toggle-list" style="margin-top:15px;"></div>
+                <div id="jobsList" class="toggle-list" ></div>
             </div>
         </div>
 
@@ -114,7 +116,7 @@
         <div class="search-box">
             <i class="fas fa-search"></i>
             <input type="text" id="searchInput" placeholder="🔍 بحث...">
-            <button id="clearSearch" class="search-clear" style="display:none;">✖</button>
+            <button id="clearSearch" class="search-clear" >✖</button>
         </div>
         <div class="filter-buttons">
             <button id="showAllBtn" class="filter-btn active">📋 جميع الصيدليات</button>
@@ -135,17 +137,17 @@
     <div id="reportFloatBtn" class="float-btn report-float" onclick="toggleReportFloat()">
         <i class="fas fa-exclamation-triangle"></i>
     </div>
-    <div id="reportFloatPanel" class="float-panel" style="display:none;">
+    <div id="reportFloatPanel" class="float-panel" >
         <div class="float-header">
             <span>تبليغ عن مشكلة</span>
-            <span onclick="toggleReportFloat()" style="cursor:pointer;">✖</span>
+            <span onclick="toggleReportFloat()" >✖</span>
         </div>
         <div class="float-buttons">
             <button onclick="startReportFloat('pothole')">🕳️ حفرة</button>
             <button onclick="startReportFloat('light')">💡 إنارة</button>
             <button onclick="startReportFloat('garbage')">🗑️ نفايات</button>
         </div>
-        <div id="reportFloatForm" style="display:none;">
+        <div id="reportFloatForm" >
             <textarea id="reportFloatDesc" rows="2" placeholder="الوصف" class="float-input"></textarea>
             <input type="file" id="reportFloatImage" accept="image/*" class="float-input">
             <div id="reportFloatLocation" class="float-location"></div>
@@ -154,13 +156,13 @@
         <div id="reportFloatList"></div>
     </div>
 
-    <div id="assistantBtn" onclick="toggleAssistant()">
+    <div id="assistantBtn" class="float-btn" onclick="toggleAssistant()">
         <i class="fas fa-robot"></i>
     </div>
-    <div id="assistantPanel" style="display:none;">
+    <div id="assistantPanel" >
         <div class="assistant-header">
             <span><i class="fas fa-robot"></i> مساعد تاوريرت</span>
-            <span onclick="toggleAssistant()" style="cursor:pointer;">✖</span>
+            <span onclick="toggleAssistant()" >✖</span>
         </div>
         <div id="assistantMessages" class="assistant-messages"></div>
         <div class="assistant-input">
@@ -172,16 +174,16 @@
     <div id="rentalFloatBtn" class="float-btn rental-float" onclick="toggleRentalFloat()">
         <i class="fas fa-home"></i>
     </div>
-    <div id="rentalFloatPanel" class="float-panel" style="display:none;">
+    <div id="rentalFloatPanel" class="float-panel" >
         <div class="float-header">
             <span>🏠 عقارات تاوريرت</span>
-            <span onclick="toggleRentalFloat()" style="cursor:pointer;">✖</span>
+            <span onclick="toggleRentalFloat()" >✖</span>
         </div>
         <div class="float-buttons">
             <button onclick="showRentalFloatForm('rent')">🔑 للإيجار</button>
             <button onclick="showRentalFloatForm('sale')">💰 للبيع</button>
         </div>
-        <div id="rentalFloatForm" style="display:none;">
+        <div id="rentalFloatForm" >
             <input type="text" id="rentalTitle" placeholder="العنوان" class="float-input">
             <textarea id="rentalDesc" placeholder="الوصف" rows="2" class="float-input"></textarea>
             <input type="number" id="rentalPrice" placeholder="السعر" class="float-input">
