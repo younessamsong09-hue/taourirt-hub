@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TAOURIRT HUB</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/panels.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <div class="header">
+        <h1>🏥 TAOURIRT HUB</h1>
+        <p>دليل مدينة تاوريرت - خدمات صحية وتجارية</p>
+    </div>
+    <div class="container">
+        <!-- الإحصائيات -->
+        <div class="stats-row">
+            <div class="stat-card"><div class="number" id="visitorCount">0</div><div class="label">👁️ زائر</div></div>
+            <div class="stat-card"><div class="number" id="pharmacyCount">0</div><div class="label">🏥 صيدلية</div></div>
+            <div class="stat-card"><div class="number" id="marketCount">0</div><div class="label">🛒 سوق</div></div>
+        </div>
+
+        <!-- التبرع بالدم -->
+        <div class="toggle-card">
+            <div class="toggle-header" onclick="toggleBlood()">
+                <div class="toggle-icon"><i class="fas fa-tint"></i></div>
+                <div class="toggle-title">التبرع بالدم</div>
+                <div class="toggle-count" id="bloodCount">0</div>
+                <div class="toggle-arrow"><i id="bloodArrow" class="fas fa-chevron-down"></i></div>
+            </div>
+            <div id="bloodContent" class="toggle-content" style="display:none;">
+                <div class="toggle-buttons">
+                    <button class="toggle-btn" onclick="showBloodReg()">🩸 سجل متبرع</button>
+                    <button class="toggle-btn-emergency" onclick="showBloodEmer()">🚨 حالة استعجالية</button>
+                </div>
+                <div id="bloodReg" style="display:none;"><input type="text" id="donorName" placeholder="الاسم"><input type="tel" id="donorPhone" placeholder="الهاتف"><select id="donorBlood"><option>فصيلة الدم</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select><button onclick="addDonor()">تسجيل</button></div>
+                <div id="bloodEmer" style="display:none;"><input type="text" id="emergPatient" placeholder="اسم المريض"><select id="emergBlood"><option>فصيلة الدم</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select><input type="tel" id="emergPhone" placeholder="رقم التواصل"><button onclick="addEmergency()">نشر</button></div>
+                <div id="donorsList" class="toggle-list"></div>
+                <div id="emergList" class="toggle-list"></div>
+            </div>
+        </div>
+
+        <!-- المفقودات والموجودات -->
+        <div class="toggle-card">
+            <div class="toggle-header" onclick="toggleLostFound()">
+                <div class="toggle-icon"><i class="fas fa-search"></i></div>
+                <div class="toggle-title">المفقودات والموجودات</div>
+                <div class="toggle-count" id="lostCount">0</div>
+                <div class="toggle-arrow"><i id="lostArrow" class="fas fa-chevron-down"></i></div>
+            </div>
+            <div id="lostFoundContent" class="toggle-content" style="display:none;">
+                <div class="toggle-buttons"><button onclick="showLostForm()">📦 أضف مفقود</button><button onclick="showFoundForm()">🎁 أضف موجود</button></div>
+                <div id="lostForm" style="display:none;"><input type="text" id="lostTitle" placeholder="العنوان"><textarea id="lostDesc" placeholder="الوصف"></textarea><input type="text" id="lostPlace" placeholder="المكان"><input type="tel" id="lostPhone" placeholder="رقم الهاتف"><button onclick="addLost()">نشر</button></div>
+                <div id="foundForm" style="display:none;"><input type="text" id="foundTitle" placeholder="العنوان"><textarea id="foundDesc" placeholder="الوصف"></textarea><input type="text" id="foundPlace" placeholder="المكان"><input type="tel" id="foundPhone" placeholder="رقم الهاتف"><button onclick="addFound()">نشر</button></div>
+                <div id="lostList" class="toggle-list"></div>
+                <div id="foundList" class="toggle-list"></div>
+            </div>
+        </div>
+
+        <!-- الوظائف -->
+        <div class="toggle-card">
+            <div class="toggle-header" onclick="toggleJobs()">
+                <div class="toggle-icon"><i class="fas fa-briefcase"></i></div>
+                <div class="toggle-title">وظائف تاوريرت</div>
+                <div class="toggle-count" id="jobsCount">0</div>
+                <div class="toggle-arrow"><i id="jobsArrow" class="fas fa-chevron-down"></i></div>
+            </div>
+            <div id="jobsContent" class="toggle-content" style="display:none;">
+                <button onclick="toggleJobForm()" style="width:100%; background:#6366f1; color:white; border:none; padding:12px;">➕ إضافة وظيفة</button>
+                <div id="addJobForm" style="display:none;"><input type="text" id="newJobTitle" placeholder="المسمى"><input type="text" id="newJobCompany" placeholder="الشركة"><input type="number" id="newJobPhone" placeholder="رقم الهاتف"><button onclick="saveNewJob()">نشر</button></div>
+                <div id="jobsList"></div>
+            </div>
+        </div>
+
+        <!-- البحث والفلترة -->
+        <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="🔍 بحث..."><button id="clearSearch" class="search-clear" style="display:none;">✖</button></div>
+        <div class="filter-buttons"><button id="showAllBtn" class="filter-btn active">📋 جميع الصيدليات</button><button id="showOpenBtn" class="filter-btn">🟢 المفتوحة الآن</button></div>
+        <div id="neighborhoods-container"></div>
+        <div id="map-container"><div id="map"></div></div>
+        <div id="duty-container"><div class="loading">⏳</div></div>
+        <div class="section-title">📋 الصيدليات <span id="pharmCount"></span></div>
+        <div id="pharmacies-container"><div class="loading">⏳</div></div>
+        <div class="section-title">🛒 الأسواق</div>
+        <div id="markets-container"><div class="loading">⏳</div></div>
+    </div>
+    <div class="footer">❤️ تاوريرت هب</div>
+
+    <!-- الأيقونات العائمة -->
+    <div id="reportFloatBtn" class="float-btn report-float" onclick="toggleReportFloat()"><i class="fas fa-exclamation-triangle"></i></div>
+    <div id="reportFloatPanel" class="float-panel" style="display:none;"><div class="float-header"><span>تبليغ عن مشكلة</span><span onclick="toggleReportFloat()">✖</span></div><div class="float-buttons"><button onclick="startReportFloat('pothole')">🕳️ حفرة</button><button onclick="startReportFloat('light')">💡 إنارة</button><button onclick="startReportFloat('garbage')">🗑️ نفايات</button></div><div id="reportFloatForm" style="display:none;"><textarea id="reportFloatDesc" rows="2" placeholder="الوصف"></textarea><input type="file" id="reportFloatImage" accept="image/*"><div id="reportFloatLocation" class="float-location"></div><button onclick="addReportFloat()">إرسال</button></div><div id="reportFloatList"></div></div>
+
+    <div id="assistantBtn" onclick="toggleAssistant()"><i class="fas fa-robot"></i></div>
+    <div id="assistantPanel" style="display:none;"><div class="assistant-header"><span>مساعد تاوريرت</span><span onclick="toggleAssistant()">✖</span></div><div id="assistantMessages"></div><div><input type="text" id="assistantInput" placeholder="اسأل..."><button onclick="sendAssistantMessage()"><i class="fas fa-paper-plane"></i></button></div></div>
+
+    <div id="rentalFloatBtn" class="float-btn rental-float" onclick="toggleRentalFloat()"><i class="fas fa-home"></i></div>
+    <div id="rentalFloatPanel" class="float-panel" style="display:none;"><div class="float-header"><span>عقارات</span><span onclick="toggleRentalFloat()">✖</span></div><div class="float-buttons"><button onclick="showRentalFloatForm('rent')">للإيجار</button><button onclick="showRentalFloatForm('sale')">للبيع</button></div><div id="rentalFloatForm" style="display:none;"><input type="text" id="rentalTitle" placeholder="العنوان"><textarea id="rentalDesc" placeholder="الوصف"></textarea><input type="number" id="rentalPrice" placeholder="السعر"><input type="tel" id="rentalPhone" placeholder="رقم الهاتف"><button onclick="addRentalFloat()">نشر</button></div><div id="rentalFloatList"></div></div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="js/core/config.js"></script>
+    <script src="js/core/storage.js"></script>
+    <script src="js/core/utils.js"></script>
+    <script src="js/modules/map.js"></script>
+    <script src="js/modules/ui.js"></script>
+    <script src="js/modules/blood.js"></script>
+    <script src="js/modules/jobs.js"></script>
+    <script src="js/modules/lostfound.js"></script>
+    <script src="js/modules/assistant.js"></script>
+    <script src="js/modules/rental.js"></script>
+    <script src="js/modules/report.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

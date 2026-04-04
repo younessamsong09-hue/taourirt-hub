@@ -1,0 +1,8 @@
+@media (max-width: 640px) {
+    body { padding: 10px; }
+    .float-panel { width: calc(100vw - 40px); left: 20px; }
+    .float-btn { width: 48px; height: 48px; }
+    .report-float { bottom: 100px; }
+    .rental-float { bottom: 160px; }
+    #assistantBtn { bottom: 45px; }
+}
