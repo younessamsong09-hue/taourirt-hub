@@ -1,4 +1,4 @@
-/* ========== COMPONENTS ========== */
+/* ========== المكونات المشتركة (أزرار, بطاقات, إحصائيات) ========== */
 .stats-row {
     display: flex;
     gap: 10px;
@@ -29,14 +29,8 @@
     cursor: pointer;
     background: #0f172a;
 }
-.toggle-icon {
-    width: 40px;
-    font-size: 20px;
-}
-.toggle-title {
-    flex: 1;
-    font-weight: bold;
-}
+.toggle-icon { width: 40px; font-size: 20px; }
+.toggle-title { flex: 1; font-weight: bold; }
 .toggle-count {
     background: #3b82f6;
     padding: 2px 8px;
@@ -44,10 +38,7 @@
     font-size: 12px;
     margin-left: 10px;
 }
-.toggle-arrow {
-    width: 30px;
-    text-align: center;
-}
+.toggle-arrow { width: 30px; text-align: center; }
 .toggle-content {
     padding: 15px;
     border-top: 1px solid #334155;
@@ -123,33 +114,4 @@
     font-size: 18px;
     font-weight: bold;
     margin: 20px 0 10px;
-}
-#map-container {
-    background: #1e293b;
-    border-radius: 20px;
-    padding: 12px;
-    margin-bottom: 20px;
-    position: relative;
-}
-#map {
-    height: 250px;
-    border-radius: 16px;
-}
-.map-controls {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    z-index: 1000;
-    display: flex;
-    gap: 8px;
-}
-.map-btn {
-    background: #3b82f6;
-    border: none;
-    padding: 10px;
-    border-radius: 50%;
-    color: white;
-    cursor: pointer;
-    width: 40px;
-    height: 40px;
 }

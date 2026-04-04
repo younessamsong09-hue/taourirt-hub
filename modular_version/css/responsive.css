@@ -1,3 +1,4 @@
+/* ========== للهواتف ========== */
 @media (max-width: 640px) {
     body { padding: 10px; }
     .float-panel { width: calc(100vw - 40px); left: 20px; }
