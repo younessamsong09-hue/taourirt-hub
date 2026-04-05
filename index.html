@@ -270,6 +270,7 @@
     }
 </script>
     <script src="js/report.js"></script>
+    <script src="js/rental.js"></script>
 </body>
 </html>
     <!-- مساعد تاوريرت الذكي -->
@@ -819,6 +820,7 @@ function showReportFloatList() {
     c.innerHTML = reportsFloat.slice(0, 3).map(r => `
         <div class="float-item"><span>${typeIcon[r.type]} ${r.desc.substring(0, 30)}</span><a href="https://www.google.com/maps?q=${r.lat},${r.lng}" target="_blank">🗺️</a></div>
     `).join('');
+<!--
 }
 -->
 
@@ -895,6 +897,7 @@ function showRentalFloatList() {
     `).join('');
     // --- END OF MODIFIED SECTION FOR COMMENTS ---
 }
+-->
 
 showReportFloatList();
 showRentalFloatList();
