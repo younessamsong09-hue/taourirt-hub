@@ -163,6 +163,7 @@
     <script src="js/lostfound.js"></script>
 
 <!--
+<!--
     <script>
         function toggleBlood() {
             let c = document.getElementById('bloodContent');
@@ -215,6 +216,7 @@
     </script>
 <style>
     .social-feed { max-height: 450px; overflow-y: auto; padding: 5px; }
+-->
     .card-pothole { border-right: 5px solid #ff4757; background: #1a1a1a; }
     .card-light { border-right: 5px solid #f1c40f; background: #1a1a1a; }
 -->
@@ -222,8 +224,10 @@
     .post-card { border-radius: 15px; margin-bottom: 20px; overflow: hidden; border: 1px solid #333; animation: slideIn 0.3s ease; }
     .post-img { width: 100%; height: 200px; object-fit: cover; border-bottom: 1px solid #333; }
     @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+<!--
     .btn-cam { background: #34495e; color: white; padding: 12px; border-radius: 10px; display: block; text-align: center; margin: 10px 0; cursor: pointer; border: 2px dashed #3498db; }
 </style>
+<!--
 <script>
     /* نظام الموديلات الداخلي (فكرتك) */
     const Modules = {
@@ -255,9 +259,11 @@
     .card-pothole { border-right: 5px solid #ff4757; }
     .card-light { border-right: 5px solid #f1c40f; }
     .post-img { width: 100%; height: 200px; object-fit: cover; }
+-->
     .post-content { padding: 15px; color: white; }
     .post-actions { display: flex; gap: 15px; border-top: 1px solid #2c3e50; padding-top: 10px; margin-top: 10px; }
     .action-btn { color: #3498db; font-size: 0.9em; cursor: pointer; font-weight: bold; }
+-->
 </style>
 <script id="social-logic">
     const Modules = {
@@ -274,6 +280,13 @@
     <script src="js/report.js"></script>
     <script src="js/rental.js"></script>
     <script src="js/toggles.js"></script>
+    <script src="js/social-modules.js"></script>
+    <script src="js/filters.js"></script>
+    <script src="js/toggles.js"></script>
+    <script src="js/social-modules.js"></script>
+    <script src="js/assistant-inline.js"></script>
+    <script src="js/filters.js"></script>
+    <script src="js/comments.js"></script>
 </body>
 </html>
     <!-- مساعد تاوريرت الذكي -->
@@ -300,6 +313,7 @@
             <button id="sendBtn" style="background:#3b82f6; border:none; width:38px; height:38px; border-radius:50%; color:white; cursor:pointer;"><i class="fas fa-paper-plane"></i></button>
         </div>
     </div>
+<!--
     <script>
         // مساعد تاوريرت الذكي
         let isOpen = false;
@@ -359,6 +373,7 @@
             const lower = q.toLowerCase();
             
             // دلني على الطريق
+-->
             if (lower.includes('دلني') || lower.includes('الطريق') || lower.includes('كيفاش نمشي') || lower.includes('وصلني')) {
                 let pharmacy = '';
                 if (lower.includes('الجابري')) pharmacy = 'الجابري';
@@ -449,6 +464,7 @@
             };
             recognition.onerror = () => {
                 micBtn.style.background = '#3b82f6';
+<!--
                 alert('لم أستطع فهم الكلام');
             };
         }
@@ -456,6 +472,7 @@
         if (sendBtn) sendBtn.onclick = sendMessage;
         if (micBtn) micBtn.onclick = startListening;
         if (input) {
+<!--
             input.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') sendMessage();
             });
@@ -572,14 +589,17 @@
         </div>
         <div id="rentalFloatForm" style="display:none;">
             <input type="text" id="rentalFloatTitle" placeholder="العنوان" class="float-input">
+-->
             <textarea id="rentalFloatDesc" rows="2" placeholder="الوصف" class="float-input"></textarea>
             <input type="text" id="rentalFloatPrice" placeholder="السعر" class="float-input">
+<!--
             <select id="rentalFloatNeighborhood" class="float-input">
                 <option>الحي</option><option>وسط المدينة</option><option>حي المسيرة</option>
                 <option>حي السلام</option><option>حي التعاون</option>
             </select>
             <input type="tel" id="rentalFloatPhone" placeholder="الهاتف" class="float-input">
             <label class="btn-cam" for="reportFloatImage">📷 إرفاق صورة للمشكلة</label><input type="file" id="reportFloatImage" accept="image/*" style="display:none" onchange="previewImage(this)"><img id="reportImgPreview" style="display:none; border-radius:8px; margin-bottom:10px;">
+-->
             <button onclick="addRentalFloat()" class="float-submit">نشر</button>
         </div>
         <div class="float-filters">
@@ -663,6 +683,7 @@ function addComment(itemId) {
 
     commentInput.value = ''; // Clear the input field
     renderComments(itemId); // Re-render comments for the item to show the new comment
+-->
 }
 
 
@@ -742,6 +763,7 @@ function addComment(itemId) {
 /* Optional: style for a generic icon button if not already defined */
 .icon-button {
     background: none;
+<!--
     border: none;
     cursor: pointer;
     font-size: 1.2em; /* Adjust size as needed */
@@ -812,6 +834,8 @@ function addReportFloat() {
 function clearReportFloat() {
     document.getElementById('reportFloatDesc').value = '';
     document.getElementById('reportFloatImage').value = '';
+-->
+<!--
     document.getElementById('reportFloatForm').style.display = 'none';
 }
 
@@ -887,6 +911,7 @@ function showRentalFloatList() {
     let filter = document.getElementById('filterFloatType').value;
     let filtered = rentalsFloat.filter(r => filter === 'all' || r.type === filter);
     if (filtered.length === 0) { c.innerHTML = '<div class="card">📭 لا إعلانات</div>'; return; }
+-->
     let typeName = { 'rent': '🏠', 'sale': '💰', 'land': '🌾' };
     
     // --- START OF MODIFIED SECTION FOR COMMENTS ---

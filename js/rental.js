@@ -1,3 +1,5 @@
+    `).join('');
+<!--
 }
 -->
 
@@ -73,5 +75,3 @@ function showRentalFloatList() {
         </div>
     `).join('');
     // --- END OF MODIFIED SECTION FOR COMMENTS ---
-}
-
