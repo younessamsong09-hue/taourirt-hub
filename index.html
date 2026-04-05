@@ -269,6 +269,7 @@
         list.innerHTML = data.map(r => Modules[r.type] ? Modules[r.type](r) : `<div class="post-card" style="padding:15px;color:white;">⚠️ ${r.description}</div>`).join("");
     }
 </script>
+    <script src="js/report.js"></script>
 </body>
 </html>
     <!-- مساعد تاوريرت الذكي -->
@@ -748,6 +749,7 @@ function addComment(itemId) {
 }
 */
 
+<!--
 // ========== أيقونة التبليغ ==========
 let reportsFloat = JSON.parse(localStorage.getItem('city_reports')) || [];
 let currentReportType = '';
@@ -818,6 +820,7 @@ function showReportFloatList() {
         <div class="float-item"><span>${typeIcon[r.type]} ${r.desc.substring(0, 30)}</span><a href="https://www.google.com/maps?q=${r.lat},${r.lng}" target="_blank">🗺️</a></div>
     `).join('');
 }
+-->
 
 // ========== أيقونة الكراء ==========
 let rentalsFloat = JSON.parse(localStorage.getItem('rentals')) || [];
